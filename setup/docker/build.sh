@@ -85,7 +85,7 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
 fi
 
 # Configure Apache
-a2enmod rewrite ssl
+a2enmod rewrite ssl version
 mkdir -p /var/logs/apache
 chmod -R 755 /var/logs/apache
 
