@@ -1,0 +1,32 @@
+# Virtua docker-compose
+# For latest versions of our Virtua Docker Containers, see:
+# <https://gitlab.virtua.ch/ddev/tools-docker/tree/master>
+
+web:
+  image: virtuasa/php:7.1
+  environment:
+    # @todo: change the following value accordingly to your project settings
+    - APACHE_DOCUMENT_ROOT=web
+    - APACHE_LOG_PATH=var/logs/apache
+    - DOCKER_COPY_CONFIG_FROM_HOST=false
+    - DOCKER_COPY_CONFIG_TO_HOST=false
+    - DOCKER_HOST_SETUP_DIR=setup
+    - DOCKER_TIMEZONE=Europe/Zurich
+    - PHP_LOG_PATH=var/logs
+  labels:
+    # @todo: change the following value accordingly to your project name
+    - "com.dnsdock.alias=project.customer.docker"
+  # @todo: add a database service below
+  # links:
+  #   - db
+  ports: 
+    - "80"
+    - "443"
+  volumes: 
+    - ./:/var/www/docker
+
+# Build:    `docker-compose build`
+# Run:      `docker-compose up -d`
+# Stop:     `docker-compose down`
+# Shell:    `docker-compose exec web /bin/bash`
+# dos2unix: `docker-compose run web bash -c 'dos2unix setup/docker/*'`
