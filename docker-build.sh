@@ -49,6 +49,16 @@ case "$1" in
     df_php_version_apt="7.2"
     df_php_version_dir="/7.2"
     ;;
+all)
+    $0 5.2
+    $0 5.3
+    $0 5.4
+    $0 5.5
+    $0 5.6
+    $0 7.0
+    $0 7.1
+    $0 7.2
+    ;;
 *)
     echo "Not supported yet"
     exit 1;
@@ -61,3 +71,6 @@ docker build --tag virtuasa/php:${df_php_version} \
     --build-arg PHP_VERSION_APT=${df_php_version_apt} \
     --build-arg PHP_VERSION_DIR=${df_php_version_dir} \
     --file setup/docker/Dockerfile .
+
+docker tag virtuasa/php:${df_php_version} virtuasa/php:${df_php_version}-dev
+docker push virtuasa/php:${df_php_version}-dev
