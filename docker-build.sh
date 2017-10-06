@@ -1,6 +1,30 @@
 #!/bin/bash
 
 case "$1" in
+5.2)
+    df_from_image="debian/eol:lenny"
+    df_php_version="5.2"
+    df_php_version_apt="5"
+    df_php_version_dir="5"
+    ;;
+5.3)
+    df_from_image="debian/eol:squeeze"
+    df_php_version="5.3"
+    df_php_version_apt="5"
+    df_php_version_dir="5"
+    ;;
+5.4)
+    df_from_image="debian:wheezy"
+    df_php_version="5.4"
+    df_php_version_apt="5"
+    df_php_version_dir="5"
+    ;;
+5.5)
+    df_from_image="debian:wheezy"
+    df_php_version="5.5"
+    df_php_version_apt="5"
+    df_php_version_dir="5"
+    ;;
 5.6)
     df_from_image="debian:jessie"
     df_php_version="5.6"

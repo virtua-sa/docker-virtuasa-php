@@ -60,10 +60,14 @@ sudo chmod -R 655 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Display server IP
 echo "Started web server on ..."
-IP="$(hostname -I | cut -d' ' -f1)"
+[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
+    && IP="$(ifconfig | awk '/inet addr/{print substr($2,6)}' | head -n 3 | tail -n 1)" \
+    || IP="$(hostname -I | cut -d' ' -f1)"
 echo "> http://${IP}"
 echo "> https://${IP}"
 echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
 
 # Start Apache
-sudo /usr/sbin/apache2ctl -D FOREGROUND
+[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
+    && sudo /usr/sbin/apache2ctl -DFOREGROUND \
+    || sudo /usr/sbin/apache2ctl -D FOREGROUND

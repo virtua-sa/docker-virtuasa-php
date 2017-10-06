@@ -9,7 +9,6 @@ php7.0-curl
 php7.0-dba
 php7.0-dev
 php7.0-enchant
-php7.0-fpm
 php7.0-gd
 php7.0-geoip
 php7.0-gmp
