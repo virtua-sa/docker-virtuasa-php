@@ -58,6 +58,7 @@ all)
     $0 7.0
     $0 7.1
     $0 7.2
+    exit 1;
     ;;
 *)
     echo "Not supported yet"
