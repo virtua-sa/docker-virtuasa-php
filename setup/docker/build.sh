@@ -85,7 +85,8 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
 fi
 
 # Configure Apache
-a2enmod rewrite ssl version
+a2enmod rewrite ssl
+[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] && a2enmod version
 mkdir -p /var/logs/apache
 chmod -R 755 /var/logs/apache
 
@@ -104,6 +105,11 @@ chmod -R 755 "${DOCKER_BASE_DIR}"
 
 # Create a non privileged user
 useradd --create-home --groups sudo --shell /bin/bash docker
-[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
-    && echo "docker ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers \
-    || echo "docker ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/docker
+if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
+    echo "docker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+else
+    echo "docker ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/docker
+    chmod 440 /etc/sudoers.d/docker
+fi
+adduser docker www-data
+adduser www-data docker

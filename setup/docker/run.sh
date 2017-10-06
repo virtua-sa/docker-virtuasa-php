@@ -46,6 +46,9 @@ fi
 
 # Apache gets grumpy about PID files pre-existing
 sudo rm -f /var/run/apache2/apache2.pid
+sudo rm -f /var/run/apache2/ssl_mutex
+sudo mkdir -p /var/run/apache2
+[[ "${DOCKER_FROM_IMAGE##*:}" = "wheezy" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
 
 # Apache log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
