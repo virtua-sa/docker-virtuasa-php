@@ -65,12 +65,11 @@ all)
     ;;
 esac
 
-docker build --tag virtuasa/php:${df_php_version} \
+docker build --tag virtuasa/php:${df_php_version}-dev \
     --build-arg FROM_IMAGE=${df_from_image} \
     --build-arg PHP_VERSION=${df_php_version} \
     --build-arg PHP_VERSION_APT=${df_php_version_apt} \
     --build-arg PHP_VERSION_DIR=${df_php_version_dir} \
     --file setup/docker/Dockerfile .
 
-docker tag virtuasa/php:${df_php_version} virtuasa/php:${df_php_version}-dev
 docker push virtuasa/php:${df_php_version}-dev
