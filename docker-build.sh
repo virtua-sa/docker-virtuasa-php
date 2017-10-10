@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Make sure we stop building/pushing images if an error happens
+set -e
+
+# Configure the build accordingly to the requested PHP version
 case "$1" in
 5.2)
     df_from_image="debian/eol:lenny"
@@ -66,6 +70,7 @@ all)
     ;;
 esac
 
+# Build the image and tag it
 docker build --tag virtuasa/php:${df_php_version}-dev \
     --build-arg FROM_IMAGE=${df_from_image} \
     --build-arg PHP_VERSION=${df_php_version} \
@@ -73,4 +78,24 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
     --build-arg PHP_VERSION_DIR=${df_php_version_dir} \
     --file setup/docker/Dockerfile .
 
+# Test the image built
+rm -rf tests/tmp
+cp -r tests/src tests/tmp
+docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
+docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
+docker run -d -v `pwd`/tests/tmp:/var/www/docker \
+    --name virtuasa-php-${df_php_version}-dev-build \
+    virtuasa/php:${df_php_version}-dev
+# docker attach --no-stdin virtuasa-php-${df_php_version}-dev-build
+sleep 5s
+docker exec virtuasa-php-${df_php_version}-dev-build pwd
+docker exec virtuasa-php-${df_php_version}-dev-build whoami
+docker exec virtuasa-php-${df_php_version}-dev-build ls -alhR
+docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io.php
+curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php"
+docker logs -t virtuasa-php-${df_php_version}-dev-build
+docker stop virtuasa-php-${df_php_version}-dev-build
+docker rm virtuasa-php-${df_php_version}-dev-build
+
+# Push the image to Docker Hub
 docker push virtuasa/php:${df_php_version}-dev

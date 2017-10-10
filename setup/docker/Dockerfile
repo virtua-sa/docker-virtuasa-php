@@ -25,8 +25,8 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     PHP_VERSION="${PHP_VERSION}" \
     PHP_VERSION_APT="${PHP_VERSION_APT}" \
     PHP_VERSION_DIR="${PHP_VERSION_DIR}" \
-    PHP_XDEBUG_APACHE_ENABLE="0" \
-    PHP_XDEBUG_CLI_ENABLE="0"
+    PHP_XDEBUG_APACHE_ENABLE="off" \
+    PHP_XDEBUG_CLI_ENABLE="off"
 
 # Copy the needed shell scripts
 COPY ./setup/ /home/docker/

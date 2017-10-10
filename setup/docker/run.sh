@@ -8,6 +8,10 @@ sudo dpkg-reconfigure --frontend noninteractive tzdata
 # Print installed PHP version
 php -v
 
+# Get HOST ip address
+DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route|awk '/default/ { print $3 }')}"
+export DOCKER_HOST_IP
+
 # Print all environment variables (can be overriden in docker-compose.yml)
 printenv
 
@@ -52,14 +56,14 @@ sudo mkdir -p /var/run/apache2
 
 # Apache log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
-sudo chmod -R 655 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
+sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 
 # Apache root directory
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
 
 # PHP log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
-sudo chmod -R 655 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
+sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Display server IP
 echo "Started web server on ..."

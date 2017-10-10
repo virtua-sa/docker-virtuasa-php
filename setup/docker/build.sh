@@ -86,7 +86,7 @@ fi
 
 # Configure Apache
 a2enmod rewrite ssl
-[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] && a2enmod version
+[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
 mkdir -p /var/logs/apache
 chmod -R 755 /var/logs/apache
 
@@ -113,3 +113,4 @@ else
 fi
 adduser docker www-data
 adduser www-data docker
+chown docker "${DOCKER_BASE_DIR}"
