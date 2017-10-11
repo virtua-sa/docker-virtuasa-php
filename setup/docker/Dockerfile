@@ -7,7 +7,7 @@ ARG PHP_VERSION="7.1"
 ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
 ENV APACHE_DOCUMENT_ROOT="web" \
-    APACHE_LOG_DIR="/var/www/docker/var/logs/apache" \
+    APACHE_LOG_DIR="/data/var/logs/apache" \
     APACHE_LOG_PATH="var/logs/apache" \
     APACHE_RUN_GROUP="docker" \
     APACHE_RUN_USER="docker" \
@@ -15,11 +15,13 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     APACHE_SERVER_NAME="localhost" \
     APACHE_SSL_CERT_KEY="/etc/ssl/private/ssl-cert-snakeoil.key" \
     APACHE_SSL_CERT_PEM="/etc/ssl/certs/ssl-cert-snakeoil.pem" \
-    DOCKER_BASE_DIR="/var/www/docker" \
+    DOCKER_BASE_DIR="/data" \
     DOCKER_COPY_CONFIG_FROM_HOST="false" \
     DOCKER_COPY_CONFIG_TO_HOST="false" \
     DOCKER_FROM_IMAGE="${FROM_IMAGE}" \
+    DOCKER_HOST_GID="1001" \
     DOCKER_HOST_SETUP_DIR="setup" \
+    DOCKER_HOST_UID="1001" \
     DOCKER_TIMEZONE="Europe/Zurich" \
     PHP_LOG_PATH="var/logs/php" \
     PHP_VERSION="${PHP_VERSION}" \
@@ -40,7 +42,7 @@ RUN sed -i 's/\r$//' /home/docker/docker/*.sh \
 
 # Set the workdir to mountpoint and the user
 USER docker
-WORKDIR /var/www/docker/
+WORKDIR /data/
 
 # Run the default script on startup
-CMD [ "/home/docker/docker/run.sh" ]
+CMD [ "/home/docker/docker/start.sh" ]

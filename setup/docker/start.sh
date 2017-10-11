@@ -1,6 +1,9 @@
 #!/bin/bash
 set -e
 
+# Set SIGKILL trap
+trap 'kill ${!}; /home/docker/docker/stop.sh' SIGTERM
+
 # Set timezone
 echo ${DOCKER_TIMEZONE} | sudo tee /etc/timezone > /dev/null
 sudo dpkg-reconfigure --frontend noninteractive tzdata

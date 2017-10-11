@@ -83,7 +83,7 @@ rm -rf tests/tmp
 cp -r tests/src tests/tmp
 docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
-docker run -d -v `pwd`/tests/tmp:/var/www/docker \
+docker run -d -v `pwd`/tests/tmp:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
     virtuasa/php:${df_php_version}-dev
 # docker attach --no-stdin virtuasa-php-${df_php_version}-dev-build
