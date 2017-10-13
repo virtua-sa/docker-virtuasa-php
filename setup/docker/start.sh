@@ -1,7 +1,10 @@
 #!/bin/bash
 set -e
 
-# Set SIGKILL trap
+echo "Starting the Virtua Docker Container ..."
+echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
+
+# Set SIGTERM trap
 trap 'kill ${!}; /home/docker/docker/stop.sh' SIGTERM
 
 # Set timezone
@@ -36,6 +39,9 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini "/etc/php${PHP_VERSION_DIR}/cli"
     sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
 fi
+
+# Chown the mount dir
+sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
 
 # Configure Apache
 (cd /etc/apache2/sites-enabled && sudo a2ensite *)
@@ -76,6 +82,9 @@ echo "Started web server on ..."
 echo "> http://${IP}"
 echo "> https://${IP}"
 echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
+
+# Chown the mount dir after Apache has started
+(sleep 5s; sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start Apache
 [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \

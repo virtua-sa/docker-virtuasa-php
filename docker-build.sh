@@ -87,14 +87,14 @@ docker run -d -v `pwd`/tests/tmp:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
     virtuasa/php:${df_php_version}-dev
 # docker attach --no-stdin virtuasa-php-${df_php_version}-dev-build
-sleep 5s
+sleep 10s
 docker exec virtuasa-php-${df_php_version}-dev-build pwd
 docker exec virtuasa-php-${df_php_version}-dev-build whoami
 docker exec virtuasa-php-${df_php_version}-dev-build ls -alhR
 docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io.php
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php"
-docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker stop virtuasa-php-${df_php_version}-dev-build
+docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker rm virtuasa-php-${df_php_version}-dev-build
 
 # Push the image to Docker Hub
