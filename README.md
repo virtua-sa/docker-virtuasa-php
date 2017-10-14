@@ -36,10 +36,10 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 ## Changelog
 
-* v1.0.0 - 20171014
+* **v1.0.0 - 20171014**
   * Metadata
-    * Version: 1.0.0
-    * Tags: `virtuasa/php:*-20171014`
-    * Built on commit : [ca14b473](https://gitlab.virtua.ch/ddev/tools-docker/commit/ca14b473dd475ca6462986ab174bac041afedf34)
+      * Version: 1.0.0
+      * Tags: `virtuasa/php:*-20171014`
+      * Built on commit : [ca14b473](https://gitlab.virtua.ch/ddev/tools-docker/commit/ca14b473dd475ca6462986ab174bac041afedf34)
   * Changes
-    * First public release
+      * First public release
