@@ -61,7 +61,7 @@ fi
 sudo rm -f /var/run/apache2/apache2.pid
 sudo rm -f /var/run/apache2/ssl_mutex
 sudo mkdir -p /var/run/apache2
-[[ "${DOCKER_FROM_IMAGE##*:}" = "wheezy" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
+[[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
 
 # Apache log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
