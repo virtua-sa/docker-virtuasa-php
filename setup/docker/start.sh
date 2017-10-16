@@ -5,7 +5,7 @@ echo "Starting the Virtua Docker Container ..."
 echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 
 # Set SIGTERM trap
-trap 'kill ${!}; /home/docker/docker/stop.sh' SIGTERM
+trap 'kill ${!}; . /home/docker/docker/stop.sh' SIGTERM
 
 # Set timezone
 echo ${DOCKER_TIMEZONE} | sudo tee /etc/timezone > /dev/null
@@ -20,6 +20,10 @@ export DOCKER_HOST_IP
 
 # Print all environment variables (can be overriden in docker-compose.yml)
 printenv
+
+# Force the UID/GID of the docker container running user
+[[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
+[[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
 # Copy image's configuration files to host filesystem
 sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
@@ -41,7 +45,7 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
 fi
 
 # Chown the mount dir
-sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
+[[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
 
 # Configure Apache
 (cd /etc/apache2/sites-enabled && sudo a2ensite *)
@@ -74,6 +78,9 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
+# Exec custom startup script
+[[ -n "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" && ./${DOCKER_CUSTOM_START}
+
 # Display server IP
 echo "Started web server on ..."
 [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
@@ -84,7 +91,7 @@ echo "> https://${IP}"
 echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
 
 # Chown the mount dir after Apache has started
-(sleep 5s; sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
+(sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start Apache
 [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
