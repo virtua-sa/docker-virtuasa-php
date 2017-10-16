@@ -36,6 +36,15 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 ## Changelog
 
+* **v1.0.1 - 20171016**
+  * Metadata
+      * Version: 1.0.1
+      * Tags: `virtuasa/php:*-20171016`
+      * Built on commit : [abc50064](https://gitlab.virtua.ch/ddev/tools-docker/commit/abc500643e9fa2b33a3995704a3ba01da96b5dd0)
+  * Changes
+      * Fixed: php7-snmp now works well on Debian Stretch
+      * Changed: DOCKER_HOST_GID and DOCKER_HOST_UID are now empty by default, chown is only done when a value is assigned to both of them
+      * Added: DOCKER_CUSTOM_START can contain the name of a script that will be executed just before Apache starts, usefull for custom file permissions
 * **v1.0.0 - 20171014**
   * Metadata
       * Version: 1.0.0
