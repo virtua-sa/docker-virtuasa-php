@@ -34,6 +34,54 @@ These images are built and published on Docker Hub : https://hub.docker.com/r/vi
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](docker-compose.yml).
 
+## Usage
+
+### Customizable environment variables
+
+> These variable are used on runtime and can change the default behavior of the images.
+> Their value can be changed in `docker-compose.yml` file.
+
+| Variable name                   | Default value                             | Description                                                                    |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `APACHE_DOCUMENT_ROOT`          | `web`                                     | Path to the Apache document root folder \*
+| `APACHE_LOG_DIR`                | `/data/var/logs/apache`                   | Path of the default Apache log folder \**
+| `APACHE_LOG_PATH`               | `var/logs/apache`                         | Path of the website Apache log folder \*
+| `APACHE_RUN_GROUP`              | `docker`                                  | Group of user running Apache
+| `APACHE_RUN_USER`               | `docker`                                  | User running Apache
+| `APACHE_SERVER_ADMIN`           | `webmaster@localhost`                     | Apache server administrator email address
+| `APACHE_SERVER_NAME`            | `localhost`                               | Apache server name
+| `APACHE_SSL_CERT_KEY`           | `/etc/ssl/private/ssl-cert-snakeoil.key`  | Private key used by Apache for SSL \**
+| `APACHE_SSL_CERT_PEM`           | `/etc/ssl/certs/ssl-cert-snakeoil.pem`    | Public key used by Apache for SSL \**
+| `DOCKER_BASE_DIR`               | `/data`                                   | Docker mount path inside the container \**
+| `DOCKER_COPY_CONFIG_FROM_HOST`  | `false`                                   | Copy the configuration files from the setup folder on the host if set to `true`
+| `DOCKER_COPY_CONFIG_TO_HOST`    | `false`                                   | Copy the configuration files to the setup folder on the host if set to `true`
+| `DOCKER_CUSTOM_START`           | ` ` *(empty)*                             | Execute script just before starting Apache, can be used for chmod if set \*
+| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
+| `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
+| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
+| `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
+| `PHP_LOG_PATH`                  | `var/logs/php`                            | Path of the PHP log folder \*
+| `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
+| `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
+
+\* *Path is relative to the Docker container mount path, i.e., to the root of the project.*
+
+\*\* *Path is absolute in the Docker container, don't forget to add the path of the mount path if needed.*
+
+\*\*\* *`DOCKER_HOST_GID` and `DOCKER_HOST_UID` must be both empty or both have a value.*
+
+### Readonly environment variables
+
+> These variables are used to build the images and can be used to adapt behaviors between their different flavors.
+> *Changing their value is not recommanded.*
+
+| Variable name                   | Sample value                              | Description                                                                    |
+| ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `DOCKER_FROM_IMAGE`             | `debian/stretch`                          | Name of the base image used to build the Docker image
+| `PHP_VERSION`                   | `7.1`                                     | PHP version included in the image
+| `PHP_VERSION_APT`               | `7.1`                                     | PHP version used in the `apt-get install` instructions
+| `PHP_VERSION_DIR`               | `/7.1`                                    | PHP version used in the paths of PHP configuration files
+
 ## Changelog
 
 * **v1.0.1 - 20171016**
