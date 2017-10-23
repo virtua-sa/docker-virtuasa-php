@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Make sure we stop building/pushing images if an error happens
-set -e
-
 # Configure the build accordingly to the requested PHP version
 case "$1" in
 5.2)
@@ -54,21 +51,30 @@ case "$1" in
     df_php_version_dir="/7.2"
     ;;
 all)
-    $0 5.2
-    $0 5.3
-    $0 5.4
-    $0 5.5
-    $0 5.6
-    $0 7.0
-    $0 7.1
-    $0 7.2
-    exit 1;
+    di_disable_push=1 $0 5.2
+    di_disable_push=1 $0 5.3
+    di_disable_push=1 $0 5.4
+    di_disable_push=1 $0 5.5
+    di_disable_push=1 $0 5.6
+    di_disable_push=1 $0 7.0
+    di_disable_push=1 $0 7.1
+    di_disable_push=1 $0 7.2
+    exit 0;
     ;;
 *)
     echo "Not supported yet"
     exit 1;
     ;;
 esac
+
+# Make sure we stop building/pushing images if an error happens
+set -e
+
+# Display build info
+echo "df_from_image='${df_from_image}'"
+echo "df_php_version=${df_php_version}"
+echo "df_php_version_apt=${df_php_version_apt}"
+echo "df_php_version_dir=${df_php_version_dir}"
 
 # Build the image and tag it
 docker build --tag virtuasa/php:${df_php_version}-dev \
@@ -79,12 +85,12 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
     --file setup/docker/Dockerfile .
 
 # Test the image built
-rm -rf tests/tmp
-cp -r tests/src tests/tmp
-chmod 775 tests/tmp
+rm -rf tests/tmp${df_php_version}
+cp -r tests/src tests/tmp${df_php_version}
+chmod 775 tests/tmp${df_php_version}
 docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
-docker run -d -v `pwd`/tests/tmp:/data \
+docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
     --env DOCKER_HOST_GID=$(id -g) \
     --env DOCKER_HOST_UID=$(id -u) \
@@ -104,7 +110,9 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker rm virtuasa-php-${df_php_version}-dev-build
-rm -rf tests/tmp
+rm -rf tests/tmp${df_php_version}
 
 # Push the image to Docker Hub
-docker push virtuasa/php:${df_php_version}-dev
+[[ -z "di_disable_push" ]] && docker push virtuasa/php:${df_php_version}-dev
+
+exit 0;
