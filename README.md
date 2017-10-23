@@ -85,15 +85,27 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 ## Changelog
 
+* **v1.1.0 - 20171023**
+  * Metadata
+      * Version: 1.1.0
+      * Tags: `virtuasa/php:*-20171023`
+      * Built on commit : [c058a980](https://gitlab.virtua.ch/ddev/tools-docker/commit/c058a9809eee884af7abe825efc15ef73493772a)
+  * Changes
+      * Fixed: php5-snmp now works well on PHP 5.6
+      * Fixed: php files are now correctly handled by Apache with PHP 5.5
+      * Added: `DOCKER_CUSTOM_START` has now a default value: `docker-start.sh`
+      * Improved: removed unnecessary files, so images are smaller
+      * Improved: removed display of environment variables on startup, unless `DOCKER_DEBUG` is set
+      * Improved: expose ports 80 (http), 443 (https) and 9000 (xdebug)
 * **v1.0.1 - 20171016**
   * Metadata
       * Version: 1.0.1
       * Tags: `virtuasa/php:*-20171016`
       * Built on commit : [abc50064](https://gitlab.virtua.ch/ddev/tools-docker/commit/abc500643e9fa2b33a3995704a3ba01da96b5dd0)
   * Changes
-      * Fixed: php7-snmp now works well on Debian Stretch
-      * Changed: DOCKER_HOST_GID and DOCKER_HOST_UID are now empty by default, chown is only done when a value is assigned to both of them
-      * Added: DOCKER_CUSTOM_START can contain the name of a script that will be executed just before Apache starts, usefull for custom file permissions
+      * Fixed: php7-snmp now works well on PHP 7.0, 7.1, 7.2
+      * Changed: `DOCKER_HOST_GID` and `DOCKER_HOST_UID` are now empty by default, chown is only done when a value is assigned to both of them
+      * Added: `DOCKER_CUSTOM_START` can contain the name of a script that will be executed just before Apache starts, usefull for custom file permissions
 * **v1.0.0 - 20171014**
   * Metadata
       * Version: 1.0.0
