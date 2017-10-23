@@ -45,5 +45,8 @@ RUN sed -i 's/\r$//' /home/docker/docker/*.sh \
 USER docker
 WORKDIR /data/
 
+# Expose ports
+EXPOSE 80 443 9000
+
 # Run the default script on startup
 CMD [ "/home/docker/docker/start.sh" ]
