@@ -19,7 +19,7 @@ DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route|awk '/default/ { print $3 }')
 export DOCKER_HOST_IP
 
 # Print all environment variables (can be overriden in docker-compose.yml)
-printenv
+[[ -n "${DOCKER_DEBUG}" ]] && printenv
 
 # Force the UID/GID of the docker container running user
 [[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
