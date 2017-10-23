@@ -39,7 +39,10 @@ RUN sed -i 's/\r$//' /home/docker/docker/*.sh \
     && chmod +x /home/docker/docker/*.sh \
     && ls -alhR /home/docker \
     && echo "PHP_VERSION=${PHP_VERSION}" \
-    && /home/docker/docker/build.sh
+    && /home/docker/docker/build.sh \
+    && rm -rf /home/docker/docker/apt/* \
+    && rm -f /home/docker/docker/build.sh \
+    && rm -f /home/docker/docker/Dockerfile
 
 # Set the workdir to mountpoint and the user
 USER docker
