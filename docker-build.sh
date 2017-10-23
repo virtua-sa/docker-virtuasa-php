@@ -88,7 +88,6 @@ docker run -d -v `pwd`/tests/tmp:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
     --env DOCKER_HOST_GID=$(id -g) \
     --env DOCKER_HOST_UID=$(id -u) \
-    --env DOCKER_CUSTOM_START="start.sh" \
     virtuasa/php:${df_php_version}-dev
 # docker attach --no-stdin virtuasa-php-${df_php_version}-dev-build
 sleep 10s

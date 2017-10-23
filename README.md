@@ -55,7 +55,8 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_BASE_DIR`               | `/data`                                   | Docker mount path inside the container \**
 | `DOCKER_COPY_CONFIG_FROM_HOST`  | `false`                                   | Copy the configuration files from the setup folder on the host if set to `true`
 | `DOCKER_COPY_CONFIG_TO_HOST`    | `false`                                   | Copy the configuration files to the setup folder on the host if set to `true`
-| `DOCKER_CUSTOM_START`           | ` ` *(empty)*                             | Execute script just before starting Apache, can be used for chmod if set \*
+| `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting Apache, can be used for chmod if set \*
+| `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
 | `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
 | `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
