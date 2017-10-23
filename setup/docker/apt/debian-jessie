@@ -12,6 +12,7 @@ mc
 mysql-client
 nano
 rsync
+snmp
 ssl-cert
 subversion
 sudo
