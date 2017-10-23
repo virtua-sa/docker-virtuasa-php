@@ -79,7 +79,7 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Exec custom startup script
-[[ -n "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" && ./${DOCKER_CUSTOM_START}
+[[ -n "${DOCKER_CUSTOM_START}" ]] && [[ -e "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" && ./${DOCKER_CUSTOM_START}
 
 # Display server IP
 echo "Started web server on ..."
