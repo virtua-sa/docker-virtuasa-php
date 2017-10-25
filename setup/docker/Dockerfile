@@ -33,17 +33,17 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     PHP_XDEBUG_CLI_ENABLE="off"
 
 # Copy the needed shell scripts
-COPY ./setup/ /home/docker/
+COPY ./setup/ /setup/
 
 # Make sure scripts are executables and run the build script
-RUN sed -i 's/\r$//' /home/docker/docker/*.sh \
-    && chmod +x /home/docker/docker/*.sh \
+RUN sed -i 's/\r$//' /setup/docker/*.sh \
+    && chmod +x /setup/docker/*.sh \
     && ls -alhR /home/docker \
     && echo "PHP_VERSION=${PHP_VERSION}" \
-    && /home/docker/docker/build.sh \
-    && rm -rf /home/docker/docker/apt/* \
-    && rm -f /home/docker/docker/build.sh \
-    && rm -f /home/docker/docker/Dockerfile
+    && /setup/docker/build.sh \
+    && rm -rf /setup/docker/apt/* \
+    && rm -f /setup/docker/build.sh \
+    && rm -f /setup/docker/Dockerfile
 
 # Set the workdir to mountpoint and the user
 USER docker
@@ -53,4 +53,4 @@ WORKDIR /data/
 EXPOSE 80 443 9000
 
 # Run the default script on startup
-CMD [ "/home/docker/docker/start.sh" ]
+CMD [ "/setup/docker/start.sh" ]

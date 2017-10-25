@@ -5,18 +5,18 @@ set -xe
 printenv
 
 # Check if Debian version is already configured
-[[ ! -e "/home/docker/docker/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
-    && echo "Debian version not supported yet, file /home/docker/docker/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
+[[ ! -e "/setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
+    && echo "Debian version not supported yet, file /setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
     && exit 1;
 
 # Check if PHP version is already configured
-[[ ! -e "/home/docker/docker/apt/php-${PHP_VERSION}" ]] \
-    && echo "PHP version not supported yet, file /home/docker/docker/apt/php-${PHP_VERSION} doesn't exist !" \
+[[ ! -e "/setup/docker/apt/php-${PHP_VERSION}" ]] \
+    && echo "PHP version not supported yet, file /setup/docker/apt/php-${PHP_VERSION} doesn't exist !" \
     && exit 1;
 
 # Install base packages
 apt-get update && apt-get install -y --fix-missing --no-install-recommends \
-    $(</home/docker/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
+    $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Use Sury repository, to get PHP 7+ on Debian 9
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
@@ -47,7 +47,7 @@ apt-cache search php${PHP_VERSION_APT} | grep -v dbgsym | cut -d' ' -f1
 
 # Install development tools
 apt-get install -y --fix-missing --no-install-recommends \
-    $(</home/docker/docker/apt/php-${PHP_VERSION})
+    $(</setup/docker/apt/php-${PHP_VERSION})
 php -v
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     apt-get install -y --fix-missing --no-install-recommends \
@@ -93,11 +93,11 @@ chmod -R 755 /var/logs/apache
 # Copy initial configuration files
 ls -alhR /etc/php${PHP_VERSION_DIR}
 ls -alhR /etc/apache2/sites-available
-cp /home/docker/php/apache/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-cp /home/docker/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
+cp /setup/php/apache/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/apache2/conf.d
+cp /setup/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
-cp /home/docker/apache/*.conf /etc/apache2/sites-available
+cp /setup/apache/*.conf /etc/apache2/sites-available
 
 # Create mountpoint for the web application
 mkdir -p "${DOCKER_BASE_DIR}"

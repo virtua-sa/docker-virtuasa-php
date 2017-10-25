@@ -5,7 +5,7 @@ echo "Starting the Virtua Docker Container ..."
 echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 
 # Set SIGTERM trap
-trap 'kill ${!}; . /home/docker/docker/stop.sh' SIGTERM
+trap 'kill ${!}; . /setup/docker/stop.sh' SIGTERM
 
 # Set timezone
 echo ${DOCKER_TIMEZONE} | sudo tee /etc/timezone > /dev/null
@@ -32,7 +32,7 @@ sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
 sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo cp -nr "/etc/apache2/sites-available/"*.conf "${DOCKER_HOST_SETUP_DIR}/apache"
-    sudo cp -nr "/home/docker/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/apache"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/cli"
 fi
