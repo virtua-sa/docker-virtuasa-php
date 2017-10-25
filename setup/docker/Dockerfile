@@ -38,7 +38,7 @@ COPY ./setup/ /setup/
 # Make sure scripts are executables and run the build script
 RUN sed -i 's/\r$//' /setup/docker/*.sh \
     && chmod +x /setup/docker/*.sh \
-    && ls -alhR /home/docker \
+    && ls -alhR /setup \
     && echo "PHP_VERSION=${PHP_VERSION}" \
     && /setup/docker/build.sh \
     && rm -rf /setup/docker/apt/* \
