@@ -4,6 +4,11 @@ set -e
 echo "Starting the Virtua Docker Container ..."
 echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 
+# Exec custom init script
+[[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
+    && echo "Executing custom init script: ${DOCKER_CUSTOM_INIT} ..." \
+    && ./${DOCKER_CUSTOM_INIT}
+
 # Set SIGTERM trap
 trap 'kill ${!}; . /setup/docker/stop.sh' SIGTERM
 
@@ -26,11 +31,11 @@ export DOCKER_HOST_IP
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
 # Copy image's configuration files to host filesystem
-sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
-sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
-sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
-sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
     sudo cp -nr "/etc/apache2/sites-available/"*.conf "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/apache"
@@ -44,8 +49,14 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
 fi
 
-# Chown the mount dir
+# Chown the mount directory
 [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
+
+# Chmod the requested directories
+[[ -n "${DOCKER_CHMOD_666}" ]] && sudo chmod 666 ${DOCKER_CHMOD_666}
+[[ -n "${DOCKER_CHMOD_777}" ]] && sudo chmod 777 ${DOCKER_CHMOD_777}
+[[ -n "${DOCKER_CHMOD_R666}" ]] && sudo chmod -R 666 ${DOCKER_CHMOD_R666}
+[[ -n "${DOCKER_CHMOD_R777}" ]] && sudo chmod -R 777 ${DOCKER_CHMOD_R777}
 
 # Configure Apache
 (cd /etc/apache2/sites-enabled && sudo a2ensite *)
@@ -90,7 +101,11 @@ echo "Started web server on ..."
     || IP="$(hostname -I | cut -d' ' -f1)"
 echo "> http://${IP}"
 echo "> https://${IP}"
-echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
+if [[ "${DOCKER_COPY_IP_TO_HOST}" = "true" ]]; then
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
+    echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
+fi
 
 # Chown the mount dir after Apache has started
 (sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &

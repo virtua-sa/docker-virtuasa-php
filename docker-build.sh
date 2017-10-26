@@ -92,6 +92,8 @@ docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docke
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
 docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
+    --env DOCKER_CHMOD_666="read.txt" \
+    --env DOCKER_CHMOD_777="." \
     --env DOCKER_HOST_GID=$(id -g) \
     --env DOCKER_HOST_UID=$(id -u) \
     virtuasa/php:${df_php_version}-dev

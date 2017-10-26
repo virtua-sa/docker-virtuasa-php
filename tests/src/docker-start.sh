@@ -1,3 +1,2 @@
 #!/bin/bash
-sudo chmod 777 .
-sudo chmod 666 read.txt
+echo "docker-start.sh called !"
