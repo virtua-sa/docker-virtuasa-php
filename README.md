@@ -91,6 +91,14 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 ## Changelog
 
+* **v1.2.0 - 20171102**
+  * Metadata
+      * Version: 1.2.0
+      * Tags: `virtuasa/php:*-20171102`
+      * Built on commit : [b699ea1d](https://gitlab.virtua.ch/ddev/tools-docker/commit/b699ea1d0fb52c0283f8ec5b37366e965e6e7354)
+  * Changes
+      * Fixed: no more warning on PHP 5.6 about php5-uprofiler (profiler.so missing)
+      * Added: `pm2`, `phpcs`, `phpcbf`, `phpmd`, `phpcpd`, `pdepend`
 * **v1.1.2 - 20171026**
   * Metadata
       * Version: 1.1.2
