@@ -87,6 +87,12 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
     echo -n "phpcbf --version : " && phpcbf --version
 fi
 
+# Install PHP_Depend
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[23456])) ]]; then
+    curl -sSL http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod +x /usr/local/bin/pdepend
+    echo -n "pdepend --version : " && pdepend --version
+fi
+
 # Install common Node.js tools
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     npm install -g bower grunt gulp pm2 webpack
