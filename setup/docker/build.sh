@@ -79,6 +79,14 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     echo -n "phpunit48 --version : " && phpunit48 --version
 fi
 
+# Install PHP_CodeSniffer
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
+    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod +x /usr/local/bin/phpcs
+    echo -n "phpcs --version : " && phpcs --version
+    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod +x /usr/local/bin/phpcbf
+    echo -n "phpcbf --version : " && phpcbf --version
+fi
+
 # Install common Node.js tools
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     npm install -g bower grunt gulp pm2 webpack
