@@ -59,6 +59,11 @@ fi
 # Remove unnecessary files left after installations
 apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
 
+# Fix PHP 5.6 issue with uprofiler (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=784774)
+if [[ "${PHP_VERSION}" = "5.6" ]]; then
+    sed -i "s/extension=profiler.so/extension=uprofiler.so/g" /etc/php5/mods-available/uprofiler.ini
+fi
+
 # Install Composer
 if [[ "${PHP_VERSION}" != "5.2" ]]; then
     curl -sSL https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
