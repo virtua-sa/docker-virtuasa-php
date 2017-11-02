@@ -29,7 +29,7 @@ These images are built and published on Docker Hub : https://hub.docker.com/r/vi
   * [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)
   * [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)
   * [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)
-* Node.js 6.11+
+* Node.js 8.9+
   * Bower, Gulp, Grunt, PM2, Webpack
 * Yarn
 * Apache

@@ -36,9 +36,12 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 fi
 
-# Use Nodesource, to get Node.js 6x on Debian
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
+# Use Nodesource, to get Node.js on Debian
+if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy ]]; then
     curl -sSL https://deb.nodesource.com/setup_6.x | bash -
+fi
+if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
+    curl -sSL https://deb.nodesource.com/setup_8.x | bash -
 fi
 
 # Update APT and list all available PHP packages
