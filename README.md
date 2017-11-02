@@ -53,9 +53,14 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `APACHE_SSL_CERT_KEY`           | `/etc/ssl/private/ssl-cert-snakeoil.key`  | Private key used by Apache for SSL \**
 | `APACHE_SSL_CERT_PEM`           | `/etc/ssl/certs/ssl-cert-snakeoil.pem`    | Public key used by Apache for SSL \**
 | `DOCKER_BASE_DIR`               | `/data`                                   | Docker mount path inside the container \**
+| `DOCKER_CHMOD_666`              | ` ` *(empty)*                             | Execute a `chmod 666` on given files if set \*
+| `DOCKER_CHMOD_777`              | ` ` *(empty)*                             | Execute a `chmod 777` on given files if set \*
+| `DOCKER_CHMOD_R666`              | ` ` *(empty)*                             | Execute a `chmod -R 666` on given files if set \*
+| `DOCKER_CHMOD_R777`              | ` ` *(empty)*                             | Execute a `chmod -R 777` on given files if set \*
 | `DOCKER_COPY_CONFIG_FROM_HOST`  | `false`                                   | Copy the configuration files from the setup folder on the host if set to `true`
 | `DOCKER_COPY_CONFIG_TO_HOST`    | `false`                                   | Copy the configuration files to the setup folder on the host if set to `true`
-| `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting Apache, can be used for chmod if set \*
+| `DOCKER_CUSTOM_INIT`            | `docker-init.sh`                          | Execute script before doing anything else \*
+| `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting Apache \*
 | `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
 | `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
@@ -78,6 +83,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 | Variable name                   | Sample value                              | Description                                                                    |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `DOCKER_FROM_COMMIT`            | `f84a27d7`                                | Short hash of the git commit used to build the Docker image in this repository
 | `DOCKER_FROM_IMAGE`             | `debian/stretch`                          | Name of the base image used to build the Docker image
 | `PHP_VERSION`                   | `7.1`                                     | PHP version included in the image
 | `PHP_VERSION_APT`               | `7.1`                                     | PHP version used in the `apt-get install` instructions
@@ -93,9 +99,9 @@ To customize these setup on your projects, changes must only be done to file [`d
   * Changes
       * Added: `DOCKER_CUSTOM_INIT` environment variable to execute a script at initialization
       * Added: `DOCKER_CHMOD_R666` environment variable to `chmod -R 666` specified files
-      * Added: `DOCKER_CHMOD_R777` environment variable to `chmod -R 777` specified directories
+      * Added: `DOCKER_CHMOD_R777` environment variable to `chmod -R 777` specified files
       * Added: `DOCKER_CHMOD_666` environment variable to `chmod 666` specified files
-      * Added: `DOCKER_CHMOD_777` environment variable to `chmod 777` specified directories
+      * Added: `DOCKER_CHMOD_777` environment variable to `chmod 777` specified files
 * **v1.1.1 - 20171025**
   * Metadata
       * Version: 1.1.1
