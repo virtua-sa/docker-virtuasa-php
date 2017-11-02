@@ -81,7 +81,7 @@ fi
 
 # Install common Node.js tools
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-    npm install -g bower grunt gulp webpack
+    npm install -g bower grunt gulp pm2 webpack
 fi
 
 # Configure Apache
