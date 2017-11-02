@@ -85,6 +85,24 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 ## Changelog
 
+* **v1.1.2 - 20171026**
+  * Metadata
+      * Version: 1.1.2
+      * Tags: `virtuasa/php:*-20171026`
+      * Built on commit : [f84a27d7](https://gitlab.virtua.ch/ddev/tools-docker/commit/f84a27d7837a309e334603de621343c03934eb7c)
+  * Changes
+      * Added: `DOCKER_CUSTOM_INIT` environment variable to execute a script at initialization
+      * Added: `DOCKER_CHMOD_R666` environment variable to `chmod -R 666` specified files
+      * Added: `DOCKER_CHMOD_R777` environment variable to `chmod -R 777` specified directories
+      * Added: `DOCKER_CHMOD_666` environment variable to `chmod 666` specified files
+      * Added: `DOCKER_CHMOD_777` environment variable to `chmod 777` specified directories
+* **v1.1.1 - 20171025**
+  * Metadata
+      * Version: 1.1.1
+      * Tags: `virtuasa/php:*-20171025`
+      * Built on commit : [a41e350f](https://gitlab.virtua.ch/ddev/tools-docker/commit/a41e350f9da31a6202a97ce9d1b595d9f52173db)
+  * Changes
+      * Changed: installation files moved to `/setup`
 * **v1.1.0 - 20171023**
   * Metadata
       * Version: 1.1.0
