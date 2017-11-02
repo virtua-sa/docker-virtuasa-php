@@ -3,6 +3,8 @@ set -e
 
 echo "Starting the Virtua Docker Container ..."
 echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
+echo "Built from commit: ${DOCKER_FROM_COMMIT}"
+echo
 
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \

@@ -78,6 +78,7 @@ echo "df_php_version_dir=${df_php_version_dir}"
 
 # Build the image and tag it
 docker build --tag virtuasa/php:${df_php_version}-dev \
+    --build-arg DOCKER_FROM_COMMIT=$(git log --pretty=format:'%h' -n 1) \
     --build-arg FROM_IMAGE=${df_from_image} \
     --build-arg PHP_VERSION=${df_php_version} \
     --build-arg PHP_VERSION_APT=${df_php_version_apt} \

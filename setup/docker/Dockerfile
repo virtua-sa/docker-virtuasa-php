@@ -3,6 +3,7 @@ FROM ${FROM_IMAGE}
 
 # Set default environment variables
 ARG FROM_IMAGE="debian:stretch"
+ARG DOCKER_FROM_COMMIT=""
 ARG PHP_VERSION="7.1"
 ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
@@ -26,6 +27,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     DOCKER_CUSTOM_INIT="docker-init.sh" \
     DOCKER_CUSTOM_START="docker-start.sh" \
     DOCKER_DEBUG="" \
+    DOCKER_FROM_COMMIT="${DOCKER_FROM_COMMIT}" \
     DOCKER_FROM_IMAGE="${FROM_IMAGE}" \
     DOCKER_HOST_GID="" \
     DOCKER_HOST_SETUP_DIR="setup" \
