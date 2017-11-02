@@ -93,10 +93,16 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[23456])) ]]; then
     echo -n "pdepend --version : " && pdepend --version
 fi
 
-# Install PHPMD (PHP Mess Detector)
+# Install PHP Mess Detector (PHPMD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     curl -sSL http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod +x /usr/local/bin/phpmd
     echo -n "phpmd --version : " && phpmd --version
+fi
+
+# Install PHP Copy/Paste Detector (PHPCPD)
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
+    curl -sSL https://phar.phpunit.de/phpcpd.phar > /usr/local/bin/phpcpd && chmod +x /usr/local/bin/phpcpd
+    echo -n "phpcpd --version : " && phpcpd --version
 fi
 
 # Install common Node.js tools
