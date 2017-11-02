@@ -55,8 +55,8 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_BASE_DIR`               | `/data`                                   | Docker mount path inside the container \**
 | `DOCKER_CHMOD_666`              | ` ` *(empty)*                             | Execute a `chmod 666` on given files if set \*
 | `DOCKER_CHMOD_777`              | ` ` *(empty)*                             | Execute a `chmod 777` on given files if set \*
-| `DOCKER_CHMOD_R666`              | ` ` *(empty)*                             | Execute a `chmod -R 666` on given files if set \*
-| `DOCKER_CHMOD_R777`              | ` ` *(empty)*                             | Execute a `chmod -R 777` on given files if set \*
+| `DOCKER_CHMOD_R666`             | ` ` *(empty)*                             | Execute a `chmod -R 666` on given files if set \*
+| `DOCKER_CHMOD_R777`             | ` ` *(empty)*                             | Execute a `chmod -R 777` on given files if set \*
 | `DOCKER_COPY_CONFIG_FROM_HOST`  | `false`                                   | Copy the configuration files from the setup folder on the host if set to `true`
 | `DOCKER_COPY_CONFIG_TO_HOST`    | `false`                                   | Copy the configuration files to the setup folder on the host if set to `true`
 | `DOCKER_CUSTOM_INIT`            | `docker-init.sh`                          | Execute script before doing anything else \*
