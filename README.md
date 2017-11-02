@@ -20,12 +20,17 @@ These images are built and published on Docker Hub : https://hub.docker.com/r/vi
 ## Images content
 
 * PHP
-  * Composer 1.4.1+
-  * PHPUnit 6.2+
-  * PHPUnit 5.7+
-  * PHPUnit 4.8+
+  * [Composer 1.4.1+ (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)
+  * [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)
+  * [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)
+  * [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)
+  * [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)
+  * [PHPUnit (Current Stable Release, 6.4+) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)
+  * [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)
+  * [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)
+  * [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)
 * Node.js 6.11+
-  * Bower, Gulp, Grunt, Webpack
+  * Bower, Gulp, Grunt, PM2, Webpack
 * Yarn
 * Apache
 * Debian
@@ -98,7 +103,7 @@ To customize these setup on your projects, changes must only be done to file [`d
       * Built on commit : [b699ea1d](https://gitlab.virtua.ch/ddev/tools-docker/commit/b699ea1d0fb52c0283f8ec5b37366e965e6e7354)
   * Changes
       * Fixed: no more warning on PHP 5.6 about php5-uprofiler (profiler.so missing)
-      * Added: `pm2`, `phpcs`, `phpcbf`, `phpmd`, `phpcpd`, `pdepend`
+      * Added: `pdepend`, `phpcbf`, `phpcpd`, `phpcs`, `phpmd`, `pm2`
 * **v1.1.2 - 20171026**
   * Metadata
       * Version: 1.1.2
