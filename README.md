@@ -9,7 +9,7 @@
 > `virtuasa/php:7.1`
 > `virtuasa/php:7.2`
 
-These images are built and published on Docker Hub : https://hub.docker.com/r/virtuasa/php/
+These images are built and published on [VirtuaSA Docker Hub](https://hub.docker.com/r/virtuasa/php/).
 
 ## Build
 
@@ -19,7 +19,7 @@ These images are built and published on Docker Hub : https://hub.docker.com/r/vi
 
 ## Images content
 
-* PHP
+* [PHP](http://php.net/manual/en/)
   * [Composer 1.4.1+ (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)
   * [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)
   * [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)
@@ -29,11 +29,15 @@ These images are built and published on Docker Hub : https://hub.docker.com/r/vi
   * [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)
   * [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)
   * [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)
-* Node.js 8.9+
-  * Bower, Gulp, Grunt, PM2, Webpack
-* Yarn
-* Apache
-* Debian
+* [Node.js 8.9+](https://nodejs.org/dist/latest-v8.x/docs/api/)
+  * [Bower](https://bower.io/),
+    [Gulp](https://github.com/gulpjs/gulp/blob/master/docs/API.md),
+    [Grunt](https://gruntjs.com/getting-started),
+    [PM2](http://pm2.keymetrics.io/docs/usage/quick-start/),
+    [Webpack](https://webpack.js.org/concepts/)
+* [Yarn](https://yarnpkg.com/en/docs)
+* [Apache](https://httpd.apache.org/docs/2.4/)
+* [Debian](https://www.debian.org/doc/)
 
 *Some features are not included on too old PHP version (5.2 & 5.3 especially).*
 
