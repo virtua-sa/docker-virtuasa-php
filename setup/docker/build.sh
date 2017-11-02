@@ -93,6 +93,12 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[23456])) ]]; then
     echo -n "pdepend --version : " && pdepend --version
 fi
 
+# Install PHPMD (PHP Mess Detector)
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+    curl -sSL http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod +x /usr/local/bin/phpmd
+    echo -n "phpmd --version : " && phpmd --version
+fi
+
 # Install common Node.js tools
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     npm install -g bower grunt gulp pm2 webpack
