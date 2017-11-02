@@ -108,6 +108,7 @@ To customize these setup on your projects, changes must only be done to file [`d
   * Changes
       * Fixed: no more warning on PHP 5.6 about php5-uprofiler (profiler.so missing)
       * Added: `pdepend`, `phpcbf`, `phpcpd`, `phpcs`, `phpmd`, `pm2`
+      * Added: short hashcode of git commit used to build images is displayed on startup
 * **v1.1.2 - 20171026**
   * Metadata
       * Version: 1.1.2
