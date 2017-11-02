@@ -72,6 +72,10 @@ fi
 
 # Install PHPUnit
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
+    curl -sSL https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+    echo -n "phpunit --version : " && phpunit --version
+fi
+if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
     curl -sSL https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod +x /usr/local/bin/phpunit62
     echo -n "phpunit62 --version : " && phpunit62 --version
 fi
