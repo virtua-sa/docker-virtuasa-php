@@ -20,10 +20,10 @@ echo "docker-init.sh called !"
 [[ -n "$(type -t phpunit62)" ]]     && phpunit62 --version
 
 [[ -n "$(type -t node)" ]]          && echo -n "Node.js " && node -v
-[[ -n "$(type -t npm)" ]]           && echo -n "NPM v" && npm -v
-[[ -n "$(type -t bower)" ]]         && bower --version
-[[ -n "$(type -t grunt)" ]]         && grunt --version
-[[ -n "$(type -t gulp)" ]]          && gulp --version
-[[ -n "$(type -t webpack)" ]]       && webpack --version
+[[ -n "$(type -t npm)" ]]           && echo -n "NPM " && npm -v
+[[ -n "$(type -t bower)" ]]         && echo -n "bower " && bower --version
+[[ -n "$(type -t grunt)" ]]         && echo -n "grunt " && grunt --version
+[[ -n "$(type -t gulp)" ]]          && echo -n "gulp " && gulp --version
+[[ -n "$(type -t webpack)" ]]       && echo -n "webpack " && webpack --version
 
-[[ -n "$(type -t yarn)" ]]          && yarn --version
+[[ -n "$(type -t yarn)" ]]          && echo -n "yarn " && yarn --version
