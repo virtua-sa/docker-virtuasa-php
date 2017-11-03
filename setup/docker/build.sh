@@ -158,6 +158,12 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
     echo -n "phing --version : " && phing --version
 fi
 
+# Install phpDocumentor
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+    curl -sSL http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod +x /usr/local/bin/phpdoc
+    echo -n "phpdoc --version : " && phpdoc --version
+fi
+
 # Configure Apache
 a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
