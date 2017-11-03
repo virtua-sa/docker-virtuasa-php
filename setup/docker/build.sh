@@ -164,6 +164,12 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     echo -n "phpdoc --version : " && phpdoc --version
 fi
 
+# Install PHPLOC
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
+    curl -sSL https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod +x /usr/local/bin/phploc
+    echo -n "phploc --version : " && phploc --version
+fi
+
 # Configure Apache
 a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
