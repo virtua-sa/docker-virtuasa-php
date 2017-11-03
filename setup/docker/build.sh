@@ -4,6 +4,12 @@ set -xe
 # Print all environment variables
 printenv
 
+# Print all shell options
+shopt
+
+# Enable some shell options
+shopt -s extglob
+
 # Check if Debian version is already configured
 [[ ! -e "/setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
     && echo "Debian version not supported yet, file /setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
