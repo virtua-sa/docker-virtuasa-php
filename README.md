@@ -109,7 +109,7 @@ To customize these setup on your projects, changes must only be done to file [`d
   * Metadata
       * Version: 1.2.0
       * Tags: `virtuasa/php:*-20171103`
-      * Built on commit : [b699ea1d](https://gitlab.virtua.ch/ddev/tools-docker/commit/b699ea1d0fb52c0283f8ec5b37366e965e6e7354)
+      * Built on commit : [2a3d706a](https://gitlab.virtua.ch/ddev/tools-docker/commit/2a3d706af671a3437f20e6de9fb3e6a862170476)
   * Changes
       * Changed: use Node.js upgraded from 6.9.1 to 8.9.0 LTS
       * Added: `behat`, `dbunit`, `phing`, `phpdoc`, `phploc`, `phpmetrics`
