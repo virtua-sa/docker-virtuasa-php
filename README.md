@@ -19,7 +19,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 
 ## Images content
 
-| [PHP](http://php.net/manual/en/)                                                                  | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       |
+| [PHP (`php`)](http://php.net/manual/en/)                                                          | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       |
 | ------------------------------------------------------------------------------------------------- | :------: | :-------: | :------: | :------: | :------: | :-------: | :-------: | :-------: |
 | [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)                                    |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Composer (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
