@@ -92,9 +92,8 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
 fi
 
 # Install DbUnit
-if [[ "${PHP_VERSION}" =~ ^7\.[01] ]]; then
+if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
     curl -sSL https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod +x /usr/local/bin/dbunit
-    echo -n "dbunit --version : " && dbunit --version
 fi
 
 # Install PHP_CodeSniffer

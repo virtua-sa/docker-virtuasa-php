@@ -4,7 +4,7 @@ echo "docker-init.sh called !"
 [[ -n "$(type -t php)" ]]           && php -v
 [[ -n "$(type -t behat)" ]]         && behat --version
 [[ -n "$(type -t composer)" ]]      && composer --version
-[[ -n "$(type -t dbunit)" ]]        && dbunit --version
+# [[ -n "$(type -t dbunit)" ]]        && dbunit --version
 [[ -n "$(type -t pdepend)" ]]       && pdepend --version
 [[ -n "$(type -t phing)" ]]         && phing -version
 [[ -n "$(type -t phpcbf)" ]]        && phpcbf --version
