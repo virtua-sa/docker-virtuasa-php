@@ -15,7 +15,7 @@ echo
 trap 'kill ${!}; . /setup/docker/stop.sh' SIGTERM
 
 # Set timezone
-echo ${DOCKER_TIMEZONE} | sudo tee /etc/timezone > /dev/null
+echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
 sudo dpkg-reconfigure --frontend noninteractive tzdata
 
 # Print installed PHP version
