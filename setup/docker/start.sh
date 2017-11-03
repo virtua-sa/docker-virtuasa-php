@@ -28,6 +28,12 @@ export DOCKER_HOST_IP
 # Print all environment variables (can be overriden in docker-compose.yml)
 [[ -n "${DOCKER_DEBUG}" ]] && printenv
 
+# Print all shell options
+[[ -n "${DOCKER_DEBUG}" ]] && shopt
+
+# Enable some shell options
+shopt -s extglob
+
 # Force the UID/GID of the docker container running user
 [[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
