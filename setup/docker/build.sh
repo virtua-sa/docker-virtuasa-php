@@ -131,12 +131,15 @@ fi
 if [[ "${PHP_VERSION}" =~ ^(5\.[3]) ]]; then
     curl -sSL https://github.com/Behat/Behat/releases/download/v3.2.2/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
+    rm -rf /tmp/behat_gherkin_cache
 elif [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
     curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
+    rm -rf /tmp/behat_gherkin_cache
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
     curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
+    rm -rf /tmp/behat_gherkin_cache
 fi
 
 # Install PhpMetrics

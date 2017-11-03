@@ -80,7 +80,7 @@ sudo rm -f /var/run/apache2/ssl_mutex
 sudo mkdir -p /var/run/apache2
 [[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
 
-# Apache log direcotry
+# Apache log directory
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 
@@ -90,6 +90,9 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
 # PHP log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
+
+# Clean Behat cache directory
+sudo rm -rf /tmp/behat_gherkin_cache
 
 # Exec custom startup script
 [[ -n "${DOCKER_CUSTOM_START}" ]] && [[ -e "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" \
