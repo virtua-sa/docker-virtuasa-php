@@ -46,7 +46,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Apache](https://httpd.apache.org/docs/2.4/)                                                      | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
 
-To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](docker-compose.yml).
+To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
 
 ## Usage
 
