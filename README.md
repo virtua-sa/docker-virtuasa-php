@@ -20,10 +20,16 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 ## Images content
 
 * [PHP](http://php.net/manual/en/)
+  * [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)
   * [Composer 1.4.1+ (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)
+  * [DbUnit (`dbunit`)](https://github.com/sebastianbergmann/dbunit)
+  * [Phing (`phing`)](https://www.phing.info/docs/guide/stable/)
   * [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)
   * [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)
   * [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)
+  * [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)
+  * [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)
+  * [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)
   * [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)
   * [PHPUnit (Current Stable Release, 6.4+) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)
   * [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)
