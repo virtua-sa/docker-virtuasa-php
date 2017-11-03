@@ -122,6 +122,18 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     npm install -g bower grunt gulp pm2 webpack
 fi
 
+# Install Behat
+if [[ "${PHP_VERSION}" =~ ^(5\.[3]) ]]; then
+    curl -sSL https://github.com/Behat/Behat/releases/download/v3.2.2/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
+    echo -n "behat --version : " && behat --version
+elif [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
+    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
+    echo -n "behat --version : " && behat --version
+elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
+    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
+    echo -n "behat --version : " && behat --version
+fi
+
 # Configure Apache
 a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
