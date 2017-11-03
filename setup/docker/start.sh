@@ -51,7 +51,7 @@ fi
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
     sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/nginx.conf" "/etc/nginx"
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"(!nginx).conf "/etc/nginx/sites-enabled"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"!(nginx).conf "/etc/nginx/sites-enabled"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini "/etc/php${PHP_VERSION_DIR}/apache2"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini "/etc/php${PHP_VERSION_DIR}/cli"
 fi
