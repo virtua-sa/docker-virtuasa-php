@@ -134,6 +134,15 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
     echo -n "behat --version : " && behat --version
 fi
 
+# Install PhpMetrics
+if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
+    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod +x /usr/local/bin/phpmetrics
+    echo -n "phpmetrics --version : " && phpmetrics --version
+elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod +x /usr/local/bin/phpmetrics
+    echo -n "phpmetrics --version : " && phpmetrics --version
+fi
+
 # Configure Apache
 a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
