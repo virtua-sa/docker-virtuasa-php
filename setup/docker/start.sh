@@ -36,19 +36,24 @@ export DOCKER_HOST_IP
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/nginx"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
     sudo cp -nr "/etc/apache2/sites-available/"*.conf "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo cp -nr "/etc/nginx/nginx.conf" "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
+    sudo cp -nr "/etc/nginx/sites-enabled"*.conf "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/apache"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/cli"
 fi
 
 # Copy image's configuration files from host filesystem
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/nginx.conf" "/etc/nginx"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"(!nginx).conf "/etc/nginx/sites-enabled"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini "/etc/php${PHP_VERSION_DIR}/apache2"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini "/etc/php${PHP_VERSION_DIR}/cli"
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
 fi
 
 # Chown the mount directory
@@ -100,7 +105,7 @@ sudo rm -rf /tmp/behat_gherkin_cache
     && ./${DOCKER_CUSTOM_START}
 
 # Display server IP
-echo "Started web server on ..."
+echo "Started ${DOCKER_WEB_SERVER} web server on ..."
 [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
     && IP="$(ifconfig | awk '/inet addr/{print substr($2,6)}' | head -n 3 | tail -n 1)" \
     || IP="$(hostname -I | cut -d' ' -f1)"
@@ -115,7 +120,11 @@ fi
 # Chown the mount dir after Apache has started
 (sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
-# Start Apache
-[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
-    && sudo /usr/sbin/apache2ctl -DFOREGROUND \
-    || sudo /usr/sbin/apache2ctl -D FOREGROUND
+# Start web server
+[[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
+    [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
+        && sudo /usr/sbin/apache2ctl -DFOREGROUND \
+        || sudo /usr/sbin/apache2ctl -D FOREGROUND
+elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
+    sudo nginx -g "daemon off;"
+fi

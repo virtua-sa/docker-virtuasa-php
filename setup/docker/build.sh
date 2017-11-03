@@ -181,11 +181,16 @@ chmod -R 755 /var/logs/apache
 # Copy initial configuration files
 ls -alhR /etc/php${PHP_VERSION_DIR}
 ls -alhR /etc/apache2/sites-available
+ls -alhR /etc/nginx
 cp /setup/php/apache/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/apache2/conf.d
 cp /setup/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
 cp /setup/apache/*.conf /etc/apache2/sites-available
+rm /etc/nginx/nginx.conf
+rm /etc/nginx/sites-enabled/*
+cp /setup/nginx/nginx.conf /etc/nginx
+cp /setup/nginx/(!nginx).conf /etc/nginx/sites-enabled
 
 # Create mountpoint for the web application
 mkdir -p "${DOCKER_BASE_DIR}"

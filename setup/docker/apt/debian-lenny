@@ -10,6 +10,7 @@ htop
 mc
 mysql-client
 nano
+nginx
 rsync
 ssl-cert
 subversion

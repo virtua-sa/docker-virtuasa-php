@@ -33,6 +33,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     DOCKER_HOST_SETUP_DIR="setup" \
     DOCKER_HOST_UID="" \
     DOCKER_TIMEZONE="Europe/Zurich" \
+    DOCKER_WEB_SERVER="apache" \
     PHP_LOG_PATH="var/logs/php" \
     PHP_VERSION="${PHP_VERSION}" \
     PHP_VERSION_APT="${PHP_VERSION_APT}" \
