@@ -149,6 +149,15 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
     echo -n "phpmetrics --version : " && phpmetrics --version
 fi
 
+# Install Phing
+if [[ "${PHP_VERSION}" =~ ^(5\.[2345]) ]]; then
+    curl -sSL http://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod +x /usr/local/bin/phing
+    echo -n "phing --version : " && phing --version
+elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
+    curl -sSL http://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod +x /usr/local/bin/phing
+    echo -n "phing --version : " && phing --version
+fi
+
 # Configure Apache
 a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && a2enmod version
