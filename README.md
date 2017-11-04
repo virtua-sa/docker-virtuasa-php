@@ -19,8 +19,9 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 
 ## Images content
 
-| [PHP (`php`)](http://php.net/manual/en/)                                                          | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       |
+| [Tags (`virtuasa/php:`)](https://hub.docker.com/r/virtuasa/php/tags/)                             | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       |
 | ------------------------------------------------------------------------------------------------- | :------: | :-------: | :------: | :------: | :------: | :-------: | :-------: | :-------: |
+| [PHP (`php`)](http://php.net/manual/en/)                                                          | *5.2.6*  | *5.3.3*   | *5.4.45* | *5.5.38* | *5.6.30* | *7.0.25*  | *7.1.11*  | *7.2.0RC5*|
 | [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)                                    |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Composer (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [DbUnit (`dbunit`)](https://github.com/sebastianbergmann/dbunit)                                  |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
@@ -47,6 +48,8 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
+
+*Apache* calls PHP with *mod_php*. *Nginx* calls PHP with
 
 ## Usage
 
