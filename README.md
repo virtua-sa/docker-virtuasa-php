@@ -45,6 +45,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Webpack (`webpack`)](https://webpack.js.org/concepts/)                                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Apache](https://httpd.apache.org/docs/2.4/)                                                      | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [NGINX](https://nginx.org/en/docs/)                                                               | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
