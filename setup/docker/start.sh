@@ -127,7 +127,7 @@ fi
 (sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start web server
-[[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
+if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
         && sudo /usr/sbin/apache2ctl -DFOREGROUND \
         || sudo /usr/sbin/apache2ctl -D FOREGROUND
