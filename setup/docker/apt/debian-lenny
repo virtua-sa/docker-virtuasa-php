@@ -15,5 +15,6 @@ rsync
 ssl-cert
 subversion
 sudo
+unzip
 vim
 wget

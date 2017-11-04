@@ -17,5 +17,6 @@ snmp
 ssl-cert
 subversion
 sudo
+unzip
 vim
 wget
