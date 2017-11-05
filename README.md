@@ -25,10 +25,10 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)                                    |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Composer (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [DbUnit (`dbunit`)](https://github.com/sebastianbergmann/dbunit)                                  |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Phing (`phing`)](https://www.phing.info/docs/guide/stable/)                                      | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Phing (`phing`)](https://www.phing.info/docs/guide/stable/)                                      |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)    |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)                 |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)                                  |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |

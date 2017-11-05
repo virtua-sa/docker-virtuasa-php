@@ -39,10 +39,10 @@ shopt -s extglob
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
 # Copy Nginx configuration files
-rm /etc/nginx/nginx.conf
-rm /etc/nginx/sites-enabled/*
-cp /setup/nginx/nginx.conf* /etc/nginx
-cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
+sudo rm /etc/nginx/nginx.conf*
+sudo rm /etc/nginx/sites-enabled/*
+sudo cp /setup/nginx/nginx.conf* /etc/nginx
+sudo cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
 
 # Copy image's configuration files to host filesystem
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
@@ -85,8 +85,11 @@ echo -e "\n$(printenv | sed "s/'//g" | sed "s/^\([^=]*\)=\(.*\)$/export \1='\2'/
 
 # Replace system environment variables into Nginx configuration files
 export DOLLAR='$'
-for file in /etc/nginx/*.conf.tpl /etc/nginx/sites-enabled/*.conf.tpl; do
-    envsubst < ${file} > ${file%%.tpl}
+for file in /etc/nginx/*.conf.tpl; do
+    sudo envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+done
+for file in /etc/nginx/sites-enabled/*.conf.tpl; do
+    sudo envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
 done
 
 # Run Composer if necessary

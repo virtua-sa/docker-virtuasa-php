@@ -100,7 +100,7 @@ if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
 fi
 
 # Install Phing
-if [[ "${PHP_VERSION}" =~ ^(5\.[2345]) ]]; then
+if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
     curl -sSL http://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod +x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
@@ -123,7 +123,7 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
 fi
 
 # Install PHP_Depend
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[23456])) ]]; then
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     curl -sSL http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod +x /usr/local/bin/pdepend
     echo -n "pdepend --version : " && pdepend --version
 fi
@@ -193,7 +193,7 @@ cp /setup/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
 cp /setup/apache/*.conf /etc/apache2/sites-available
-rm /etc/nginx/nginx.conf
+rm /etc/nginx/nginx.conf*
 rm /etc/nginx/sites-enabled/*
 cp /setup/nginx/nginx.conf* /etc/nginx
 cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
