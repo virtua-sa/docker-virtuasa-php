@@ -38,6 +38,12 @@ shopt -s extglob
 [[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
+# Copy Nginx configuration files
+rm /etc/nginx/nginx.conf
+rm /etc/nginx/sites-enabled/*
+cp /setup/nginx/nginx.conf* /etc/nginx
+cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
+
 # Copy image's configuration files to host filesystem
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
@@ -76,6 +82,11 @@ fi
 
 # Export system environment variables to Apache
 echo -e "\n$(printenv | sed "s/'//g" | sed "s/^\([^=]*\)=\(.*\)$/export \1='\2'/g")\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+
+# Replace system environment variables into Nginx configuration files
+for file in /etc/nginx/*.conf.tpl /etc/nginx/sites-enabled/*.conf.tpl; do
+    envsubst < ${file} > ${file%%.tpl}
+done
 
 # Run Composer if necessary
 if [[ "${PHP_VERSION}" != "5.2" ]]; then
