@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Make sure we stop building/pushing images if an error happens
+set -e
+
 # Configure the build accordingly to the requested PHP version
 case "$1" in
 5.2)
@@ -66,9 +69,6 @@ all)
     exit 1;
     ;;
 esac
-
-# Make sure we stop building/pushing images if an error happens
-set -e
 
 # Display build info
 echo "df_from_image='${df_from_image}'"
