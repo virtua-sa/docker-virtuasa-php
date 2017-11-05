@@ -84,6 +84,7 @@ fi
 echo -e "\n$(printenv | sed "s/'//g" | sed "s/^\([^=]*\)=\(.*\)$/export \1='\2'/g")\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 
 # Replace system environment variables into Nginx configuration files
+export DOLLAR='$'
 for file in /etc/nginx/*.conf.tpl /etc/nginx/sites-enabled/*.conf.tpl; do
     envsubst < ${file} > ${file%%.tpl}
 done
