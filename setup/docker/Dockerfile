@@ -58,9 +58,10 @@ RUN sed -i 's/\r$//' /setup/docker/*.sh \
     && rm -f /setup/docker/build.sh \
     && rm -f /setup/docker/Dockerfile
 
-# Set the workdir to mountpoint and the user
+# Set the workdir to mountpoint, the volume and the user
 USER docker
-WORKDIR /data/
+WORKDIR /data
+VOLUME /data
 
 # Expose ports
 EXPOSE 80 443 9000
