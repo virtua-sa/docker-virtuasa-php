@@ -74,11 +74,7 @@ if [[ "${PHP_VERSION}" = "5.6" ]]; then
 fi
 
 # Install Behat
-if [[ "${PHP_VERSION}" =~ ^(5\.[3]) ]]; then
-    curl -sSL https://github.com/Behat/Behat/releases/download/v3.2.2/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
-    echo -n "behat --version : " && behat --version
-    rm -rf /tmp/behat_gherkin_cache
-elif [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
+if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
     curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
     rm -rf /tmp/behat_gherkin_cache
@@ -89,7 +85,7 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
 fi
 
 # Install Composer
-if [[ "${PHP_VERSION}" != "5.2" ]]; then
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     curl -sSL https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
 fi
@@ -129,7 +125,7 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
 fi
 
 # Install phpDocumentor
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
     curl -sSL http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod +x /usr/local/bin/phpdoc
     echo -n "phpdoc --version : " && phpdoc --version
 fi
