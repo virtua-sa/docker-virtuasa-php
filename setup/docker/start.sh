@@ -6,6 +6,13 @@ echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 echo "Built from commit: ${DOCKER_FROM_COMMIT}"
 echo
 
+# Print ran commands
+[[ -n "${DOCKER_DEBUG}" ]] && set -x
+
+# Set working directory
+sudo mkdir -p ${DOCKER_BASE_DIR}
+cd ${DOCKER_BASE_DIR}
+
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
     && echo "Executing custom init script: ${DOCKER_CUSTOM_INIT} ..." \

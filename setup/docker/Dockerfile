@@ -49,7 +49,8 @@ ENV APACHE_DOCUMENT_ROOT="web" \
 COPY ./setup/ /setup/
 
 # Make sure scripts are executables and run the build script
-RUN sed -i 's/\r$//' /setup/docker/*.sh \
+RUN set -xe \
+    && sed -i 's/\r$//' /setup/docker/*.sh \
     && chmod +x /setup/docker/*.sh \
     && ls -alhR /setup \
     && echo "PHP_VERSION=${PHP_VERSION}" \
@@ -60,8 +61,8 @@ RUN sed -i 's/\r$//' /setup/docker/*.sh \
 
 # Set the workdir to mountpoint, the volume and the user
 USER docker
-WORKDIR /data
-VOLUME /data
+WORKDIR ${DOCKER_BASE_DIR}
+VOLUME ${DOCKER_BASE_DIR}
 
 # Expose ports
 EXPOSE 80 443 9000
