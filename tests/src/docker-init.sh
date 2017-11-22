@@ -1,4 +1,8 @@
 #!/bin/bash
+
+# Print ran commands
+[[ -n "${DOCKER_DEBUG}" ]] && set -x
+
 echo "docker-init.sh called !"
 
 [[ -n "$(type -t php)" ]]           && php -v
@@ -27,3 +31,5 @@ echo "docker-init.sh called !"
 [[ -n "$(type -t webpack)" ]]       && echo -n "webpack " && webpack --version
 
 [[ -n "$(type -t yarn)" ]]          && echo -n "yarn " && yarn --version
+
+exit 0;
