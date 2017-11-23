@@ -171,5 +171,5 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
         && sudo /usr/sbin/apache2ctl -DFOREGROUND \
         || sudo /usr/sbin/apache2ctl -D FOREGROUND
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
-    sudo nginx -g "daemon off;" || sudo nginx
+    sudo nginx
 fi

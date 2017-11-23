@@ -1,5 +1,5 @@
-user ${NGINX_RUN_USER};
-group ${NGINX_RUN_GROUP};
+daemon off;
+user ${NGINX_RUN_USER} ${NGINX_RUN_GROUP};
 worker_processes auto;
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
@@ -39,8 +39,8 @@ http {
 	# Logging Settings
 	##
 
-	access_log ${NGINX_LOG_PATH}/access.log;
-	error_log ${NGINX_LOG_PATH}/error.log;
+	access_log ${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}/access.log;
+	error_log ${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}/error.log;
 
 	##
 	# Gzip Settings
