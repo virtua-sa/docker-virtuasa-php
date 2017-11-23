@@ -26,6 +26,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     DOCKER_COPY_IP_TO_HOST="false" \
     DOCKER_CUSTOM_INIT="docker-init.sh" \
     DOCKER_CUSTOM_START="docker-start.sh" \
+    DOCKER_CUSTOM_STOP="docker-stop.sh" \
     DOCKER_DEBUG="" \
     DOCKER_FROM_COMMIT="${DOCKER_FROM_COMMIT}" \
     DOCKER_FROM_IMAGE="${FROM_IMAGE}" \
