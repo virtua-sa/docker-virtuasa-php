@@ -77,14 +77,23 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_CHMOD_R777`             | ` ` *(empty)*                             | Execute a `chmod -R 777` on given files if set \*
 | `DOCKER_COPY_CONFIG_FROM_HOST`  | `false`                                   | Copy the configuration files from the setup folder on the host if set to `true`
 | `DOCKER_COPY_CONFIG_TO_HOST`    | `false`                                   | Copy the configuration files to the setup folder on the host if set to `true`
+| `DOCKER_COPY_IP_TO_HOST`        | `false`                                   | Copy the container's ip to the setup folder on the host if set to `true`
 | `DOCKER_CUSTOM_INIT`            | `docker-init.sh`                          | Execute script before doing anything else \*
-| `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting Apache \*
+| `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting web server \*
+| `DOCKER_CUSTOM_STOP`            | `docker-stop.sh`                          | Execute script before shutting down \*
 | `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
 | `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
 | `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
 | `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
+| `DOCKER_WEB_SERVER`             | `apache`                                  | Web server to use, can be either `apache` or `nginx`
+| `NGINX_DOCUMENT_ROOT`           | `web`                                     | Path to the Nginx document root folder \*
+| `NGINX_LOG_PATH`                | `var/logs/nginx`                          | Path of the website Nginx log folder \*
+| `NGINX_RUN_GROUP`               | `docker`                                  | Group of user running Nginx
+| `NGINX_RUN_USER`                | `docker`                                  | User running Nginx
 | `PHP_LOG_PATH`                  | `var/logs/php`                            | Path of the PHP log folder \*
+| `PHP_MEMORY_LIMIT_APACHE`       | `128M`                                    | Maximum amount of memory a PHP script running on Apache may consume
+| `PHP_MEMORY_LIMIT_CLI`          | `512M`                                    | Maximum amount of memory a PHP script running on CLI may consume
 | `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
 | `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
 
