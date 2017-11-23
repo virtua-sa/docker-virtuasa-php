@@ -104,6 +104,9 @@ sudo mkdir -p /var/run/apache2
 [[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
 
 # Apache log directory
+export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_DIR}"
+sudo mkdir -p "${APACHE_LOG_DIR}"
+sudo chmod -R 755 "${APACHE_LOG_DIR}"
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 
@@ -124,6 +127,7 @@ done
 (cd /etc/apache2/sites-enabled && sudo a2ensite *)
 echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 echo -e "\nexport APACHE_RUN_GROUP='${APACHE_RUN_GROUP}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+echo -e "\nexport APACHE_LOG_DIR='${APACHE_LOG_DIR}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 
 # Replace system environment variables into Nginx configuration files
 for file in /etc/nginx/*.conf.tpl; do
