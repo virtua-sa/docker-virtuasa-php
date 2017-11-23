@@ -19,7 +19,8 @@ cd ${DOCKER_BASE_DIR}
     && ./${DOCKER_CUSTOM_INIT}
 
 # Set trap for every signals
-trap 'PTK="${!}"; ps -e | grep ${PTK} && kill ${PTK}; echo "Stopping the Virtua Docker Container ..."; . /setup/docker/stop.sh' 0
+trap 'PTK="${!}"; [[ -n "${PTK}" ]] && ps -e | grep -q "${PTK}" && kill ${PTK};
+      echo "Stopping the Virtua Docker Container ..."; . /setup/docker/stop.sh' 0
 
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
@@ -111,7 +112,7 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
 
 export DOLLAR='$'
 # Disable previous Apache sites
-(cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite *)
+(cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
 # Replace system environment variables into Apache configuration files
 for file in /etc/apache2/sites-available/*.conf.tpl; do
     envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
