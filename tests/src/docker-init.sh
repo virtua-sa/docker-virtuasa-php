@@ -32,4 +32,11 @@ echo "docker-init.sh called !"
 
 [[ -n "$(type -t yarn)" ]]          && echo -n "yarn " && yarn --version
 
+# Print Apache and Nginx versions
+/usr/sbin/apache2 -v
+/usr/sbin/nginx -v
+
+# Print Debian version
+uname -a
+
 exit 0;

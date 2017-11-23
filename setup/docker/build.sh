@@ -1,6 +1,9 @@
 #!/bin/bash
 set -xe
 
+# Print Debian version
+uname -a
+
 # Print all environment variables
 printenv
 
@@ -67,6 +70,10 @@ fi
 
 # Remove unnecessary files left after installations
 apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
+
+# Print Apache and Nginx versions
+/usr/sbin/apache2 -v
+/usr/sbin/nginx -v
 
 # Fix PHP 5.6 issue with uprofiler (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=784774)
 if [[ "${PHP_VERSION}" = "5.6" ]]; then
