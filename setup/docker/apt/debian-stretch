@@ -5,6 +5,7 @@ build-essential
 ca-certificates
 curl
 dos2unix
+gettext
 git
 gnupg
 htop

@@ -4,6 +4,7 @@ apt-utils
 build-essential
 ca-certificates
 curl
+gettext
 git
 gnupg
 htop
