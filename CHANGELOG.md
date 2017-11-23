@@ -1,5 +1,33 @@
 # Virtua Docker Container - PHP - CHANGELOG
 
+## V1.X.X - 201711XX
+
+* Metadata
+  * Version: 1.X.X
+  * Tags: `virtuasa/php:*-201711XX`
+  * Built on commit : [XXXXXXXX](https://gitlab.virtua.ch/ddev/tools-docker/commit/XXXXXX)
+* Changes
+  * Added: `PHP_MEMORY_LIMIT_APACHE`, `PHP_MEMORY_LIMIT_CLI` to set maximum memory a PHP script may consumes
+  * Removed: `APACHE_LOG_DIR` environment variable (use same path as `APACHE_LOG_PATH`)
+
+## v1.3.0 - 20171123
+
+* Metadata
+  * Version: 1.3.0
+  * Tags: `virtuasa/php:*-20171123`
+  * Built on commit : [7b8e62d1](https://gitlab.virtua.ch/ddev/tools-docker/commit/7b8e62d15e1043aa6a5b3cfba265ecd57c58c6f6)
+* Changes
+  * Fixed: no more issues when exporting environment variables to Apache
+  * Added: ability to use Nginx instead of Apache (experimental)
+  * Added: `envsubst`, `unzip` packages
+  * Added: `DOCKER_CUSTOM_STOP` to run script on shutting down
+  * Improved: declare volume in `Dockerfile`
+  * Improved: `DOCKER_BASE_DIR` now changes working directory too
+  * Improved: file permissions are now reset on shutting down too
+  * Removed: `phing`, `pdepends` for PHP 5.2
+  * Removed: `behat`, `phpdoc` for PHP 5.3
+  * Removed: `behat` for PHP 5.4
+
 ## v1.2.0 - 20171103
 
 * Metadata
@@ -17,7 +45,7 @@
   * Tags: `virtuasa/php:*-20171102`
   * Built on commit : [b699ea1d](https://gitlab.virtua.ch/ddev/tools-docker/commit/b699ea1d0fb52c0283f8ec5b37366e965e6e7354)
 * Changes
-  * Fixed: no more warning on PHP 5.6 about php5-uprofiler (profiler.so missing)
+  * Fixed: no more warning on PHP 5.6 about `php5-uprofiler` (`profiler.so` missing)
   * Added: `pdepend`, `phpcbf`, `phpcpd`, `phpcs`, `phpmd`, `pm2`
   * Added: short hashcode of git commit used to build images is displayed on startup
 
@@ -55,7 +83,7 @@
   * Added: `DOCKER_CUSTOM_START` has now a default value: `docker-start.sh`
   * Improved: removed unnecessary files, so images are smaller
   * Improved: removed display of environment variables on startup, unless `DOCKER_DEBUG` is set
-  * Improved: expose ports 80 (http), 443 (https) and 9000 (xdebug)
+  * Improved: expose ports 80 (http), 443 (https) and 9000 (xdebug) in `Dockerfile`
 
 ## v1.0.1 - 20171016
 
@@ -64,7 +92,7 @@
   * Tags: `virtuasa/php:*-20171016`
   * Built on commit : [abc50064](https://gitlab.virtua.ch/ddev/tools-docker/commit/abc500643e9fa2b33a3995704a3ba01da96b5dd0)
 * Changes
-  * Fixed: php7-snmp now works well on PHP 7.0, 7.1, 7.2
+  * Fixed: `php7-snmp` now works well on PHP 7.0, 7.1, 7.2
   * Changed: `DOCKER_HOST_GID` and `DOCKER_HOST_UID` are now empty by default, chown is only done when a value is assigned to both of them
   * Added: `DOCKER_CUSTOM_START` can contain the name of a script that will be executed just before Apache starts, usefull for custom file permissions
 
