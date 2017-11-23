@@ -111,7 +111,7 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
 
 export DOLLAR='$'
 # Disable previous Apache sites
-(cd /etc/apache2/sites-enabled && sudo a2dissite *)
+(cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite *)
 # Replace system environment variables into Apache configuration files
 for file in /etc/apache2/sites-available/*.conf.tpl; do
     envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
