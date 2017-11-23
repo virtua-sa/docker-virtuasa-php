@@ -122,6 +122,8 @@ done
 
 # Configure Apache
 (cd /etc/apache2/sites-enabled && sudo a2ensite *)
+echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+echo -e "\nexport APACHE_RUN_GROUP='${APACHE_RUN_GROUP}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 
 # Replace system environment variables into Nginx configuration files
 for file in /etc/nginx/*.conf.tpl; do
@@ -169,5 +171,5 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
         && sudo /usr/sbin/apache2ctl -DFOREGROUND \
         || sudo /usr/sbin/apache2ctl -D FOREGROUND
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
-    sudo nginx -g "daemon off;"
+    sudo nginx -g "daemon off;" || sudo nginx
 fi
