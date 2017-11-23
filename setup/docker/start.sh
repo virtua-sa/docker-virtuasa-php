@@ -104,9 +104,7 @@ sudo mkdir -p /var/run/apache2
 [[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
 
 # Apache log directory
-export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_DIR}"
-sudo mkdir -p "${APACHE_LOG_DIR}"
-sudo chmod -R 755 "${APACHE_LOG_DIR}"
+export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 

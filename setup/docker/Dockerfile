@@ -8,7 +8,6 @@ ARG PHP_VERSION="7.1"
 ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
 ENV APACHE_DOCUMENT_ROOT="web" \
-    APACHE_LOG_DIR="/data/var/logs/apache" \
     APACHE_LOG_PATH="var/logs/apache" \
     APACHE_RUN_GROUP="docker" \
     APACHE_RUN_USER="docker" \

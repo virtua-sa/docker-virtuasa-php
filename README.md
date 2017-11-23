@@ -62,7 +62,6 @@ To customize these setup on your projects, changes must only be done to file [`d
 | Variable name                   | Default value                             | Description                                                                    |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
 | `APACHE_DOCUMENT_ROOT`          | `web`                                     | Path to the Apache document root folder \*
-| `APACHE_LOG_DIR`                | `var/logs/apache`                         | Path of the default Apache log folder \*
 | `APACHE_LOG_PATH`               | `var/logs/apache`                         | Path of the website Apache log folder \*
 | `APACHE_RUN_GROUP`              | `docker`                                  | Group of user running Apache
 | `APACHE_RUN_USER`               | `docker`                                  | User running Apache
