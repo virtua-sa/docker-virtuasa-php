@@ -120,7 +120,7 @@ for file in /etc/apache2/sites-available/*.conf.tpl; do
 done
 
 # Configure Apache
-(cd /etc/apache2/sites-enabled && sudo a2ensite *)
+(cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2ensite *)
 
 # Replace system environment variables into Nginx configuration files
 for file in /etc/nginx/*.conf.tpl; do
