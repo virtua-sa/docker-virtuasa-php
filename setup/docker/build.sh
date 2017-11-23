@@ -188,8 +188,9 @@ cp /setup/php/apache/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/apache2/conf
 cp /setup/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
-cp /setup/apache/*.conf /etc/apache2/sites-available
+cp /setup/apache/*.conf* /etc/apache2/sites-available
 rm /etc/nginx/nginx.conf*
+rm /etc/nginx/sites-available/*
 rm /etc/nginx/sites-enabled/*
 cp /setup/nginx/nginx.conf* /etc/nginx
 cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled

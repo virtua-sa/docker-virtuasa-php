@@ -18,8 +18,8 @@ cd ${DOCKER_BASE_DIR}
     && echo "Executing custom init script: ${DOCKER_CUSTOM_INIT} ..." \
     && ./${DOCKER_CUSTOM_INIT}
 
-# Set SIGTERM trap
-trap 'kill ${!}; . /setup/docker/stop.sh' SIGTERM
+# Set trap for every signals
+trap 'PTK="${!}"; ps -e | grep ${PTK} && kill ${PTK}; echo "Stopping the Virtua Docker Container ..."; . /setup/docker/stop.sh' 0
 
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
@@ -45,6 +45,10 @@ shopt -s extglob
 [[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
+# Copy Apache configuration files
+sudo rm /etc/apache2/sites-available/*
+sudo cp /setup/apache/*.conf* /etc/apache2/sites-available
+
 # Copy Nginx configuration files
 sudo rm /etc/nginx/nginx.conf*
 sudo rm /etc/nginx/sites-enabled/*
@@ -58,19 +62,19 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/nginx"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
-    sudo cp -nr "/etc/apache2/sites-available/"*.conf "${DOCKER_HOST_SETUP_DIR}/apache"
+    sudo cp -nr "/etc/apache2/sites-available/"*.conf* "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
-    sudo cp -nr "/etc/nginx/nginx.conf" "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
-    sudo cp -nr "/etc/nginx/sites-enabled"*.conf "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
+    sudo cp -nr "/etc/nginx/"nginx.conf* "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
+    sudo cp -nr "/etc/nginx/sites-enabled/"*.conf* "${DOCKER_HOST_SETUP_DIR}/docker/nginx"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/apache"
     sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/cli"
 fi
 
 # Copy image's configuration files from host filesystem
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf "/etc/apache2/sites-available"
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/nginx.conf" "/etc/nginx"
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"!(nginx).conf "/etc/nginx/sites-enabled"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf* "/etc/apache2/sites-available"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"nginx.conf* "/etc/nginx"
+    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"!(nginx).conf* "/etc/nginx/sites-enabled"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini "/etc/php${PHP_VERSION_DIR}/apache2"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini "/etc/php${PHP_VERSION_DIR}/cli"
 fi
@@ -83,21 +87,6 @@ fi
 [[ -n "${DOCKER_CHMOD_777}" ]] && sudo chmod 777 ${DOCKER_CHMOD_777}
 [[ -n "${DOCKER_CHMOD_R666}" ]] && sudo chmod -R 666 ${DOCKER_CHMOD_R666}
 [[ -n "${DOCKER_CHMOD_R777}" ]] && sudo chmod -R 777 ${DOCKER_CHMOD_R777}
-
-# Configure Apache
-(cd /etc/apache2/sites-enabled && sudo a2ensite *)
-
-# Export system environment variables to Apache
-echo -e "\n$(printenv | sed "s/'//g" | sed "s/^\([^=]*\)=\(.*\)$/export \1='\2'/g")\n" | sudo tee -a /etc/apache2/envvars > /dev/null
-
-# Replace system environment variables into Nginx configuration files
-export DOLLAR='$'
-for file in /etc/nginx/*.conf.tpl; do
-    sudo envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-done
-for file in /etc/nginx/sites-enabled/*.conf.tpl; do
-    sudo envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-done
 
 # Run Composer if necessary
 if [[ "${PHP_VERSION}" != "5.2" ]]; then
@@ -119,6 +108,31 @@ sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
 
 # Apache root directory
 sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
+
+export DOLLAR='$'
+# Disable previous Apache sites
+(cd /etc/apache2/sites-enabled && sudo a2dissite *)
+# Replace system environment variables into Apache configuration files
+for file in /etc/apache2/sites-available/*.conf.tpl; do
+    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+    sudo rm ${file}
+    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+done
+
+# Configure Apache
+(cd /etc/apache2/sites-enabled && sudo a2ensite *)
+
+# Replace system environment variables into Nginx configuration files
+for file in /etc/nginx/*.conf.tpl; do
+    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+    sudo rm ${file}
+    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+done
+for file in /etc/nginx/sites-enabled/*.conf.tpl; do
+    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+    sudo rm ${file}
+    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+done
 
 # PHP log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
