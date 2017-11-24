@@ -127,6 +127,10 @@ echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apa
 echo -e "\nexport APACHE_RUN_GROUP='${APACHE_RUN_GROUP}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 echo -e "\nexport APACHE_LOG_DIR='${APACHE_LOG_DIR}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
 
+# Apache log directory
+sudo mkdir -p "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
+sudo chmod -R 755 "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
+
 # Replace system environment variables into Nginx configuration files
 for file in /etc/nginx/*.conf.tpl; do
     envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null

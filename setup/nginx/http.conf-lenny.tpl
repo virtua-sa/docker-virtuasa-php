@@ -19,13 +19,11 @@
 # Default server configuration
 #
 server {
-	listen 80 default_server;
-	listen [::]:80 default_server;
+	listen 80;
 
 	# SSL configuration
 	#
-	# listen 443 ssl default_server;
-	# listen [::]:443 ssl default_server;
+	# listen 443 ssl;
 	#
 	# Note: You should disable gzip for SSL traffic.
 	# See: https://bugs.debian.org/773332
@@ -46,28 +44,26 @@ server {
 	server_name _;
 
 	location / {
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
-		try_files ${DOLLAR}uri ${DOLLAR}uri/ =404;
+
 	}
 
 	# pass PHP scripts to FastCGI server
-	
-	location ~ \.php${DOLLAR} {
-		include snippets/fastcgi-php.conf;
-	
-		# With php-fpm (or other unix sockets):
-		fastcgi_pass unix:/var/run/php/php${PHP_VERSION}-fpm.sock;
-		# With php-cgi (or other tcp sockets):
-		#fastcgi_pass 127.0.0.1:9000;
-	}
+	#
+	#location ~ \.php${DOLLAR} {
+	#	include snippets/fastcgi-php.conf;
+	#
+	#	# With php-fpm (or other unix sockets):
+	#	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
+	#	# With php-cgi (or other tcp sockets):
+	#	fastcgi_pass 127.0.0.1:9000;
+	#}
 
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
-	
-	location ~ /\.ht {
-		deny all;
-	}
+	#
+	#location ~ /\.ht {
+	#	deny all;
+	#}
 }
 
 
