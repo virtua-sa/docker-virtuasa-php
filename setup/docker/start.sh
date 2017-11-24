@@ -97,6 +97,9 @@ fi
 # Install npm packages if necessary
 [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install
 
+# Disable Nginx for lenny and squeeze
+[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && export DOCKER_WEB_SERVER="apache"
+
 # Configure web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     # Apache gets grumpy about PID files pre-existing
