@@ -3,6 +3,7 @@ set -xe
 
 # Print Debian version
 uname -a
+echo -n "Debian version: " && cat /etc/debian_version
 
 # Print all environment variables
 printenv

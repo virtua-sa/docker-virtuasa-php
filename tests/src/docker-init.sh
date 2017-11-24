@@ -38,5 +38,6 @@ echo "docker-init.sh called !"
 
 # Print Debian version
 uname -a
+echo -n "Debian version: " && cat /etc/debian_version
 
 exit 0;
