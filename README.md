@@ -44,8 +44,8 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [PM2 (`pm2`)](http://pm2.keymetrics.io/docs/usage/quick-start/)                                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Webpack (`webpack`)](https://webpack.js.org/concepts/)                                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Apache](https://httpd.apache.org/docs/2.4/)                                                      | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [NGINX](https://nginx.org/en/docs/)                                                               | &#x2714; | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Apache](https://httpd.apache.org/docs/2.4/)                                                      | *2.2.9*  | *2.2.16*  | *2.2.22* | *2.2.22* | *2.4.10* | *2.4.25*  | *2.4.25*  | *2.4.25*  |
+| [NGINX](https://nginx.org/en/docs/)                                                               | *0.6.32* | *0.7.67*  | *1.2.1*  | *1.2.1*  | *1.6.2*  | *1.10.3*  | *1.10.3*  | *1.10.3*  |
 | [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
