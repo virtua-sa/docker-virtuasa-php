@@ -187,13 +187,16 @@ a2enmod headers php${PHP_VERSION_APT} rewrite ssl
 mkdir -p /var/logs/apache
 chmod -R 755 /var/logs/apache
 
-# Remove non-applicable Nginx configuration files
-if [[ find /setup/nginx/ -name "*.conf-${DOCKER_FROM_IMAGE##*:}*" -mindepth 1 -print -quit | grep -q . ]]; then
-    for file in /setup/nginx/*.conf-${DOCKER_FROM_IMAGE##*:}*; do
-        cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
-    done
-fi
-[[ find /setup/nginx/ -name "*.conf-*" -mindepth 1 -print -quit | grep -q . ]] && rm /setup/nginx/*.conf-*
+# Apply distribution-specific configuration files
+find /setup -name "*.conf-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
+    file="{}" cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
+done
+find /setup -name "*.ini-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
+    file="{}" cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
+done
+# Remove non-applicable configuration files
+find /setup -name "*.conf-*" -exec rm
+find /setup -name "*.ini-*" -exec rm
 
 # Copy initial configuration files
 ls -alhR /etc/php${PHP_VERSION_DIR}
