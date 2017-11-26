@@ -190,10 +190,10 @@ chmod -R 755 /var/logs/apache
 
 # Apply distribution-specific configuration files
 find /setup -name "*.conf-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
-    file="{}" cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
+    cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
 done
 find /setup -name "*.ini-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
-    file="{}" cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
+    cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
 done
 # Remove non-applicable configuration files
 find /setup -name "*.conf-*" -exec rm {} \;
