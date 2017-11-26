@@ -196,8 +196,8 @@ find /setup -name "*.ini-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; d
     file="{}" cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
 done
 # Remove non-applicable configuration files
-find /setup -name "*.conf-*" -exec rm
-find /setup -name "*.ini-*" -exec rm
+find /setup -name "*.conf-*" -exec rm {} \;
+find /setup -name "*.ini-*" -exec rm {} \;
 
 # Copy initial configuration files
 ls -alhR /etc/php${PHP_VERSION_DIR}
