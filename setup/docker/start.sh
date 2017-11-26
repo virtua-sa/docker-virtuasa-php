@@ -97,47 +97,52 @@ fi
 # Install npm packages if necessary
 [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install
 
-# Apache gets grumpy about PID files pre-existing
-sudo rm -f /var/run/apache2/apache2.pid
-sudo rm -f /var/run/apache2/ssl_mutex
-sudo mkdir -p /var/run/apache2
-[[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
+# Disable Nginx for lenny and squeeze
+[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && export DOCKER_WEB_SERVER="apache"
 
-# Apache log directory
-export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
-sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
-sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
-
-# Apache root directory
-sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
-
-export DOLLAR='$'
-# Disable previous Apache sites
-(cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
-# Replace system environment variables into Apache configuration files
-for file in /etc/apache2/sites-available/*.conf.tpl; do
-    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-    sudo rm ${file}
-    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
-done
-
-# Configure Apache
-(cd /etc/apache2/sites-enabled && sudo a2ensite *)
-echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
-echo -e "\nexport APACHE_RUN_GROUP='${APACHE_RUN_GROUP}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
-echo -e "\nexport APACHE_LOG_DIR='${APACHE_LOG_DIR}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
-
-# Replace system environment variables into Nginx configuration files
-for file in /etc/nginx/*.conf.tpl; do
-    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-    sudo rm ${file}
-    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
-done
-for file in /etc/nginx/sites-enabled/*.conf.tpl; do
-    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-    sudo rm ${file}
-    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
-done
+# Configure web server
+if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
+    # Apache gets grumpy about PID files pre-existing
+    sudo rm -f /var/run/apache2/apache2.pid
+    sudo rm -f /var/run/apache2/ssl_mutex
+    sudo mkdir -p /var/run/apache2
+    [[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
+    # Apache log directory
+    export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
+    sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
+    sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
+    # Apache root directory
+    sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
+    export DOLLAR='$'
+    # Disable previous Apache sites
+    (cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
+    # Replace system environment variables into Apache configuration files
+    for file in /etc/apache2/sites-available/*.conf.tpl; do
+        envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+        sudo rm ${file}
+        [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+    done
+    # Configure Apache
+    (cd /etc/apache2/sites-enabled && sudo a2ensite *)
+    echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+    echo -e "\nexport APACHE_RUN_GROUP='${APACHE_RUN_GROUP}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+    echo -e "\nexport APACHE_LOG_DIR='${APACHE_LOG_DIR}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
+elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
+    # Nginx log directory
+    sudo mkdir -p "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
+    sudo chmod -R 755 "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
+    # Replace system environment variables into Nginx configuration files
+    for file in /etc/nginx/*.conf.tpl; do
+        envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+        sudo rm ${file}
+        [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+    done
+    for file in /etc/nginx/sites-enabled/*.conf.tpl; do
+        envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+        sudo rm ${file}
+        [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+    done
+fi
 
 # PHP log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"

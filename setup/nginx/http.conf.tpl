@@ -52,22 +52,22 @@ server {
 	}
 
 	# pass PHP scripts to FastCGI server
-	#
-	#location ~ \.php${DOLLAR} {
-	#	include snippets/fastcgi-php.conf;
-	#
-	#	# With php-fpm (or other unix sockets):
-	#	fastcgi_pass unix:/var/run/php/php7.0-fpm.sock;
-	#	# With php-cgi (or other tcp sockets):
-	#	fastcgi_pass 127.0.0.1:9000;
-	#}
+	
+	location ~ \.php${DOLLAR} {
+		include snippets/fastcgi-php.conf;
+	
+		# With php-fpm (or other unix sockets):
+		fastcgi_pass unix:/var/run/php/php${PHP_VERSION}-fpm.sock;
+		# With php-cgi (or other tcp sockets):
+		#fastcgi_pass 127.0.0.1:9000;
+	}
 
 	# deny access to .htaccess files, if Apache's document root
 	# concurs with nginx's one
-	#
-	#location ~ /\.ht {
-	#	deny all;
-	#}
+	
+	location ~ /\.ht {
+		deny all;
+	}
 }
 
 
