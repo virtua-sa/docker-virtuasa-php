@@ -1,11 +1,11 @@
 # Virtua Docker Container - PHP - CHANGELOG
 
-## V1.X.X - 201711XX
+## V1.3.1 - 20171126
 
 * Metadata
-  * Version: 1.X.X
-  * Tags: `virtuasa/php:*-201711XX`
-  * Built on commit : [XXXXXXXX](https://gitlab.virtua.ch/ddev/tools-docker/commit/XXXXXX)
+  * Version: 1.3.1
+  * Tags: `virtuasa/php:*-20171126`
+  * Built on commit : [b9e9ada0](https://gitlab.virtua.ch/ddev/tools-docker/commit/b9e9ada0a8eb71f4d464c191ba1866256c7ed123)
 * Changes
   * Added: `PHP_MEMORY_LIMIT_APACHE`, `PHP_MEMORY_LIMIT_CLI` to set maximum memory a PHP script may consumes
   * Removed: `APACHE_LOG_DIR` environment variable (use same path as `APACHE_LOG_PATH`)
