@@ -13,6 +13,9 @@ echo
 sudo mkdir -p ${DOCKER_BASE_DIR}
 cd ${DOCKER_BASE_DIR}
 
+# Disable Nginx for lenny and squeeze
+[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && export DOCKER_WEB_SERVER="apache"
+
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
     && echo "Executing custom init script: ${DOCKER_CUSTOM_INIT} ..." \
@@ -96,9 +99,6 @@ fi
 
 # Install npm packages if necessary
 [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install
-
-# Disable Nginx for lenny and squeeze
-[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && export DOCKER_WEB_SERVER="apache"
 
 # Configure web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
