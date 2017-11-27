@@ -189,11 +189,21 @@ mkdir -p /var/logs/apache
 chmod -R 755 /var/logs/apache
 
 # Apply distribution-specific configuration files
+# For files matching the pattern /setup/**/*.conf-<debian-version>*
 find /setup -name "*.conf-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
     cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
 done
+# For files matching the pattern /setup/**/*.ini-<debian-version>*
 find /setup -name "*.ini-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
     cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
+done
+# For files matching the pattern /setup/**/*.conf-<php-version>*
+find /setup -name "*.conf-${PHP_VERSION}*" | while IFS= read -r file; do
+    cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${PHP_VERSION}}"
+done
+# For files matching the pattern /setup/**/*.ini-<php-version>*
+find /setup -name "*.ini-${PHP_VERSION}*" | while IFS= read -r file; do
+    cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${PHP_VERSION}}"
 done
 # Remove non-applicable configuration files
 find /setup -name "*.conf-*" -exec rm {} \;
