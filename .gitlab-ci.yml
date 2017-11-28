@@ -64,6 +64,7 @@ push:all:
     - master
   when: manual
   script:
+    - ./docker-build.sh all
     - ./docker-push.sh all
 
 clean:soft:
