@@ -60,19 +60,22 @@ build:72:
 push:all:
   <<: *template
   stage: push
-  only: master
+  only: 
+    - master
   when: manual
   script:
     - ./docker-push.sh all
 
 clean:soft:
   <<: *template
+  stage: clean
   when: manual
   script:
     - docker system prune --volumes --force
 
 clean:hard:
   <<: *template
+  stage: clean
   when: manual
   script:
     - docker system prune --all --volumes --force
