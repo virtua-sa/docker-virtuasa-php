@@ -22,7 +22,7 @@ cd ${DOCKER_BASE_DIR}
     && ./${DOCKER_CUSTOM_INIT}
 
 # Set trap for every signals
-trap 'echo -e "\n(last error code: '"'"'$?'"'"'; on line: '"'"'${LINENO}/$(caller)'"'"'; with command: '"'"'${BASH_COMMAND}'"'"')";
+trap 'echo -e "\n(last error code: '"'"'$?'"'"'; on line: '"'"'${LINENO}/$(caller)/${PIPESTATUS[0]}'"'"'; with command: '"'"'${BASH_COMMAND}'"'"')";
     PTK="${!}"; [[ -n "${PTK}" ]] && ps -e | grep -q "${PTK}" && kill ${PTK};
     echo "Stopping the Virtua Docker Container ..."; . /setup/docker/stop.sh' 0
 
