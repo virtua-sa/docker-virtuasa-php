@@ -33,7 +33,7 @@ sudo dpkg-reconfigure --frontend noninteractive tzdata
 php -v
 
 # Get HOST ip address
-DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route|awk '/default/ { print $3 }')}"
+DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route | awk '/default/ { print $3 }')}"
 export DOCKER_HOST_IP
 
 # Print all environment variables (can be overriden in docker-compose.yml)
@@ -59,6 +59,10 @@ sudo rm /etc/nginx/sites-enabled/*
 sudo cp /setup/nginx/nginx.conf* /etc/nginx
 sudo cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
 
+# Copy PHP configuration files
+sudo cp /setup/php/apache/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
+sudo cp /setup/php/cli/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/cli/conf.d
+
 # Copy image's configuration files to host filesystem
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
@@ -70,8 +74,8 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     sudo cp -nr "/etc/nginx/"nginx.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
     sudo cp -nr "/etc/nginx/sites-enabled/"*.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
-    sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/apache"
-    sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini "${DOCKER_HOST_SETUP_DIR}/php/cli"
+    sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/apache"
+    sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/cli"
 fi
 
 # Copy image's configuration files from host filesystem
@@ -79,8 +83,8 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"*.conf* "/etc/apache2/sites-available"
     sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"nginx.conf* "/etc/nginx"
     sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"!(nginx).conf* "/etc/nginx/sites-enabled"
-    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini "/etc/php${PHP_VERSION_DIR}/apache2"
-    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini "/etc/php${PHP_VERSION_DIR}/cli"
+    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini* "/etc/php${PHP_VERSION_DIR}/apache2"
+    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini* "/etc/php${PHP_VERSION_DIR}/cli"
 fi
 
 # Chown the mount directory
@@ -117,7 +121,7 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     # Disable previous Apache sites
     (cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
     # Replace system environment variables into Apache configuration files
-    for file in /etc/apache2/sites-available/*.conf.tpl; do
+    find /etc/apache2 -name "*.conf.tpl" | while IFS= read -r file; do
         envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
         sudo rm ${file}
         [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
@@ -132,12 +136,7 @@ elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
     sudo mkdir -p "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
     sudo chmod -R 755 "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
     # Replace system environment variables into Nginx configuration files
-    for file in /etc/nginx/*.conf.tpl; do
-        envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
-        sudo rm ${file}
-        [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
-    done
-    for file in /etc/nginx/sites-enabled/*.conf.tpl; do
+    find /etc/nginx -name "*.conf.tpl" | while IFS= read -r file; do
         envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
         sudo rm ${file}
         [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
@@ -147,6 +146,13 @@ fi
 # PHP log direcotry
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
+
+# Replace system environment variables into PHP configuration files
+find /etc/php${PHP_VERSION_DIR} -name "*.ini.tpl" | while IFS= read -r file; do
+    envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
+    sudo rm ${file}
+    [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+done
 
 # Clean Behat cache directory
 sudo rm -rf /tmp/behat_gherkin_cache

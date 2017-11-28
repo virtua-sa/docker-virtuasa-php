@@ -213,8 +213,8 @@ find /setup -name "*.ini-*" -exec rm {} \;
 ls -alhR /etc/php${PHP_VERSION_DIR}
 ls -alhR /etc/apache2/sites-available
 ls -alhR /etc/nginx
-cp /setup/php/apache/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-cp /setup/php/cli/conf.d/*docker*.ini /etc/php${PHP_VERSION_DIR}/cli/conf.d
+cp /setup/php/apache/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
+cp /setup/php/cli/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/cli/conf.d
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
 cp /setup/apache/*.conf* /etc/apache2/sites-available
