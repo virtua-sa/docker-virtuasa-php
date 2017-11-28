@@ -1,5 +1,16 @@
 # Virtua Docker Container - PHP - CHANGELOG
 
+## V1.3.2 - 20171128
+
+* Metadata
+  * Version: 1.3.2
+  * Tags: `virtuasa/php:*-20171128`
+  * Built on commit : [7ad43e8a](https://gitlab.virtua.ch/ddev/tools-docker/tree/7ad43e8a8d70b90a9fab3759597a6d74752ea2d0/images/php)
+* Changes
+  * Fixed: `PHP_MEMORY_LIMIT_APACHE`, `PHP_MEMORY_LIMIT_CLI` are now always used by PHP
+  * Fixed: No more issue when copying configuration files to / from host
+  * Improved: Web server check to use is done before calling custom init script, so it can be overriden
+
 ## V1.3.1 - 20171126
 
 * Metadata
