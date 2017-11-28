@@ -1,0 +1,6 @@
+ip
+*.log
+**/setup/**/conf.d/*
+**/setup/mysql/db/*
+**/tests/tmp*/*
+!**/setup/**/conf.d/*docker*.ini*
