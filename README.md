@@ -115,6 +115,14 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_VERSION_APT`               | `7.1`                                     | PHP version used in the `apt-get install` instructions
 | `PHP_VERSION_DIR`               | `/7.1`                                    | PHP version used in the paths of PHP configuration files
 
+### Limitations with old PHP versions
+
+* `PHP 5.2`:
+  * Using `DOCKER_COPY_CONFIG_TO_HOST=true` will override host local files sharring the same names on each startup of the container.
+  * Using `DOCKER_WEB_SERVER=nginx` is not allowed, and `apache` will be used instead, this can be overriden by setting the value of `DOCKER_WEB_SERVER` with a script loaded by `DOCKER_CUSTOM_INIT`.
+* `PHP 5.3`:
+  * Using `DOCKER_WEB_SERVER=nginx` is not allowed, and `apache` will be used instead, this can be overriden by setting the value of `DOCKER_WEB_SERVER` with a script loaded by `DOCKER_CUSTOM_INIT`.
+
 ## Changelog
 
 See [CHANGELOG.md](CHANGELOG.md).
