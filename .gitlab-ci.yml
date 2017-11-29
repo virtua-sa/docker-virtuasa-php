@@ -18,7 +18,7 @@ stages:
     paths:
       - builds/
 
-check:modifications
+check:modifications:
   <<: *template
   stage: check
   script:
