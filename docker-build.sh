@@ -150,10 +150,7 @@ di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php")"
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
-docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_build_path}/phpinfo-cli.log
-curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log
 docker stop virtuasa-php-${df_php_version}-dev-build
-docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
