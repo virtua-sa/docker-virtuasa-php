@@ -26,7 +26,7 @@ check:modifications:
   script:
     - IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${CI_BUILD_REF}~..${CI_BUILD_REF}")); unset IFS
     - echo "COMMIT_SCA_FILES='${COMMIT_SCA_FILES}'"
-    - "[[ \"${COMMIT_SCA_FILES}\" =~ setup/ ]]"
+    - "[[ \"${COMMIT_SCA_FILES}\" =~ setup/|\.sh ]]"
 
 build:52:
   <<: *template_build
