@@ -122,11 +122,14 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     # Disable previous Apache sites
     (cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
     # Replace system environment variables into Apache configuration files
+    echo -n "Applying Apache configuration file templates "
     find /etc/apache2 -name "*.conf.tpl" | while IFS= read -r file; do
         envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
         sudo rm ${file}
         [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+        echo -n "."
     done
+    echo " OK"
     # Configure Apache
     (cd /etc/apache2/sites-enabled && sudo a2ensite *)
     echo -e "\nexport APACHE_RUN_USER='${APACHE_RUN_USER}'\n" | sudo tee -a /etc/apache2/envvars > /dev/null
@@ -137,11 +140,14 @@ elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
     sudo mkdir -p "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
     sudo chmod -R 755 "${DOCKER_BASE_DIR}/${NGINX_LOG_PATH}"
     # Replace system environment variables into Nginx configuration files
+    echo -n "Applying Nginx configuration file templates "
     find /etc/nginx -name "*.conf.tpl" | while IFS= read -r file; do
         envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
         sudo rm ${file}
         [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+        echo -n "."
     done
+    echo " OK"
 fi
 
 # PHP log direcotry
@@ -149,11 +155,14 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Replace system environment variables into PHP configuration files
+echo -n "Applying PHP configuration file templates "
 find /etc/php${PHP_VERSION_DIR} -name "*.ini.tpl" | while IFS= read -r file; do
     envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
     sudo rm ${file}
     [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
+    echo -n "."
 done
+echo " OK"
 
 # Clean Behat cache directory
 sudo rm -rf /tmp/behat_gherkin_cache
