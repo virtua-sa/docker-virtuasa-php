@@ -52,39 +52,42 @@ shopt -s extglob
 
 # Copy Apache configuration files
 sudo rm /etc/apache2/sites-available/*
-sudo cp /setup/apache/*.conf* /etc/apache2/sites-available
+sudo cp -r /setup/apache/*.conf* /etc/apache2
 
 # Copy Nginx configuration files
 sudo rm /etc/nginx/nginx.conf*
+sudo rm /etc/nginx/sites-available/*
 sudo rm /etc/nginx/sites-enabled/*
-sudo cp /setup/nginx/nginx.conf* /etc/nginx
-sudo cp /setup/nginx/!(nginx).conf* /etc/nginx/sites-enabled
+sudo cp -r /setup/nginx/*.conf* /etc/nginx
 
 # Copy PHP configuration files
-sudo cp /setup/php/apache/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-sudo cp /setup/php/cli/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/cli/conf.d
+sudo cp -r /setup/php/apache/*.ini* /etc/php${PHP_VERSION_DIR}/apache2
+sudo cp -r /setup/php/cli/*.ini* /etc/php${PHP_VERSION_DIR}/cli
+sudo cp -r /setup/php/fpm/*.ini* /etc/php${PHP_VERSION_DIR}/fpm
+
 
 # Copy image's configuration files to host filesystem
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/nginx"
-    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache/conf.d"
-    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli/conf.d"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/fpm"
     if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
-        sudo cp -r "/etc/apache2/sites-available/"*.conf* "${DOCKER_HOST_SETUP_DIR}/apache"
+        sudo cp -r "/etc/apache2/"*.conf* "${DOCKER_HOST_SETUP_DIR}/apache"
         sudo cp -r "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
-        sudo cp -r "/etc/nginx/"nginx.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
-        sudo cp -r "/etc/nginx/sites-enabled/"*.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
+        sudo cp -r "/etc/nginx/"*.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/apache"
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/cli/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/cli"
+        sudo cp -r "/etc/php${PHP_VERSION_DIR}/fpm/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
     else
-        sudo cp -nr "/etc/apache2/sites-available/"*.conf* "${DOCKER_HOST_SETUP_DIR}/apache"
+        sudo cp -nr "/etc/apache2/"*.conf* "${DOCKER_HOST_SETUP_DIR}/apache"
         sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
-        sudo cp -nr "/etc/nginx/"nginx.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
-        sudo cp -nr "/etc/nginx/sites-enabled/"*.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
+        sudo cp -nr "/etc/nginx/"*.conf* "${DOCKER_HOST_SETUP_DIR}/nginx"
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/apache"
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/cli"
+        sudo cp -nr "/etc/php${PHP_VERSION_DIR}/fpm/"*.ini* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
     fi
 fi
 
@@ -95,6 +98,7 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"!(nginx).conf* "/etc/nginx/sites-enabled"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"*.ini* "/etc/php${PHP_VERSION_DIR}/apache2"
     sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"*.ini* "/etc/php${PHP_VERSION_DIR}/cli"
+    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/fpm/"*.ini* "/etc/php${PHP_VERSION_DIR}/fpm"
 fi
 
 # Chown the mount directory

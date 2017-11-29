@@ -123,6 +123,7 @@ curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
+exit 0;
 rm -rf tests/tmp${df_php_version}
 
 # Test the image built with Apache without DEBUG

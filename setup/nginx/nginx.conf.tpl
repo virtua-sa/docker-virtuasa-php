@@ -1,12 +1,12 @@
 daemon off;
 user ${NGINX_RUN_USER} ${NGINX_RUN_GROUP};
-worker_processes auto;
+worker_processes 2;
+worker_rlimit_nofile  8192;
 pid /run/nginx.pid;
 include /etc/nginx/modules-enabled/*.conf;
 
 events {
-	worker_connections 768;
-	# multi_accept on;
+	worker_connections 1024;
 }
 
 http {
@@ -28,6 +28,10 @@ http {
 	include /etc/nginx/mime.types;
 	default_type application/octet-stream;
 
+	log_format  main '$remote_addr - $remote_user [$time_local] "$request" '
+				'$status $body_bytes_sent "$http_referer" '
+				'"$http_user_agent" "$http_x_forwarded_for"';
+
 	##
 	# SSL Settings
 	##
@@ -46,15 +50,15 @@ http {
 	# Gzip Settings
 	##
 
-	gzip on;
-	gzip_disable "msie6";
-
-	# gzip_vary on;
-	# gzip_proxied any;
-	# gzip_comp_level 6;
-	# gzip_buffers 16 8k;
-	# gzip_http_version 1.1;
-	# gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+	gzip  on;
+	gzip_disable  "MSIE [1-6]\.(?!.*SV1)";
+	gzip_min_length  100;
+	gzip_types  text/plain text/css application/x-javascript application/javascript
+				text/xml application/xml application/xml+rss text/javascript
+				image/vnd.microsoft.icon;
+	gzip_vary  on;
+	gzip_comp_level  9;
+	gzip_proxied  any;
 
 	##
 	# Virtual Host Configs
