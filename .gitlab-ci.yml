@@ -12,7 +12,6 @@ stages:
 
 .template_build: &template_build
   <<: *template
-  stage: build
   artifacts:
     name: reports
     when: on_success
@@ -30,41 +29,49 @@ check:modifications:
 
 build:52:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 5.2
 
 build:53:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 5.3
 
 build:54:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 5.4
 
 build:55:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 5.5
 
 build:56:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 5.6
 
 build:70:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 7.0
 
 build:71:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 7.1
 
 build:72:
   <<: *template_build
+  stage: build
   script:
     - di_disable_push=1 ./docker-build.sh 7.2
 
@@ -73,14 +80,14 @@ push:nothing:
   stage: push
 
 push:dev:
-  <<: *template
+  <<: *template_build
   stage: push
   when: manual
   script:
     - ./docker-build.sh all
 
 push:all:
-  <<: *template
+  <<: *template_build
   stage: push
   only: 
     - master
