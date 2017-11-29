@@ -24,8 +24,8 @@ check:modifications:
   <<: *template
   stage: check
   script:
-    - "IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB \"${CI_BUILD_REF}~..${CI_BUILD_REF}\")); unset IFS"
-    - "echo \"COMMIT_SCA_FILES='${COMMIT_SCA_FILES}'\""
+    - IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${CI_BUILD_REF}~..${CI_BUILD_REF}")); unset IFS
+    - echo "COMMIT_SCA_FILES='${COMMIT_SCA_FILES}'"
     - "[[ \"${COMMIT_SCA_FILES}\" =~ setup/ ]]"
 
 build:52:
