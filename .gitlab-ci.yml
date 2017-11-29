@@ -1,7 +1,7 @@
 # Lint: https://gitlab.virtua.ch/ci/lint
 
 stages:
-  - check
+#  - check
   - build
   - push
   - clean
@@ -20,13 +20,13 @@ stages:
     paths:
       - builds/
 
-check:modifications:
-  <<: *template
-  stage: check
-  script:
-    - IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${CI_BUILD_REF}~..${CI_BUILD_REF}")); unset IFS
-    - echo "COMMIT_SCA_FILES='${COMMIT_SCA_FILES}'"
-    - '[[ "${COMMIT_SCA_FILES}" =~ setup/|\.sh ]]'
+#check:modifications:
+#  <<: *template
+#  stage: check
+#  script:
+#    - IFS=$'\n'; COMMIT_SCA_FILES=($(git diff --name-only --diff-filter=ACMRTUXB "${CI_BUILD_REF}~..${CI_BUILD_REF}")); unset IFS
+#    - echo "COMMIT_SCA_FILES='${COMMIT_SCA_FILES}'"
+#    - '[[ "${COMMIT_SCA_FILES}" =~ setup/|\.sh ]]'
 
 build:52:
   <<: *template_build
