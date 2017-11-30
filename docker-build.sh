@@ -97,6 +97,7 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
     --build-arg PHP_VERSION_APT=${df_php_version_apt} \
     --build-arg PHP_VERSION_DIR=${df_php_version_dir} \
     --file setup/docker/Dockerfile . | tee ${db_build_path}/build.log
+grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path}/build.log || exit 1;
 
 # Test the image built with Apache
 cat <<"EOF"
