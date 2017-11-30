@@ -125,6 +125,7 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_WEB_SERVER="apache" \
     virtuasa/php:${df_php_version}-dev
 sleep 10s
+docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1 
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
 [[ "${di_check}" != "/data" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build whoami)"
@@ -139,9 +140,8 @@ docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker stop virtuasa-php-${df_php_version}-dev-build
-docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-apache.log
+docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 | tee ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
-exit 0;
 rm -rf tests/tmp${df_php_version}
 
 # Test the image built with Apache without DEBUG

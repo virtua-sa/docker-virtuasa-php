@@ -51,13 +51,13 @@ shopt -s extglob
 [[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
 
 # Copy Apache configuration files
-sudo rm /etc/apache2/sites-available/*
-sudo cp -r /setup/apache/*.conf* /etc/apache2
+sudo rm -rf /etc/apache2/sites-available/*
+sudo cp -r /setup/apache/* /etc/apache2
 
 # Copy Nginx configuration files
-sudo rm /etc/nginx/nginx.conf*
-sudo rm /etc/nginx/sites-available/*
-sudo rm /etc/nginx/sites-enabled/*
+sudo rm -rf /etc/nginx/nginx.conf*
+sudo rm -rf /etc/nginx/sites-available/*
+sudo rm -rf /etc/nginx/sites-enabled/*
 sudo cp -r /setup/nginx/* /etc/nginx
 
 # Copy PHP configuration files
@@ -93,11 +93,11 @@ fi
 
 # Copy image's configuration files from host filesystem
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/apache/"* "/etc/apache2/sites-available"
-    sudo cp "${DOCKER_HOST_SETUP_DIR}/nginx/"* "/etc/nginx"
-    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2"
-    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli"
-    sudo cp -r "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/apache/"* "/etc/apache2"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/nginx/"* "/etc/nginx"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
 fi
 
 # Chown the mount directory
