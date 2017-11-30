@@ -191,19 +191,19 @@ chmod -R 755 /var/logs/apache
 # Apply distribution-specific configuration files
 # For files matching the pattern /setup/**/*.conf-<debian-version>*
 find /setup -name "*.conf-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
-    cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
+    cp -vf "${file}" "${file%%.conf-*}.conf${file##*.conf-${DOCKER_FROM_IMAGE##*:}}"
 done
 # For files matching the pattern /setup/**/*.ini-<debian-version>*
 find /setup -name "*.ini-${DOCKER_FROM_IMAGE##*:}*" | while IFS= read -r file; do
-    cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
+    cp -vf "${file}" "${file%%.ini-*}.ini${file##*.ini-${DOCKER_FROM_IMAGE##*:}}"
 done
 # For files matching the pattern /setup/**/*.conf-<php-version>*
 find /setup -name "*.conf-${PHP_VERSION}*" | while IFS= read -r file; do
-    cp "${file}" "${file%%.conf-*}.conf${file##*.conf-${PHP_VERSION}}"
+    cp -vf "${file}" "${file%%.conf-*}.conf${file##*.conf-${PHP_VERSION}}"
 done
 # For files matching the pattern /setup/**/*.ini-<php-version>*
 find /setup -name "*.ini-${PHP_VERSION}*" | while IFS= read -r file; do
-    cp "${file}" "${file%%.ini-*}.ini${file##*.ini-${PHP_VERSION}}"
+    cp -vf "${file}" "${file%%.ini-*}.ini${file##*.ini-${PHP_VERSION}}"
 done
 # Remove non-applicable configuration files
 find /setup -name "*.conf-*" -exec rm {} \;
@@ -211,18 +211,18 @@ find /setup -name "*.ini-*" -exec rm {} \;
 
 # Copy initial configuration files
 ls -alhR /etc/php${PHP_VERSION_DIR}
-ls -alhR /etc/apache2/sites-available
+ls -alhR /etc/apache2
 ls -alhR /etc/nginx
-cp /setup/php/apache/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-cp /setup/php/cli/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/cli/conf.d
-cp /setup/php/fpm/conf.d/*docker*.ini* /etc/php${PHP_VERSION_DIR}/fpm/conf.d
+cp -vrf /setup/php/apache/* /etc/php${PHP_VERSION_DIR}/apache2
+cp -vrf /setup/php/cli/* /etc/php${PHP_VERSION_DIR}/cli
+cp -vrf /setup/php/fpm/* /etc/php${PHP_VERSION_DIR}/fpm
 (cd /etc/apache2/sites-enabled && a2dissite *)
 rm /etc/apache2/sites-available/*
-cp -r /setup/apache/*.conf* /etc/apache2
+cp -vrf /setup/apache/* /etc/apache2
 rm /etc/nginx/nginx.conf*
 rm /etc/nginx/sites-available/*
 rm /etc/nginx/sites-enabled/*
-cp -r /setup/nginx/*.conf* /etc/nginx
+cp -vrf /setup/nginx/* /etc/nginx
 
 # Create mountpoint for the web application
 mkdir -p "${DOCKER_BASE_DIR}"
