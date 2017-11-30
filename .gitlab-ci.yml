@@ -107,9 +107,9 @@ clean:nothing:
 clean:soft:
   <<: *template
   stage: clean
-  when: manual
+  when: always
   script:
-    - docker system prune --volumes --force
+    - ./docker-clean.sh
 
 clean:hard:
   <<: *template

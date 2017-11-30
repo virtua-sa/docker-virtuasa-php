@@ -16,6 +16,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 * Run the script `./docker-build.sh`:
   * `./docker-build.sh <PHP_VERSION>`
   * `./docker-build.sh all`
+* Images can be pushed from GitlabCI if all tests are OK
 
 ## Images content
 
