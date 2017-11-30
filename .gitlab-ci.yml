@@ -15,7 +15,7 @@ stages:
   stage: build
   artifacts:
     name: reports
-    when: on_success
+    when: always
     expire_in: 1 day
     paths:
       - builds/
