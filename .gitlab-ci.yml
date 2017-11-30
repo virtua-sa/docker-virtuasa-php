@@ -100,10 +100,6 @@ push:all:
     paths:
       - builds/
 
-clean:nothing:
-  <<: *template
-  stage: clean
-
 clean:soft:
   <<: *template
   stage: clean
