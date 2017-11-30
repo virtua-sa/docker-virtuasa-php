@@ -18,4 +18,4 @@ docker images -q virtuasa/php:7.0-dev | xargs -rn1 docker rmi
 docker images -q virtuasa/php:7.1-dev | xargs -rn1 docker rmi
 docker images -q virtuasa/php:7.2-dev | xargs -rn1 docker rmi
 
-docker system prune --volumes --force
+#docker system prune --volumes --force
