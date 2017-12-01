@@ -13,6 +13,7 @@ mysql-client
 nano
 nginx
 rsync
+sendmail
 ssl-cert
 subversion
 sudo
