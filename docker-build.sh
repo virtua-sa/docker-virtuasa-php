@@ -125,7 +125,8 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_WEB_SERVER="apache" \
     virtuasa/php:${df_php_version}-dev
 sleep 10s
-docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1 
+docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1
+cp -r tests/tmp${df_php_version}/setup ${db_build_path}/setup
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
 [[ "${di_check}" != "/data" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build whoami)"
