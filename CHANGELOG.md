@@ -1,15 +1,48 @@
 # Virtua Docker Container - PHP - CHANGELOG
 
+## V1.3.5 - 20171204
+
+* Metadata
+  * Version: 1.3.5
+  * Tags: `virtuasa/php:*-20171204`
+  * Built on commit : [0a1209e2](https://gitlab.virtua.ch/docker/virtuasa-php/tree/0a1209e2890aa0229821babb381804d1ade98b83)
+* Changes
+  * Added: Nginx is now working and can be selected with `DOCKER_WEB_SERVER=nginx` on PHP 7.0, 7.1, 7.2
+  * Added: `sendmail` package
+  * Updated: PHP 7.0 is now final
+
+## V1.3.4 - 20171130
+
+* Metadata
+  * Version: 1.3.4
+  * Tags: `virtuasa/php:*-20171130`
+  * Built on commit : [1cf333d9](https://gitlab.virtua.ch/docker/virtuasa-php/tree/1cf333d97a90cb9b25d939e6527be2f584dac89c)
+* Changes
+  * Changed: Use real structure of tool configuration files instead of the old flat one
+  * Fixed: Split PHP configuration files between apache, cli, fpm
+
+## V1.3.3 - 20171129
+
+* Metadata
+  * Version: 1.3.3
+  * Tags: `virtuasa/php:*-20171129`
+  * Built on commit : [d5475ca0](https://gitlab.virtua.ch/docker/virtuasa-php/tree/d5475ca00f9d7423c9373629b3e3f4ba52c7adcf)
+* Changes
+  * Improved: More tests on images
+  * Fixed: Images can work with and without debug mode
+  * Fixed: Copy config to host works on PHP 5.2, but it overrides existing files
+
 ## V1.3.2 - 20171128
 
 * Metadata
   * Version: 1.3.2
   * Tags: `virtuasa/php:*-20171128`
-  * Built on commit : [d7211141](https://gitlab.virtua.ch/docker/virtuasa-php/tree/d7211141ed453537617586404a047165a09a3fe6)
+  * Built on commit : [b4bd8651](https://gitlab.virtua.ch/docker/virtuasa-php/tree/b4bd86513ef741a1df537cecb7b2d654e6160fb5)
 * Changes
   * Fixed: `PHP_MEMORY_LIMIT_APACHE`, `PHP_MEMORY_LIMIT_CLI` are now always used by PHP
   * Fixed: No more issue when copying configuration files to / from host
   * Improved: Web server check to use is done before calling custom init script, so it can be overriden
+  * Improved: Use templates for PHP configuration files too
 
 ## V1.3.1 - 20171126
 
