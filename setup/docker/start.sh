@@ -13,8 +13,8 @@ echo
 sudo mkdir -p ${DOCKER_BASE_DIR}
 cd ${DOCKER_BASE_DIR}
 
-# Disable Nginx for lenny and squeeze
-[[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]] && export DOCKER_WEB_SERVER="apache"
+# Disable Nginx for PHP < 7.0
+[[ "${PHP_VERSION}" =~ ^(5\.[23456]) ]] && export DOCKER_WEB_SERVER="apache"
 
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
