@@ -180,43 +180,44 @@ docker stop virtuasa-php-${df_php_version}-dev-build
 docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
-## Test the image built with Nginx
-#cat <<"EOF"
-#  _____         _             _   _  ____ ___ _   ___  __
-# |_   _|__  ___| |_          | \ | |/ ___|_ _| \ | \ \/ /
-#   | |/ _ \/ __| __|  _____  |  \| | |  _ | ||  \| |\  / 
-#   | |  __/\__ \ |_  |_____| | |\  | |_| || || |\  |/  \ 
-#   |_|\___||___/\__|         |_| \_|\____|___|_| \_/_/\_\
-#EOF
-#cp -r tests/src tests/tmp${df_php_version}
-#chmod 775 tests/tmp${df_php_version}
-#docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
-#docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
-#docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
-#    --name virtuasa-php-${df_php_version}-dev-build \
-#    --env DOCKER_CHMOD_666="read.txt" \
-#    --env DOCKER_CHMOD_777="." \
-#    --env DOCKER_DEBUG=1 \
-#    --env DOCKER_HOST_GID=$(id -g) \
-#    --env DOCKER_HOST_UID=$(id -u) \
-#    --env DOCKER_WEB_SERVER="nginx" \
-#    virtuasa/php:${df_php_version}-dev
-#sleep 10s
-#docker exec virtuasa-php-${df_php_version}-dev-build ls || docker logs -t virtuasa-php-${df_php_version}-dev-build
-#di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
-#[[ "${di_check}" != "/data" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
-#di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build whoami)"
-#[[ "${di_check}" != "docker" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
-#docker exec virtuasa-php-${df_php_version}-dev-build ls -alhR
-#di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io.php)"
-#[[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
-#di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php")"
-#[[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
-#curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-nginx.log
-#docker stop virtuasa-php-${df_php_version}-dev-build
-#docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-nginx.log
-#docker rm virtuasa-php-${df_php_version}-dev-build
-#rm -rf tests/tmp${df_php_version}
+# Test the image built with Nginx
+cat <<"EOF"
+  _____         _             _   _  ____ ___ _   ___  __
+ |_   _|__  ___| |_          | \ | |/ ___|_ _| \ | \ \/ /
+   | |/ _ \/ __| __|  _____  |  \| | |  _ | ||  \| |\  / 
+   | |  __/\__ \ |_  |_____| | |\  | |_| || || |\  |/  \ 
+   |_|\___||___/\__|         |_| \_|\____|___|_| \_/_/\_\
+EOF
+cp -r tests/src tests/tmp${df_php_version}
+chmod 775 tests/tmp${df_php_version}
+docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
+docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
+docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
+    --name virtuasa-php-${df_php_version}-dev-build \
+    --env DOCKER_CHMOD_666="read.txt" \
+    --env DOCKER_CHMOD_777="." \
+    --env DOCKER_DEBUG=1 \
+    --env DOCKER_HOST_GID=$(id -g) \
+    --env DOCKER_HOST_UID=$(id -u) \
+    --env DOCKER_WEB_SERVER="nginx" \
+    virtuasa/php:${df_php_version}-dev
+sleep 10s
+docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-nginx.log 2>&1
+docker exec virtuasa-php-${df_php_version}-dev-build ls || docker logs -t virtuasa-php-${df_php_version}-dev-build
+di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
+[[ "${di_check}" != "/data" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
+di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build whoami)"
+[[ "${di_check}" != "docker" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
+docker exec virtuasa-php-${df_php_version}-dev-build ls -alhR
+di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io.php)"
+[[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
+di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php")"
+[[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
+curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-nginx.log
+docker stop virtuasa-php-${df_php_version}-dev-build
+docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-nginx.log
+docker rm virtuasa-php-${df_php_version}-dev-build
+rm -rf tests/tmp${df_php_version}
 
 # Push the image to Docker Hub
 [[ -z "${di_disable_push}" ]] && docker push virtuasa/php:${df_php_version}-dev

@@ -168,13 +168,16 @@ sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Replace system environment variables into PHP configuration files
 echo -n "Applying PHP configuration file templates "
-find /etc/php${PHP_VERSION_DIR} -name "*.ini.tpl" | while IFS= read -r file; do
+find /etc/php${PHP_VERSION_DIR} -regex ".*\.\(conf\|ini\)\.tpl" | while IFS= read -r file; do
     envsubst < ${file} | sudo tee ${file%%.tpl} > /dev/null
     sudo rm ${file}
     [[ -n "${DOCKER_DEBUG}" ]] && cat ${file%%.tpl}
     echo -n "."
 done
 echo " OK"
+
+# Start PHP-FPM if using Nginx
+[[ "${DOCKER_WEB_SERVER}" = "nginx" ]] && sudo service php${PHP_VERSION_APT}-fpm start
 
 # Clean Behat cache directory
 sudo rm -rf /tmp/behat_gherkin_cache
