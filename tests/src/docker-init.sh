@@ -32,6 +32,10 @@ echo "docker-init.sh called !"
 
 [[ -n "$(type -t yarn)" ]]          && echo -n "yarn " && yarn --version
 
+[[ -n "$(type -t ruby)" ]]          && ruby --version
+[[ -n "$(type -t gem)" ]]           && echo -n "gem " && gem --version
+[[ -n "$(type -t cap)" ]]           && cap --version
+
 # Print Apache and Nginx versions
 /usr/sbin/apache2 -v
 /usr/sbin/nginx -v
