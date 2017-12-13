@@ -1,12 +1,24 @@
 ARG FROM_IMAGE="debian:stretch"
 FROM ${FROM_IMAGE}
 
-# Set default environment variables
+# Retrieve build arguments
 ARG FROM_IMAGE="debian:stretch"
+ARG DOCKER_BUILD_DATE=""
 ARG DOCKER_FROM_COMMIT=""
 ARG PHP_VERSION="7.1"
 ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
+
+# Set metadata labels, see: http://label-schema.org/rc1/
+LABEL   org.label-schema.build-date="${DOCKER_BUILD_DATE}" \
+        org.label-schema.name="Virtua Docker Image - PHP" \
+        org.label-schema.description="PHP web development docker images used by Virtua SA." \
+        org.label-schema.url="https://hub.docker.com/r/virtuasa/php/" \
+        org.label-schema.vcs-ref="${DOCKER_FROM_COMMIT}" \
+        org.label-schema.vendor="Virtua SA" \
+        org.label-schema.schema-version="1.0"
+
+# Set default environment variables
 ENV APACHE_DOCUMENT_ROOT="web" \
     APACHE_LOG_PATH="var/logs/apache" \
     APACHE_RUN_GROUP="docker" \
@@ -16,6 +28,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     APACHE_SSL_CERT_KEY="/etc/ssl/private/ssl-cert-snakeoil.key" \
     APACHE_SSL_CERT_PEM="/etc/ssl/certs/ssl-cert-snakeoil.pem" \
     DOCKER_BASE_DIR="/data" \
+    DOCKER_BUILD_DATE="${DOCKER_BUILD_DATE}" \
     DOCKER_CHMOD_666="" \
     DOCKER_CHMOD_777="" \
     DOCKER_CHMOD_R666="" \

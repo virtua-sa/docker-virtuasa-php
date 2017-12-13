@@ -1,4 +1,4 @@
-# Virtua Docker Container - PHP
+# Virtua Docker Image - PHP
 
 > `virtuasa/php:5.2`
 > `virtuasa/php:5.3`

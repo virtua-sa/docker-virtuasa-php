@@ -77,6 +77,7 @@ echo "df_php_version_apt=${df_php_version_apt}"
 echo "df_php_version_dir=${df_php_version_dir}"
 
 # Log all build details
+db_build_date="$(date --iso-8601=seconds)"
 db_build_path="builds/${df_php_version}-$(date +%Y%m%d)"
 rm -rf ${db_build_path}
 mkdir -p ${db_build_path}
@@ -91,6 +92,7 @@ cat <<"EOF"
 EOF
 
 docker build --tag virtuasa/php:${df_php_version}-dev \
+    --build-arg DOCKER_BUILD_DATE="${db_build_date}" \
     --build-arg DOCKER_FROM_COMMIT=$(git log --pretty=format:'%h' -n 1) \
     --build-arg FROM_IMAGE=${df_from_image} \
     --build-arg PHP_VERSION=${df_php_version} \
