@@ -103,6 +103,9 @@ fi
 # Chown the mount directory
 [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
 
+# Create the requested directories
+[[ -n "${DOCKER_MKDIR}" ]] && sudo mkdir -p ${DOCKER_MKDIR}
+
 # Chmod the requested directories
 [[ -n "${DOCKER_CHMOD_666}" ]] && sudo chmod 666 ${DOCKER_CHMOD_666}
 [[ -n "${DOCKER_CHMOD_777}" ]] && sudo chmod 777 ${DOCKER_CHMOD_777}

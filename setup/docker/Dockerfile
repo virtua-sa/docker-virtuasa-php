@@ -45,6 +45,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     DOCKER_HOST_GID="" \
     DOCKER_HOST_SETUP_DIR="setup" \
     DOCKER_HOST_UID="" \
+    DOCKER_MKDIR="" \
     DOCKER_TIMEZONE="Europe/Zurich" \
     DOCKER_WEB_SERVER="apache" \
     NGINX_DOCUMENT_ROOT="web" \

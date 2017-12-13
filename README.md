@@ -85,6 +85,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
 | `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
+| `DOCKER_MKDIR`                  | ` ` *(empty)*                             | Create requested directories if set \*
 | `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
 | `DOCKER_WEB_SERVER`             | `apache`                                  | Web server to use, can be either `apache` or `nginx`
 | `NGINX_DOCUMENT_ROOT`           | `web`                                     | Path to the Nginx document root folder \*
@@ -110,6 +111,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 | Variable name                   | Sample value                              | Description                                                                    |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `DOCKER_BUILD_DATE`             | `2017-12-13T15:22:29+0100`                | Build date of the image, using ISO-8601 format
 | `DOCKER_FROM_COMMIT`            | `f84a27d7`                                | Short hash of the git commit used to build the Docker image in this repository
 | `DOCKER_FROM_IMAGE`             | `debian/stretch`                          | Name of the base image used to build the Docker image
 | `PHP_VERSION`                   | `7.1`                                     | PHP version included in the image
