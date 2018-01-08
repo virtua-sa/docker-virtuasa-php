@@ -7,7 +7,7 @@
   * Tags: `virtuasa/php:*-20180108`
   * Built on commit : [008d6b18](https://gitlab.virtua.ch/docker/virtuasa-php/tree/008d6b1871f34ab120b77a7ced7c510e6649ca68)
 * Changes
-  * Added: PHP versions upgraded: 5.6.33, 7.0.27, 7.1.13, 7.2.1
+  * Added: PHP versions upgraded: 7.0.26, 7.1.13, 7.2.1
 
 ## V1.3.7 - 20171213
 
