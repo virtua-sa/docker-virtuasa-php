@@ -1,5 +1,33 @@
 # Virtua Docker Container - PHP - CHANGELOG
 
+## V1.3.8 - 20180108
+
+* Metadata
+  * Version: 1.3.8
+  * Tags: `virtuasa/php:*-20180108`
+  * Built on commit : [](https://gitlab.virtua.ch/docker/virtuasa-php/tree/)
+* Changes
+  * Added: PHP versions upgraded: 5.6.33, 7.0.27, 7.1.13, 7.2.1
+
+## V1.3.7 - 20171213
+
+* Metadata
+  * Version: 1.3.7
+  * Tags: `virtuasa/php:*-20171213`
+  * Built on commit : [3b0cf86d](https://gitlab.virtua.ch/docker/virtuasa-php/tree/3b0cf86d818126fc02e6223a4058cb6d75455c44)
+* Changes
+  * Added: `DOCKER_MKDIR` to recursively create folders on start
+  * Added: Labels compliant to http://label-schema.org/rc1/
+
+## V1.3.6 - 20171208
+
+* Metadata
+  * Version: 1.3.6
+  * Tags: `virtuasa/php:*-20171208`
+  * Built on commit : [31849eea](https://gitlab.virtua.ch/docker/virtuasa-php/tree/31849eea9a7a99633c3e8bd81a27e35d51a99d27)
+* Changes
+  * Added: Ruby and Capistrano for PHP 5.6, 7.0, 7.1, 7.2
+
 ## V1.3.5 - 20171204
 
 * Metadata
