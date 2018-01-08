@@ -71,6 +71,8 @@ build:72:
 push:nothing:
   <<: *template
   stage: push
+  script:
+    - echo This is a dummy job
 
 push:dev:
   <<: *template
