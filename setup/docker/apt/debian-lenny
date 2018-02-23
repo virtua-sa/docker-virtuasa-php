@@ -6,6 +6,7 @@ ca-certificates
 curl
 gettext
 git
+git-svn
 gnupg
 htop
 mc
