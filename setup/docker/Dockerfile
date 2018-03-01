@@ -62,6 +62,7 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     PHP_XDEBUG_CLI_ENABLE="off" \
     XHGUI_ACTIVE="false" \
     XHGUI_BASE_DIR="/xhgui" \
+    XHGUI_DB_ENSURE="false" \
     XHGUI_DB_HOST="" \
     XHGUI_DB_NAME="" \
     XHGUI_SERVER_NAME="xhgui.${APACHE_SERVER_NAME}"

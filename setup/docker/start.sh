@@ -86,6 +86,9 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/fpm"
+    if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
+        sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/xhgui"
+    fi
     if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
         sudo cp -r "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
         sudo cp -r "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
@@ -94,7 +97,7 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
         if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
-            sudo cp -r "/etc/xhgui/"* "${XHGUI_BASE_DIR}/config"
+            sudo cp -r "${XHGUI_BASE_DIR}/config/"* "${DOCKER_HOST_SETUP_DIR}/php/xhgui"
         fi
     else
         sudo cp -nr "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
@@ -104,7 +107,7 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
         if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
-            sudo cp -nr "/etc/xhgui/"* "${XHGUI_BASE_DIR}/config"
+            sudo cp -nr "${XHGUI_BASE_DIR}/config/"* "${DOCKER_HOST_SETUP_DIR}/php/xhgui"
         fi
     fi
 fi
@@ -118,7 +121,7 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
     if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
-        sudo cp -rf "${XHGUI_BASE_DIR}/config/"* "/etc/xhgui/"
+        sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/xhgui/"* "${XHGUI_BASE_DIR}/config/"
     fi
 fi
 
@@ -191,7 +194,7 @@ sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 
 # Replace system environment variables into XHGUI configuration files
-if [[ -n "${XHGUI_DB_HOST}" ]] && [[ -n "${XHGUI_DB_NAME}" ]]; then
+if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
     echo -n "Applying XHGUI configuration "
     find "${XHGUI_BASE_DIR}/config/" -name "*.php" -not -name "config.default.php" | while IFS= read -r file; do
         envsubst < ${file} | sudo tee ${file} > /dev/null
@@ -216,6 +219,14 @@ echo " OK"
 
 # Clean Behat cache directory
 sudo rm -rf /tmp/behat_gherkin_cache
+
+# Ensure XHGUI database configuration
+if [[ "${XHGUI_ACTIVE}" = "true" ]] && [[ "${XHGUI_DB_ENSURE}" = "true" ]]; then
+    sleep 1
+    echo -n "Ensure XHGUI database "
+    mongo "${XHGUI_DB_HOST}/${XHGUI_DB_NAME}" < /setup/mongo/db-ensure.js
+    echo " OK"
+fi
 
 # Exec custom startup script
 [[ -n "${DOCKER_CUSTOM_START}" ]] && [[ -e "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" \

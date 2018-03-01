@@ -99,6 +99,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
 | `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
 | `XHGUI_ACTIVE`                  | `false`                                   | Activate of Tideways profiling if set to `true`
+| `XHGUI_DB_ENSURE`               | `false`                                   | Ensure MongoDB database creation and configuration if set to `true`
 | `XHGUI_DB_HOST`                 | ` ` *(empty)*                             | MongoDB database host to store the profiles
 | `XHGUI_DB_NAME`                 | ` ` *(empty)*                             | MongoDB database name to store the profiles
 | `XHGUI_SERVER_NAME`             | `xhgui.localhost`                         | XHGUI Apache server name
@@ -112,7 +113,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 ### Readonly environment variables
 
 > These variables are used to build the images and can be used to adapt behaviors between their different flavors.
-> *Changing their value is not recommanded.*
+> *Changing their value is not recommended.*
 
 | Variable name                   | Sample value                              | Description                                                                    |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
