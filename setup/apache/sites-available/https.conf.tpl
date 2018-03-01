@@ -128,6 +128,8 @@
 		#		nokeepalive ssl-unclean-shutdown \
 		#		downgrade-1.0 force-response-1.0
 
+		# XHGUI configuration
+		${XHGUI_PHP_CONF}
 	</VirtualHost>
 </IfModule>
 

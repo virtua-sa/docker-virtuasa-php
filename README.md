@@ -44,6 +44,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Grunt (`grunt`)](https://gruntjs.com/getting-started)                                            |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PM2 (`pm2`)](http://pm2.keymetrics.io/docs/usage/quick-start/)                                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Webpack (`webpack`)](https://webpack.js.org/concepts/)                                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [XHGUI (`xhgui`)](https://github.com/perftools/xhgui)                                             |          |           |          | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Apache](https://httpd.apache.org/docs/2.4/)                                                      | *2.2.9*  | *2.2.16*  | *2.2.22* | *2.2.22* | *2.4.10* | *2.4.25*  | *2.4.25*  | *2.4.25*  |
 | [NGINX](https://nginx.org/en/docs/)                                                               | *0.6.32* | *0.7.67*  | *1.2.1*  | *1.2.1*  | *1.6.2*  | *1.10.3*  | *1.10.3*  | *1.10.3*  |
@@ -97,6 +98,10 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_MEMORY_LIMIT_CLI`          | `512M`                                    | Maximum amount of memory a PHP script running on CLI may consume
 | `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
 | `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
+| `XHGUI_ACTIVE`                  | `false`                                   | Activate of Tideways profiling if set to `true`
+| `XHGUI_DB_HOST`                 | ` ` *(empty)*                             | MongoDB database host to store the profiles
+| `XHGUI_DB_NAME`                 | ` ` *(empty)*                             | MongoDB database name to store the profiles
+| `XHGUI_SERVER_NAME`             | `xhgui.localhost`                         | XHGUI Apache server name
 
 \* *Path is relative to the Docker container mount path, i.e., to the root of the project.*
 
@@ -117,6 +122,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_VERSION`                   | `7.1`                                     | PHP version included in the image
 | `PHP_VERSION_APT`               | `7.1`                                     | PHP version used in the `apt-get install` instructions
 | `PHP_VERSION_DIR`               | `/7.1`                                    | PHP version used in the paths of PHP configuration files
+| `XHGUI_BASE_DIR`                | `/xhgui`                                  | XHGUI installation directory
 
 ### Limitations with old PHP versions
 
@@ -125,6 +131,8 @@ To customize these setup on your projects, changes must only be done to file [`d
   * Using `DOCKER_WEB_SERVER=nginx` is not allowed, and `apache` will be used instead, this can be overriden by setting the value of `DOCKER_WEB_SERVER` with a script loaded by `DOCKER_CUSTOM_INIT`.
 * `PHP 5.3`:
   * Using `DOCKER_WEB_SERVER=nginx` is not allowed, and `apache` will be used instead, this can be overriden by setting the value of `DOCKER_WEB_SERVER` with a script loaded by `DOCKER_CUSTOM_INIT`.
+* `PHP < 5.5`:
+  * Using `XHGUI_ACTIVE=true` is incompatible, on Docker start the variable will be overriden to `XHGUI_ACTIVE=false`.
 
 ## Changelog
 

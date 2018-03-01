@@ -54,6 +54,10 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
     curl -sSL https://deb.nodesource.com/setup_8.x | bash -
 fi
 
+# Use Tideways pre-compiled packages
+echo "deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main" > /etc/apt/sources.list.d/tideways.list
+curl -sSL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
+
 # Update APT and list all available PHP packages
 apt-get update
 apt-cache search php${PHP_VERSION_APT} | grep -v dbgsym | cut -d' ' -f1
@@ -84,11 +88,6 @@ apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
 # Print Apache and Nginx versions
 /usr/sbin/apache2 -v
 /usr/sbin/nginx -v
-
-# Fix PHP 5.6 issue with uprofiler (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=784774)
-if [[ "${PHP_VERSION}" = "5.6" ]]; then
-    sed -i "s/extension=profiler.so/extension=uprofiler.so/g" /etc/php5/mods-available/uprofiler.ini
-fi
 
 # Install Behat
 if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
@@ -130,8 +129,8 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
 fi
 
 # Install PHP Copy/Paste Detector (PHPCPD)
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
-    curl -sSL https://phar.phpunit.de/phpcpd.phar > /usr/local/bin/phpcpd && chmod +x /usr/local/bin/phpcpd
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+    curl -sSL https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod +x /usr/local/bin/phpcpd
     echo -n "phpcpd --version : " && phpcpd --version
 fi
 
@@ -184,6 +183,19 @@ fi
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     curl -sSL https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod +x /usr/local/bin/phpunit48
     echo -n "phpunit48 --version : " && phpunit48 --version
+fi
+
+# Install XHGUI
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+    rm -Rf "${XHGUI_BASE_DIR}"
+    git clone https://github.com/perftools/xhgui.git "${XHGUI_BASE_DIR}"
+    chmod -R 755 "${XHGUI_BASE_DIR}"
+    chmod -R 777 "${XHGUI_BASE_DIR}/cache"
+    if [[ "${PHP_VERSION}" =~ ^(7\.) ]]; then
+        composer require -d "${XHGUI_BASE_DIR}" mongodb/mongodb:1.2
+    else
+        composer install -d "${XHGUI_BASE_DIR}" --ignore-platform-reqs
+    fi
 fi
 
 # Install common Node.js tools

@@ -59,7 +59,12 @@ ENV APACHE_DOCUMENT_ROOT="web" \
     PHP_VERSION_APT="${PHP_VERSION_APT}" \
     PHP_VERSION_DIR="${PHP_VERSION_DIR}" \
     PHP_XDEBUG_APACHE_ENABLE="off" \
-    PHP_XDEBUG_CLI_ENABLE="off"
+    PHP_XDEBUG_CLI_ENABLE="off" \
+    XHGUI_ACTIVE="false" \
+    XHGUI_BASE_DIR="/xhgui" \
+    XHGUI_DB_HOST="" \
+    XHGUI_DB_NAME="" \
+    XHGUI_SERVER_NAME="xhgui.${APACHE_SERVER_NAME}"
 
 # Copy the needed shell scripts
 COPY ./setup/ /setup/

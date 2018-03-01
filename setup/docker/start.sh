@@ -6,6 +6,8 @@ echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 echo "Built from commit: ${DOCKER_FROM_COMMIT}"
 echo
 
+export DOLLAR='$'
+
 # Print ran commands
 [[ -n "${DOCKER_DEBUG}" ]] && set -x
 
@@ -37,6 +39,14 @@ php -v
 DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route | awk '/default/ { print $3 }')}"
 export DOCKER_HOST_IP
 
+# XHGUI Config
+if [[ "${XHGUI_ACTIVE}" = "true" ]] && [[ -n "${XHGUI_DB_HOST}" ]] && [[ -n "${XHGUI_DB_NAME}" ]] && [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+    export XHGUI_PHP_CONF="php_value auto_prepend_file \"${XHGUI_BASE_DIR}/external/header.php\""
+else
+    export XHGUI_ACTIVE="false"
+    export XHGUI_PHP_CONF=""
+fi
+
 # Print all environment variables (can be overriden in docker-compose.yml)
 [[ -n "${DOCKER_DEBUG}" ]] && printenv
 
@@ -64,7 +74,9 @@ sudo cp -r /setup/nginx/* /etc/nginx
 sudo cp -r /setup/php/apache/* /etc/php${PHP_VERSION_DIR}/apache2
 sudo cp -r /setup/php/cli/* /etc/php${PHP_VERSION_DIR}/cli
 sudo cp -r /setup/php/fpm/* /etc/php${PHP_VERSION_DIR}/fpm
-
+if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
+    sudo cp -r "/setup/php/xhgui/"* "${XHGUI_BASE_DIR}/config"
+fi
 
 # Copy image's configuration files to host filesystem
 if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
@@ -81,6 +93,9 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/apache2/"* "${DOCKER_HOST_SETUP_DIR}/php/apache"
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
         sudo cp -r "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
+        if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
+            sudo cp -r "/etc/xhgui/"* "${XHGUI_BASE_DIR}/config"
+        fi
     else
         sudo cp -nr "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
         sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
@@ -88,6 +103,9 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"* "${DOCKER_HOST_SETUP_DIR}/php/apache"
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
         sudo cp -nr "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
+        if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
+            sudo cp -nr "/etc/xhgui/"* "${XHGUI_BASE_DIR}/config"
+        fi
     fi
 fi
 
@@ -98,6 +116,10 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2"
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli"
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
+    if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
+        sudo cp -rf "${XHGUI_BASE_DIR}/config/"* "/etc/xhgui/"
+    fi
 fi
 
 # Chown the mount directory
@@ -133,7 +155,6 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     sudo chmod -R 755 "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
     # Apache root directory
     sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_DOCUMENT_ROOT}"
-    export DOLLAR='$'
     # Disable previous Apache sites
     (cd /etc/apache2/sites-enabled && find -mindepth 1 -print -quit | grep -q . && sudo a2dissite * || true)
     # Replace system environment variables into Apache configuration files
@@ -165,9 +186,20 @@ elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
     echo " OK"
 fi
 
-# PHP log direcotry
+# PHP log directory
 sudo mkdir -p "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
 sudo chmod -R 755 "${DOCKER_BASE_DIR}/${PHP_LOG_PATH}"
+
+# Replace system environment variables into XHGUI configuration files
+if [[ -n "${XHGUI_DB_HOST}" ]] && [[ -n "${XHGUI_DB_NAME}" ]]; then
+    echo -n "Applying XHGUI configuration "
+    find "${XHGUI_BASE_DIR}/config/" -name "*.php" -not -name "config.default.php" | while IFS= read -r file; do
+        envsubst < ${file} | sudo tee ${file} > /dev/null
+        [[ -n "${DOCKER_DEBUG}" ]] && cat ${file}
+        echo -n "."
+    done
+    echo " OK"
+fi
 
 # Replace system environment variables into PHP configuration files
 echo -n "Applying PHP configuration file templates "
