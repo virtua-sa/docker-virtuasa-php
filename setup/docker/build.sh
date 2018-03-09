@@ -188,7 +188,7 @@ fi
 # Install XHGUI
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
     rm -Rf "${XHGUI_BASE_DIR}"
-    git clone https://github.com/perftools/xhgui.git "${XHGUI_BASE_DIR}"
+    git clone https://github.com/perftools/xhgui.git "${XHGUI_BASE_DIR}" --branch 0.9.0
     chmod -R 755 "${XHGUI_BASE_DIR}"
     chmod -R 777 "${XHGUI_BASE_DIR}/cache"
     if [[ "${PHP_VERSION}" =~ ^(7\.) ]]; then
