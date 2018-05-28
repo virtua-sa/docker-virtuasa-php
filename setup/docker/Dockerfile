@@ -10,16 +10,18 @@ ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
 
 # Set metadata labels, see: http://label-schema.org/rc1/
-LABEL   org.label-schema.build-date="${DOCKER_BUILD_DATE}" \
-        org.label-schema.name="Virtua Docker Image - PHP" \
-        org.label-schema.description="PHP web development docker images used by Virtua SA." \
-        org.label-schema.url="https://hub.docker.com/r/virtuasa/php/" \
-        org.label-schema.vcs-ref="${DOCKER_FROM_COMMIT}" \
-        org.label-schema.vendor="Virtua SA" \
-        org.label-schema.schema-version="1.0"
+LABEL org.label-schema.build-date="${DOCKER_BUILD_DATE}" \
+      org.label-schema.name="Virtua Docker Image - PHP" \
+      org.label-schema.description="PHP web development docker images used by Virtua SA." \
+      org.label-schema.url="https://hub.docker.com/r/virtuasa/php/" \
+      org.label-schema.vcs-ref="${DOCKER_FROM_COMMIT}" \
+      org.label-schema.vcs-url="https://github.com/virtua-sa/docker-virtuasa-php" \
+      org.label-schema.vendor="Virtua SA" \
+      org.label-schema.schema-version="1.0"
 
 # Set default environment variables
-ENV APACHE_DOCUMENT_ROOT="web" \
+ENV LANG=C.UTF-8 \
+    APACHE_DOCUMENT_ROOT="web" \
     APACHE_LOG_PATH="var/logs/apache" \
     APACHE_RUN_GROUP="docker" \
     APACHE_RUN_USER="docker" \
@@ -73,8 +75,8 @@ COPY ./setup/ /setup/
 # Make sure scripts are executables and run the build script
 RUN set -xe \
     && sed -i 's/\r$//' /setup/docker/*.sh \
-    && chmod +x /setup/docker/*.sh \
-    && ls -alhR /setup \
+    && chmod a+rx /setup/docker/*.sh \
+    && chmod -R a+rX /setup \
     && echo "PHP_VERSION=${PHP_VERSION}" \
     && /setup/docker/build.sh \
     && rm -rf /setup/docker/apt/* \

@@ -26,10 +26,10 @@ web:
   # links:
   #   - db
   #   - mongo
-  ports: 
+  ports:
     - "80"
     - "443"
-  volumes: 
+  volumes:
     - ./:/data
 
 # @todo Uncomment these lines to profile the application

@@ -16,7 +16,6 @@ mongodb-clients
 nano
 nginx
 rsync
-sendmail
 snmp
 ssl-cert
 subversion
@@ -24,3 +23,5 @@ sudo
 unzip
 vim
 wget
+ssmtp
+strace

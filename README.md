@@ -31,10 +31,11 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)                 |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)                                  |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHPUnit (Current Stable Release) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)   |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPUnit (Current Stable Release) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)   |          |           |          |          |          |           | &#x2714;  | &#x2714;  |
 | [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)                         |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)                         |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
@@ -48,11 +49,12 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
 | [Apache](https://httpd.apache.org/docs/2.4/)                                                      | *2.2.9*  | *2.2.16*  | *2.2.22* | *2.2.22* | *2.4.10* | *2.4.25*  | *2.4.25*  | *2.4.25*  |
 | [NGINX](https://nginx.org/en/docs/)                                                               | *0.6.32* | *0.7.67*  | *1.2.1*  | *1.2.1*  | *1.6.2*  | *1.10.3*  | *1.10.3*  | *1.10.3*  |
+| [SSMTP](https://doc.ubuntu-fr.org/ssmtp)                                                          |  *2.64*  |  *2.64*   |  *2.64*  |  *2.64*  |  *2.64*  |  *2.64*   |  *2.64*   |  *2.64*   |
 | [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
 
-*Apache* calls PHP with *mod_php*. *Nginx* calls PHP with
+*Apache* calls PHP with *mod_php*. *Nginx* calls PHP with *php-fpm*
 
 ## Usage
 
@@ -98,6 +100,16 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_MEMORY_LIMIT_CLI`          | `512M`                                    | Maximum amount of memory a PHP script running on CLI may consume
 | `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
 | `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
+| `SSMTP_MAILHUB`                 | ` ` *(empty)*                             | The host to send mail to, in the form host IP_addr[:port]. The default port is 25.
+| `SSMTP_AUTH_USER`               | ` ` *(empty)*                             | The user name to use for SMTP AUTH. The default is blank, in which case SMTP AUTH is not used. sent without
+| `SSMTP_AUTH_PASS`               | ` ` *(empty)*                             | The password to use for SMTP AUTH.
+| `SSMTP_AUTH_METHOD`             | ` ` *(empty)*                             | The authorization method to use. If unset, plain text is used. May also be set to “cram-md5”.
+| `SSMTP_USE_TLS`                 | ` ` *(empty)*                             | Specifies whether ssmtp uses TLS to talk to the SMTP server. The default is “no”.
+| `SSMTP_USE_STARTTLS`            | ` ` *(empty)*                             | Specifies whether ssmtp does a EHLO/STARTTLS before starting SSL negotiation. See RFC 2487.
+| `SSMTP_SENDER_ROOT`             | ` ` *(empty)*                             | The user that gets all mail for userids less than 1000. If blank, address rewriting is disabled.
+| `SSMTP_SENDER_HOSTNAME`         | ` ` *(empty)*                             | The full qualified name of the host. If not specified, the host is queried for its hostname.
+| `SSMTP_REWRITE_DOMAIN`          | ` ` *(empty)*                             | The domain from which mail seems to come. for user authentication.
+| `SSMTP_FROM_LINE_OVERRIDE`      | ` ` *(empty)*                             | Specifies whether the From header of an email, if any, may override the default domain. The default is “no”.
 | `XHGUI_ACTIVE`                  | `false`                                   | Activate of Tideways profiling if set to `true`
 | `XHGUI_DB_ENSURE`               | `false`                                   | Ensure MongoDB database creation and configuration if set to `true`
 | `XHGUI_DB_HOST`                 | ` ` *(empty)*                             | MongoDB database host to store the profiles

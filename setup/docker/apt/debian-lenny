@@ -15,10 +15,11 @@ mongodb-clients
 nano
 nginx
 rsync
-sendmail
 ssl-cert
 subversion
 sudo
 unzip
 vim
 wget
+ssmtp
+strace

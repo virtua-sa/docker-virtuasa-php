@@ -25,8 +25,11 @@ shopt -s extglob
     && exit 1;
 
 # Install base packages
-apt-get update && apt-get install -y --fix-missing --no-install-recommends \
-    $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
+apt-get update \
+    && apt-get upgrade -y --fix-missing --no-install-recommends \
+    && apt-get dist-upgrade -y --fix-missing --no-install-recommends \
+    && apt-get install -y --fix-missing --no-install-recommends \
+        $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Use Sury repository, to get PHP 7+ on Debian 9
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
@@ -88,14 +91,15 @@ apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
 # Print Apache and Nginx versions
 /usr/sbin/apache2 -v
 /usr/sbin/nginx -v
+/usr/sbin/sendmail -V
 
 # Install Behat
 if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
-    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
+    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
     rm -rf /tmp/behat_gherkin_cache
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod +x /usr/local/bin/behat
+    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
     rm -rf /tmp/behat_gherkin_cache
 fi
@@ -108,80 +112,94 @@ fi
 
 # Install DbUnit
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    curl -sSL https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod +x /usr/local/bin/dbunit
+    curl -sSL https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod a+x /usr/local/bin/dbunit
 fi
 
 # Install Phing
 if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
-    curl -sSL http://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod +x /usr/local/bin/phing
+    curl -sSL http://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL http://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod +x /usr/local/bin/phing
+    curl -sSL http://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 fi
 
 # Install PHP_CodeSniffer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod +x /usr/local/bin/phpcs
+    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod a+x /usr/local/bin/phpcs
     echo -n "phpcs --version : " && phpcs --version
-    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod +x /usr/local/bin/phpcbf
+    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod a+x /usr/local/bin/phpcbf
     echo -n "phpcbf --version : " && phpcbf --version
 fi
 
 # Install PHP Copy/Paste Detector (PHPCPD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod +x /usr/local/bin/phpcpd
+    curl -sSL https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
     echo -n "phpcpd --version : " && phpcpd --version
 fi
 
 # Install PHP_Depend
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod +x /usr/local/bin/pdepend
+    curl -sSL http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
     echo -n "pdepend --version : " && pdepend --version
 fi
 
 # Install phpDocumentor
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    curl -sSL http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod +x /usr/local/bin/phpdoc
+    curl -sSL http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
     echo -n "phpdoc --version : " && phpdoc --version
+fi
+
+# Install phpdox
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+    curl -sSL http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    echo -n "phpdox --version : " && phpdox --version
+fi
+if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then
+    curl -sSL https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    echo -n "phpdox --version : " && phpdox --version
+fi
+if [[ "${PHP_VERSION}" =~ ^5\.3 ]]; then
+    curl -sSL https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    echo -n "phpdox --version : " && phpdox --version
 fi
 
 # Install PHPLOC
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
-    curl -sSL https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod +x /usr/local/bin/phploc
+    curl -sSL https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
     echo -n "phploc --version : " && phploc --version
 fi
 
 # Install PHP Mess Detector (PHPMD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod +x /usr/local/bin/phpmd
+    curl -sSL http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
     echo -n "phpmd --version : " && phpmd --version
 fi
 
 # Install PhpMetrics
 if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
-    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod +x /usr/local/bin/phpmetrics
+    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
     echo -n "phpmetrics --version : " && phpmetrics --version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod +x /usr/local/bin/phpmetrics
+    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
     echo -n "phpmetrics --version : " && phpmetrics --version
 fi
 
 # Install PHPUnit
-if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod +x /usr/local/bin/phpunit
+if [[ "${PHP_VERSION}" =~ ^7\.[123456] ]]; then
+    curl -sSL https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
     echo -n "phpunit --version : " && phpunit --version
 fi
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod +x /usr/local/bin/phpunit62
+    curl -sSL https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod a+x /usr/local/bin/phpunit62
     echo -n "phpunit62 --version : " && phpunit62 --version
 fi
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit57 && chmod +x /usr/local/bin/phpunit57
+    curl -sSL https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit57 && chmod a+x /usr/local/bin/phpunit57
     echo -n "phpunit57 --version : " && phpunit57 --version
 fi
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod +x /usr/local/bin/phpunit48
+    curl -sSL https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
     echo -n "phpunit48 --version : " && phpunit48 --version
 fi
 

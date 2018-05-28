@@ -31,6 +31,7 @@ trap 'echo -e "\n(last error code: '"'"'$?/${PIPESTATUS[*]}'"'"'; on line: '"'"'
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
 sudo dpkg-reconfigure --frontend noninteractive tzdata
+sudo find /etc -name "php.ini" -exec sed -i "s|^;*date.timezone =.*|date.timezone = \"${DOCKER_TIMEZONE}3\"|" {} +
 
 # Print installed PHP version
 php -v
@@ -143,7 +144,24 @@ if [[ "${PHP_VERSION}" != "5.2" ]]; then
 fi
 
 # Install npm packages if necessary
-[[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install
+[[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install || echo "Ignore npm install Errors"
+
+# Configure SSMTP
+if [[ -n "${SSMTP_MAILHUB}" ]]; then
+    file=/etc/ssmtp/ssmtp.conf
+    echo "" > $file
+
+    [[ -n "${SSMTP_SENDER_ROOT}" ]] echo Root=${SSMTP_SENDER_ROOT} >> $file
+    [[ -n "${SSMTP_MAILHUB}" ]] echo Mailhub=${SSMTP_MAILHUB} >> $file
+    [[ -n "${SSMTP_AUTH_USER}" ]] echo AuthUser=${SSMTP_AUTH_USER} >> $file
+    [[ -n "${SSMTP_AUTH_PASS}" ]] echo AuthPass=${SSMTP_AUTH_PASS} >> $file
+    [[ -n "${SSMTP_AUTH_METHOD}" ]] echo AuthMethod=${SSMTP_AUTH_METHOD} >> $file
+    [[ -n "${SSMTP_USE_TLS}" ]] echo UseTLS=${SSMTP_USE_TLS} >> $file
+    [[ -n "${SSMTP_USE_STARTTLS}" ]] echo UseSTARTTLS=${SSMTP_USE_STARTTLS} >> $file
+    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] echo Hostname=${SSMTP_SENDER_HOSTNAME} >> $file
+    [[ -z "${SSMTP_REWRITE_DOMAIN+x}" ]] echo RewriteDomain=${SSMTP_REWRITE_DOMAIN} >> $file
+    [[ -z "${SSMTP_FROM_LINE_OVERRIDE+x}" ]] echo FromLineOverride=${SSMTP_FROM_LINE_OVERRIDE} >> $file
+fi
 
 # Configure web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
