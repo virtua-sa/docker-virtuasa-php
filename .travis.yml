@@ -18,4 +18,4 @@ matrix:
     - PHP=5.3
 
 script:
-  - ./travis $PHP
+  - ./travis.sh $PHP
