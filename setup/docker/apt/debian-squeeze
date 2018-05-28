@@ -12,7 +12,6 @@ gnupg
 htop
 mc
 mysql-client
-mongodb-clients
 nano
 nginx
 rsync
