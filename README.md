@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/virtua-sa/docker-virtuasa-php.svg?branch=develop)](https://travis-ci.org/virtua-sa/docker-virtuasa-php)
+
 # Virtua Docker Image - PHP
 
 > [`virtuasa/php:5.2`](https://microbadger.com/images/virtuasa/php:5.2)

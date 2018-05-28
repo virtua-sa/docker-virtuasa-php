@@ -3,19 +3,19 @@ services:
   - docker
 
 env:
-  - PHP_VERSION=5.2
-  - PHP_VERSION=5.3
-  - PHP_VERSION=5.4
-  - PHP_VERSION=5.5
-  - PHP_VERSION=5.6
-  - PHP_VERSION=7.0
-  - PHP_VERSION=7.1
-  - PHP_VERSION=7.2
+  - PHP=5.2
+  - PHP=5.3
+  - PHP=5.4
+  - PHP=5.5
+  - PHP=5.6
+  - PHP=7.0
+  - PHP=7.1
+  - PHP=7.2
 
 matrix:
   allow_failures:
-    - PHP_VERSION=5.2
-    - PHP_VERSION=5.3
+    - PHP=5.2
+    - PHP=5.3
 
 script:
-  - di_disable_push=1 ./docker-build.sh $PHP_VERSION && [[ $TRAVIS_BRANCH = 'master' ]] && docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && ./docker-push.sh $PHP_VERSION;
+  - ./travis $PHP

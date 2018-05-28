@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # Make sure we stop building/pushing images if an error happens
 set -e

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 docker ps -aq --filter "name=virtuasa/php:5.2-dev" | xargs -rn1 docker rm
 docker ps -aq --filter "name=virtuasa/php:5.3-dev" | xargs -rn1 docker rm
