@@ -1,6 +1,4 @@
-dist: jessie
 sudo: required
-language: php
 services:
   - docker
 
