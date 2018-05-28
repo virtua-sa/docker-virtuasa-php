@@ -84,7 +84,7 @@ mkdir -p ${db_build_path}
 
 # Build the image and tag it
 cat <<"EOF"
-  ____        _ _     _ 
+  ____        _ _     _
  | __ ) _   _(_) | __| |
  |  _ \| | | | | |/ _` |
  | |_) | |_| | | | (_| |
@@ -103,12 +103,12 @@ grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path
 
 # Test the image built with Apache
 cat <<"EOF"
-  _____         _                _                     _          
- |_   _|__  ___| |_             / \   _ __   __ _  ___| |__   ___ 
+  _____         _                _                     _
+ |_   _|__  ___| |_             / \   _ __   __ _  ___| |__   ___
    | |/ _ \/ __| __|  _____    / _ \ | '_ \ / _` |/ __| '_ \ / _ \
    | |  __/\__ \ |_  |_____|  / ___ \| |_) | (_| | (__| | | |  __/
    |_|\___||___/\__|         /_/   \_\ .__/ \__,_|\___|_| |_|\___|
-                                     |_|                          
+                                     |_|
 EOF
 rm -rf tests/tmp${df_php_version}
 cp -r tests/src tests/tmp${df_php_version}
@@ -143,18 +143,18 @@ docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker stop virtuasa-php-${df_php_version}-dev-build
-docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 | tee ${db_build_path}/run-apache.log
+docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 > ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
 # Test the image built with Apache without DEBUG
 cat <<"EOF"
-  _____         _                _                     _           __        _______    ____  ____   ____ 
+  _____         _                _                     _           __        _______    ____  ____   ____
  |_   _|__  ___| |_             / \   _ __   __ _  ___| |__   ___  \ \      / / / _ \  |  _ \| __ ) / ___|
-   | |/ _ \/ __| __|  _____    / _ \ | '_ \ / _` |/ __| '_ \ / _ \  \ \ /\ / / / | | | | | | |  _ \| |  _ 
+   | |/ _ \/ __| __|  _____    / _ \ | '_ \ / _` |/ __| '_ \ / _ \  \ \ /\ / / / | | | | | | |  _ \| |  _
    | |  __/\__ \ |_  |_____|  / ___ \| |_) | (_| | (__| | | |  __/   \ V  V / /| |_| | | |_| | |_) | |_| |
    |_|\___||___/\__|         /_/   \_\ .__/ \__,_|\___|_| |_|\___|    \_/\_/_/  \___/  |____/|____/ \____|
-                                     |_|                                                                  
+                                     |_|
 EOF
 rm -rf tests/tmp${df_php_version}
 cp -r tests/src tests/tmp${df_php_version}
@@ -186,8 +186,8 @@ rm -rf tests/tmp${df_php_version}
 cat <<"EOF"
   _____         _             _   _  ____ ___ _   ___  __
  |_   _|__  ___| |_          | \ | |/ ___|_ _| \ | \ \/ /
-   | |/ _ \/ __| __|  _____  |  \| | |  _ | ||  \| |\  / 
-   | |  __/\__ \ |_  |_____| | |\  | |_| || || |\  |/  \ 
+   | |/ _ \/ __| __|  _____  |  \| | |  _ | ||  \| |\  /
+   | |  __/\__ \ |_  |_____| | |\  | |_| || || |\  |/  \
    |_|\___||___/\__|         |_| \_|\____|___|_| \_/_/\_\
 EOF
 cp -r tests/src tests/tmp${df_php_version}
@@ -217,7 +217,7 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-nginx.log
 docker stop virtuasa-php-${df_php_version}-dev-build
-docker logs -t virtuasa-php-${df_php_version}-dev-build | tee ${db_build_path}/run-nginx.log
+docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-nginx.log
 docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
