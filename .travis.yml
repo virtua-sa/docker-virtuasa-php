@@ -19,4 +19,4 @@ matrix:
 
 script:
   - di_disable_push=1 ./docker-build.sh $PHP_VERSION
-  - if [ $TRAVIS_BRANCH = 'master' ]; docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; ./docker-push.sh $PHP_VERSION; fi
+  - if [ $TRAVIS_BRANCH = 'master' ]; docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD && ./docker-push.sh $PHP_VERSION; fi
