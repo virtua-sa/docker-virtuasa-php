@@ -66,19 +66,19 @@ apt-get update
 apt-cache search php${PHP_VERSION_APT} | grep -v dbgsym | cut -d' ' -f1
 
 # Install development tools
-apt-get install -y --fix-missing --no-install-recommends \
+apt-get install -y --force-yes --fix-missing --no-install-recommends \
     $(</setup/docker/apt/php-${PHP_VERSION})
 php -v
 # Install NodeJS and Yarn
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-    apt-get install -y --fix-missing --no-install-recommends \
+    apt-get install -y --force-yes --fix-missing --no-install-recommends \
         nodejs \
         yarn
     echo -n "Node.js " && node -v && echo -n "NPM v" && npm -v
 fi
 ##Install Ruby and Capistrano BUG on capistrano install
 #if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-#    apt-get install -y --fix-missing --no-install-recommends \
+#    apt-get install -y --force-yes --fix-missing --no-install-recommends \
 #        ruby-full
 #    ruby -v && echo -n "gem v" && gem -v
 #    gem install capistrano

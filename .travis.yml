@@ -12,19 +12,11 @@ env:
   - PHP_VERSION=7.1
   - PHP_VERSION=7.2
 
-#stages:
-#  - compile
-#  - name: deploy
-#    if: branch = master
-
 matrix:
   allow_failures:
     - PHP_VERSION=5.2
     - PHP_VERSION=5.3
 
-script: ./docker-build.sh $PHP_VERSION
-
-#- stage: deploy
-#  script:
-#    - docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD;
-#    - ./docker-push.sh $PHP_VERSION
+script:
+  - di_disable_push=1 ./docker-build.sh $PHP_VERSION
+  - if [ $TRAVIS_BRANCH = 'master' ]; docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD; ./docker-push.sh $PHP_VERSION; fi
