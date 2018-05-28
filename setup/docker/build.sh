@@ -26,9 +26,9 @@ shopt -s extglob
 
 # Install base packages
 apt-get update \
-    && apt-get upgrade -y --fix-missing --no-install-recommends \
-    && apt-get dist-upgrade -y --fix-missing --no-install-recommends \
-    && apt-get install -y --fix-missing --no-install-recommends \
+    && apt-get upgrade -y --force-yes --fix-missing --no-install-recommends \
+    && apt-get dist-upgrade -y --force-yes --fix-missing --no-install-recommends \
+    && apt-get install -y --force-yes --fix-missing --no-install-recommends \
         $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Use Sury repository, to get PHP 7+ on Debian 9
@@ -76,14 +76,14 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
         yarn
     echo -n "Node.js " && node -v && echo -n "NPM v" && npm -v
 fi
-# Install Ruby and Capistrano
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-    apt-get install -y --fix-missing --no-install-recommends \
-        ruby-full
-    ruby -v && echo -n "gem v" && gem -v
-    gem install capistrano
-    cap -v
-fi
+##Install Ruby and Capistrano BUG on capistrano install
+#if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
+#    apt-get install -y --fix-missing --no-install-recommends \
+#        ruby-full
+#    ruby -v && echo -n "gem v" && gem -v
+#    gem install capistrano
+#    cap -v
+#fi
 
 # Remove unnecessary files left after installations
 apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
@@ -218,7 +218,9 @@ fi
 
 # Install common Node.js tools
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-    npm install -g bower grunt gulp pm2 webpack
+# BUG on gulp install
+#    npm install -g bower grunt gulp pm2 webpack
+    npm install -g bower grunt  pm2 webpack
 fi
 
 # Configure Apache
