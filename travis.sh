@@ -5,7 +5,7 @@ PHP_VERSION=$1
 di_disable_push=1 ./docker-build.sh ${PHP_VERSION}
 RESULT=$?
 
-if [ ${RESULT} -eq 0 ] || [ ${TRAVIS_BRANCH} -eq 'master' ] ; then
+if [ ${RESULT} -eq 0 ] && [ ${TRAVIS_BRANCH} -eq 'master' ] ; then
     echo "Docker Login"
     docker login -u ${DOCKER_USERNAME} -p ${DOCKER_PASSWORD}
     RESULT=$?

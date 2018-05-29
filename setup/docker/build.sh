@@ -57,9 +57,11 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
     curl -sSL https://deb.nodesource.com/setup_8.x | bash -
 fi
 
-# Use Tideways pre-compiled packages
-echo "deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main" > /etc/apt/sources.list.d/tideways.list
-curl -sSL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
+if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+    # Use Tideways pre-compiled packages
+    echo "deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main" > /etc/apt/sources.list.d/tideways.list
+    curl -sSL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
+fi
 
 # Update APT and list all available PHP packages
 apt-get update

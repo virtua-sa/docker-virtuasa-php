@@ -14,8 +14,8 @@ env:
 
 matrix:
   allow_failures:
-    - PHP=5.2
-    - PHP=5.3
+    - env: PHP=5.2
+    - env: PHP=5.3
 
 script:
   - ./travis.sh $PHP
