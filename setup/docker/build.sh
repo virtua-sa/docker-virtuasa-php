@@ -118,11 +118,14 @@ if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
 fi
 
 # Install Phing
-if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
-    curl -sSL http://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
+if [[ "${PHP_VERSION}" =~ ^(5\.[3]) ]]; then
+    curl -sSL https://github.com/phingofficial/phing/releases/download/2.16.1/phing-2.16.1.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
+    echo -n "phing -version : " && phing -version
+elif [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
+    curl -sSL https://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL http://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
+    curl -sSL https://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 fi
 
@@ -222,7 +225,7 @@ fi
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
 # BUG on gulp install
 #    npm install -g bower grunt gulp pm2 webpack
-    npm install -g bower grunt  pm2 webpack
+    npm install -g bower grunt pm2 webpack
 fi
 
 # Configure Apache
