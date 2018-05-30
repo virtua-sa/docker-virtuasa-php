@@ -12,7 +12,7 @@ make > log-file 2>&1
 make install > log-file 2>&1
 cd ..
 rm -Rf openssl-*
-openssl version
+openssl version || exit 1
 
 echo "Build Curl..."
 tar xfz /setup/tmp/curl-*
@@ -23,6 +23,8 @@ make install > log-file 2>&1
 cd ..
 rm -Rf curl-*
 ln -s /usr/local/bin/curl /usr/bin/curl
-curl --version
+curl --version || exit 1
 
 apt-get purge -y --force-yes libssl-dev make info2man
+
+exit 0

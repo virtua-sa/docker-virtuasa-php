@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 
-. _compile_openssl_curl.sh
+PATH=$(dirname $0) && pwd`)
+${PATH}/_compile_openssl_curl.sh  || exit 1
+
+exit 0

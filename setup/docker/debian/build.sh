@@ -18,12 +18,12 @@ WGET="curl -sSL"
 BASE_PATH="/setup/docker/${FROM_DISTRIBUTION}"
 # Check if Debian version is already configured
 [[ ! -e "${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
-    && echo "Debian version not supported yet, file /setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
+    && echo "Debian version not supported yet, file ${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
     && exit 1;
 
 # Check if PHP version is already configured
 [[ ! -e "${BASE_PATH}/apt/php-${PHP_VERSION}" ]] \
-    && echo "PHP version not supported yet, file /setup/docker/apt/php-${PHP_VERSION} doesn't exist !" \
+    && echo "PHP version not supported yet, file ${BASE_PATH}/apt/php-${PHP_VERSION} doesn't exist !" \
     && exit 1;
 
 # Install base packages
@@ -34,8 +34,8 @@ apt-get update \
         $(<${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Run distribution version hook
-if [ -f "/setup/docker/build.d/debian-${FROM_VERSION}.sh" ]; then
-   ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh
+if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
+   ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
 fi
 
 # Use Sury repository, to get PHP 7+ on Debian 9
@@ -80,8 +80,8 @@ apt-get install -y --force-yes --fix-missing --no-install-recommends \
 php -v
 
 # Run php version hook
-if [ -f "${BASE_PATH}/build.d/php-${PHP_VERSION##*:}.sh" ]; then
-   ${BASE_PATH}/build.d/php-${PHP_VERSION##*:}.sh
+if [ -f "${BASE_PATH}/build.d/php-${PHP_VERSION}.sh" ]; then
+   ${BASE_PATH}/build.d/php-${PHP_VERSION}.sh  || exit 1
 fi
 
 # Install NodeJS and Yarn
