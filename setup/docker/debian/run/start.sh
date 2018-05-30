@@ -26,7 +26,7 @@ cd ${DOCKER_BASE_DIR}
 # Set trap for every signals
 trap 'echo -e "\n(last error code: '"'"'$?/${PIPESTATUS[*]}'"'"'; on line: '"'"'${LINENO}/$(caller)'"'"'; with command: '"'"'${BASH_COMMAND}'"'"')";
     PTK="${!}"; [[ -n "${PTK}" ]] && ps -e | grep -q "${PTK}" && kill ${PTK};
-    echo "Stopping the Virtua Docker Container ..."; . /setup/docker/stop.sh' 0
+    echo "Stopping the Virtua Docker Container ..."; . /setup/run/stop.sh' 0
 
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null

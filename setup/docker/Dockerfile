@@ -3,6 +3,8 @@ FROM ${FROM_IMAGE}
 
 # Retrieve build arguments
 ARG FROM_IMAGE="debian:stretch"
+ARG FROM_DISTRIBUTION="debian"
+ARG FROM_VERSION="stretch"
 ARG DOCKER_BUILD_DATE=""
 ARG DOCKER_FROM_COMMIT=""
 ARG PHP_VERSION="7.1"
@@ -74,15 +76,12 @@ COPY ./setup/ /setup/
 
 # Make sure scripts are executables and run the build script
 RUN set -xe \
-    && sed -i 's/\r$//' /setup/docker/*.sh \
-    && chmod a+rx /setup/docker/*.sh \
     && chmod -R a+rX /setup \
+    && find /setup -type f -name "*.sh" -exec chmod +x {} \; \
     && echo "PHP_VERSION=${PHP_VERSION}" \
-    && /setup/docker/build.sh \
-    && rm -rf /setup/docker/apt/* \
-    && rm -rf /setup/docker/tmp \
-    && rm -f /setup/docker/build.sh \
-    && rm -f /setup/docker/Dockerfile
+    && /setup/docker/${FROM_DISTRIBUTION}/build.sh \
+    && cp -R /setup/docker/${FROM_DISTRIBUTION}/run /setup/ \
+    && rm -rf /setup/docker setup/tmp
 
 # Set the workdir to mountpoint, the volume and the user
 USER docker
@@ -93,4 +92,4 @@ VOLUME ${DOCKER_BASE_DIR}
 EXPOSE 80 443 9000
 
 # Run the default script on startup
-CMD [ "/setup/docker/start.sh" ]
+CMD [ "/setup/run/start.sh" ]

@@ -7,48 +7,64 @@ set -e
 case "$1" in
 5.2)
     df_from_image="debian/eol:lenny"
+    df_from_distribution="debian"
+    df_from_version="lenny"
     df_php_version="5.2"
     df_php_version_apt="5"
     df_php_version_dir="5"
     ;;
 5.3)
     df_from_image="debian/eol:squeeze"
+    df_from_distribution="debian"
+    df_from_version="squeeze"
     df_php_version="5.3"
     df_php_version_apt="5"
     df_php_version_dir="5"
     ;;
 5.4)
     df_from_image="debian:wheezy"
+    df_from_distribution="debian"
+    df_from_version="wheezy"
     df_php_version="5.4"
     df_php_version_apt="5"
     df_php_version_dir="5"
     ;;
 5.5)
     df_from_image="debian:wheezy"
+    df_from_distribution="debian"
+    df_from_version="wheezy"
     df_php_version="5.5"
     df_php_version_apt="5"
     df_php_version_dir="5"
     ;;
 5.6)
     df_from_image="debian:jessie"
+    df_from_distribution="debian"
+    df_from_version="jessie"
     df_php_version="5.6"
     df_php_version_apt="5"
     df_php_version_dir="5"
     ;;
 7.0)
     df_from_image="debian:stretch"
+    df_from_distribution="debian"
+    df_from_version="stretch"
     df_php_version="7.0"
     df_php_version_apt="7.0"
     df_php_version_dir="/7.0"
     ;;
 7.1)
     df_from_image="debian:stretch"
+    df_from_distribution="debian"
+    df_from_version="stretch"
     df_php_version="7.1"
     df_php_version_apt="7.1"
     df_php_version_dir="/7.1"
     ;;
 7.2)
     df_from_image="debian:stretch"
+    df_from_distribution="debian"
+    df_from_version="stretch"
     df_php_version="7.2"
     df_php_version_apt="7.2"
     df_php_version_dir="/7.2"
@@ -72,13 +88,20 @@ esac
 
 rm -Rf setup/tmp
 mkdir -p setup/tmp
-if [[ "${df_from_image##*:}" =~ lenny|squeeze ]]; then
-    wget -q -P setup/tmp https://www.openssl.org/source/openssl-1.1.0.tar.gz
-    wget -q -P setup/tmp https://curl.haxx.se/download/curl-7.52.1.tar.gz
-fi;
+
+# Run distribution version hook
+if [ -f "./setup/docker/${df_from_distribution}/master-build.d/${df_from_distribution}-${df_from_version}.sh" ]; then
+   ./setup/docker/${df_from_distribution}/master-build.d/${df_from_distribution}-${df_from_version}.sh
+fi
+# Run php version hook
+if [ -f "/etup/docker/${df_from_distribution}/master-build.d/php-${df_php_version}.sh" ]; then
+   ./setup/docker/${df_from_distribution}/master-build.d/php-${df_php_version}.sh
+fi
 
 # Display build info
 echo "df_from_image='${df_from_image}'"
+echo "df_from_distribution='${df_from_distribution}'"
+echo "df_from_version='${df_from_version}'"
 echo "df_php_version=${df_php_version}"
 echo "df_php_version_apt=${df_php_version_apt}"
 echo "df_php_version_dir=${df_php_version_dir}"
@@ -102,6 +125,8 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
     --build-arg DOCKER_BUILD_DATE="${db_build_date}" \
     --build-arg DOCKER_FROM_COMMIT=$(git log --pretty=format:'%h' -n 1) \
     --build-arg FROM_IMAGE=${df_from_image} \
+    --build-arg FROM_DISTRIBUTION=${df_from_distribution} \
+    --build-arg FROM_VERSION=${df_from_version} \
     --build-arg PHP_VERSION=${df_php_version} \
     --build-arg PHP_VERSION_APT=${df_php_version_apt} \
     --build-arg PHP_VERSION_DIR=${df_php_version_dir} \
@@ -234,7 +259,7 @@ if [ -z "${di_disable_push}" ]; then
     echo "Push the image to Docker Hub..."
     docker push virtuasa/php:${df_php_version}-dev
 else
-    echo "Don't push the images to Docker Hub"
+    echo "Don't push the images to Docker Hub (${di_disable_push})"
 fi
 
 exit 0;

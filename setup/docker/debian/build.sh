@@ -14,13 +14,15 @@ shopt
 # Enable some shell options
 shopt -s extglob
 
+WGET="curl -sSL"
+BASE_PATH="/setup/docker/${FROM_DISTRIBUTION}"
 # Check if Debian version is already configured
-[[ ! -e "/setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
+[[ ! -e "${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:}" ]] \
     && echo "Debian version not supported yet, file /setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:} doesn't exist !" \
     && exit 1;
 
 # Check if PHP version is already configured
-[[ ! -e "/setup/docker/apt/php-${PHP_VERSION}" ]] \
+[[ ! -e "${BASE_PATH}/apt/php-${PHP_VERSION}" ]] \
     && echo "PHP version not supported yet, file /setup/docker/apt/php-${PHP_VERSION} doesn't exist !" \
     && exit 1;
 
@@ -29,34 +31,11 @@ apt-get update \
     && apt-get upgrade -y --force-yes --fix-missing --no-install-recommends \
     && apt-get dist-upgrade -y --force-yes --fix-missing --no-install-recommends \
     && apt-get install -y --force-yes --fix-missing --no-install-recommends \
-        $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
+        $(<${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
-WGET="curl -sSL"
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]]; then
-    # install OpenSSL 1.0.1
-   apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev make info2man curl
-   apt-get -y --force-yes remove curl
-
-    tar xfz /setup/tmp/openssl-*
-    cd openssl-*
-    ./config --prefix=/usr zlib-dynamic --openssldir=/etc/ssl shared > log-file 2>&1
-    make > log-file 2>&1
-    make install > log-file 2>&1
-    cd ..
-    rm -Rf openssl-*
-    openssl version
-
-    tar xfz /setup/tmp/curl-*
-    cd curl-*
-    ./configure --disable-shared > log-file 2>&1
-    make > log-file 2>&1
-    make install > log-file 2>&1
-    cd ..
-    rm -Rf curl-*
-    ln -s /usr/local/bin/curl /usr/bin/curl
-    curl --version
-
-    apt-get purge -y --force-yes libssl-dev make info2man
+# Run distribution version hook
+if [ -f "/setup/docker/build.d/debian-${FROM_VERSION}.sh" ]; then
+   ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh
 fi
 
 # Use Sury repository, to get PHP 7+ on Debian 9
@@ -97,8 +76,14 @@ apt-cache search php${PHP_VERSION_APT} | grep -v dbgsym | cut -d' ' -f1
 
 # Install development tools
 apt-get install -y --force-yes --fix-missing --no-install-recommends \
-    $(</setup/docker/apt/php-${PHP_VERSION})
+    $(<${BASE_PATH}/apt/php-${PHP_VERSION})
 php -v
+
+# Run php version hook
+if [ -f "${BASE_PATH}/build.d/php-${PHP_VERSION##*:}.sh" ]; then
+   ${BASE_PATH}/build.d/php-${PHP_VERSION##*:}.sh
+fi
+
 # Install NodeJS and Yarn
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     apt-get install -y --force-yes --fix-missing --no-install-recommends \
