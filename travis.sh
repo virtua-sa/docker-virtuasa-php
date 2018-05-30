@@ -7,7 +7,7 @@ docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 
 echo "Start build for branch ${TRAVIS_BRANCH}"
 
-if [ "${TRAVIS_BRANCH}" -eq 'master' ] ; then
+if [ "${TRAVIS_BRANCH}" = 'master' ] ; then
     # build no push
     di_disable_push=1 ./docker-build.sh ${PHP_VERSION}
     RESULT=$?
@@ -17,7 +17,7 @@ if [ "${TRAVIS_BRANCH}" -eq 'master' ] ; then
         ./docker-push.sh ${PHP_VERSION};
         RESULT=$?
     fi
-elif [ "${TRAVIS_BRANCH}" -eq 'develop' ] ; then
+elif [ "${TRAVIS_BRANCH}" = 'develop' ] ; then
     # build and push to dev tag
     ./docker-build.sh ${PHP_VERSION}
     RESULT=$?
