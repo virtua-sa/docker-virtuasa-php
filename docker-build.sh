@@ -73,8 +73,8 @@ esac
 rm -Rf setup/tmp
 mkdir -p setup/tmp
 if [[ "${df_from_image##*:}" =~ lenny|squeeze ]]; then
-    wget -P setup/tmp https://www.openssl.org/source/openssl-1.1.0.tar.gz
-    wget -P setup/tmp https://curl.haxx.se/download/curl-7.52.1.tar.gz
+    wget -q -P setup/tmp https://www.openssl.org/source/openssl-1.1.0.tar.gz
+    wget -q -P setup/tmp https://curl.haxx.se/download/curl-7.52.1.tar.gz
 fi;
 
 # Display build info
@@ -228,7 +228,13 @@ docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-n
 docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
-# Push the image to Docker Hub
-[[ -z "${di_disable_push}" ]] && docker push virtuasa/php:${df_php_version}-dev
+echo "Build finished :-)"
+
+if [ -z "${di_disable_push}" ]; then
+    echo "Push the image to Docker Hub..."
+    docker push virtuasa/php:${df_php_version}-dev
+else
+    echo "Don't push the images to Docker Hub"
+fi
 
 exit 0;
