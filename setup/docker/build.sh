@@ -31,36 +31,64 @@ apt-get update \
     && apt-get install -y --force-yes --fix-missing --no-install-recommends \
         $(</setup/docker/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
+WGET="curl -sSL"
+if [[ "${DOCKER_FROM_IMAGE##*:}" =~ lenny|squeeze ]]; then
+    # install OpenSSL 1.0.1
+   apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev make info2man curl
+   apt-get -y --force-yes remove curl
+
+    tar xfz /setup/tmp/openssl-*
+    cd openssl-*
+    ./config --prefix=/usr zlib-dynamic --openssldir=/etc/ssl shared > log-file 2>&1
+    make > log-file 2>&1
+    make install > log-file 2>&1
+    cd ..
+    rm -Rf openssl-*
+    openssl version
+
+    tar xfz /setup/tmp/curl-*
+    cd curl-*
+    ./configure --disable-shared > log-file 2>&1
+    make > log-file 2>&1
+    make install > log-file 2>&1
+    cd ..
+    rm -Rf curl-*
+    ln -s /usr/local/bin/curl /usr/bin/curl
+    curl --version
+
+    apt-get purge -y --force-yes libssl-dev make info2man
+fi
+
 # Use Sury repository, to get PHP 7+ on Debian 9
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
     echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list
-    curl -sSL https://packages.sury.org/php/apt.gpg | apt-key add -
+    ${WGET} https://packages.sury.org/php/apt.gpg | apt-key add -
 fi
 
 # Use Dotdeb repository, to get PHP 5.5 on Debian 7
 if [[ "${PHP_VERSION}" = "5.5" ]]; then
     echo "deb http://packages.dotdeb.org wheezy-php55 all" > /etc/apt/sources.list.d/dotdeb.list
-    curl -sSL https://www.dotdeb.org/dotdeb.gpg | apt-key add -
+    ${WGET} https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 fi
 
 # Use Yarnpkg repository, to get Yarn on Debian
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
     echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+    ${WGET} https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 fi
 
 # Use Nodesource, to get Node.js on Debian
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy ]]; then
-    curl -sSL https://deb.nodesource.com/setup_6.x | bash -
+    ${WGET} https://deb.nodesource.com/setup_6.x | bash -
 fi
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-    curl -sSL https://deb.nodesource.com/setup_8.x | bash -
+    ${WGET} https://deb.nodesource.com/setup_8.x | bash -
 fi
 
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
     # Use Tideways pre-compiled packages
     echo "deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main" > /etc/apt/sources.list.d/tideways.list
-    curl -sSL https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
+    ${WGET} https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
 fi
 
 # Update APT and list all available PHP packages
@@ -87,9 +115,6 @@ fi
 #    cap -v
 #fi
 
-# Remove unnecessary files left after installations
-apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
-
 # Print Apache and Nginx versions
 /usr/sbin/apache2 -v
 /usr/sbin/nginx -v
@@ -97,114 +122,111 @@ apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*
 
 # Install Behat
 if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
-    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
+    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
     rm -rf /tmp/behat_gherkin_cache
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
+    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
     echo -n "behat --version : " && behat --version
     rm -rf /tmp/behat_gherkin_cache
 fi
 
 # Install Composer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
+    ${WGET} https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
 fi
 
 # Install DbUnit
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    curl -sSL https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod a+x /usr/local/bin/dbunit
+    ${WGET} https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod a+x /usr/local/bin/dbunit
 fi
 
 # Install Phing
-if [[ "${PHP_VERSION}" =~ ^(5\.[3]) ]]; then
-    curl -sSL https://github.com/phingofficial/phing/releases/download/2.16.1/phing-2.16.1.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
-    echo -n "phing -version : " && phing -version
-elif [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
-    curl -sSL https://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
+if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
+    ${WGET} https://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL https://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
+    ${WGET} https://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
     echo -n "phing -version : " && phing -version
 fi
 
 # Install PHP_CodeSniffer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod a+x /usr/local/bin/phpcs
+    ${WGET} https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod a+x /usr/local/bin/phpcs
     echo -n "phpcs --version : " && phpcs --version
-    curl -sSL https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod a+x /usr/local/bin/phpcbf
+    ${WGET} https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod a+x /usr/local/bin/phpcbf
     echo -n "phpcbf --version : " && phpcbf --version
 fi
 
 # Install PHP Copy/Paste Detector (PHPCPD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
+    ${WGET} https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
     echo -n "phpcpd --version : " && phpcpd --version
 fi
 
 # Install PHP_Depend
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
+    ${WGET} http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
     echo -n "pdepend --version : " && pdepend --version
 fi
 
 # Install phpDocumentor
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    curl -sSL http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
+    ${WGET} http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
     echo -n "phpdoc --version : " && phpdoc --version
 fi
 
 # Install phpdox
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    curl -sSL http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    ${WGET} http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
     echo -n "phpdox --version : " && phpdox --version
 fi
 if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then
-    curl -sSL https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    ${WGET} https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
     echo -n "phpdox --version : " && phpdox --version
 fi
 if [[ "${PHP_VERSION}" =~ ^5\.3 ]]; then
-    curl -sSL https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    ${WGET} https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
     echo -n "phpdox --version : " && phpdox --version
 fi
 
 # Install PHPLOC
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
-    curl -sSL https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
+    ${WGET} https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
     echo -n "phploc --version : " && phploc --version
 fi
 
 # Install PHP Mess Detector (PHPMD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
+    ${WGET} http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
     echo -n "phpmd --version : " && phpmd --version
 fi
 
 # Install PhpMetrics
 if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
-    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
+    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
     echo -n "phpmetrics --version : " && phpmetrics --version
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    curl -sSL https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
+    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
     echo -n "phpmetrics --version : " && phpmetrics --version
 fi
 
 # Install PHPUnit
 if [[ "${PHP_VERSION}" =~ ^7\.[123456] ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
+    ${WGET} https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
     echo -n "phpunit --version : " && phpunit --version
 fi
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod a+x /usr/local/bin/phpunit62
+    ${WGET} https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod a+x /usr/local/bin/phpunit62
     echo -n "phpunit62 --version : " && phpunit62 --version
 fi
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit57 && chmod a+x /usr/local/bin/phpunit57
+    ${WGET} https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit57 && chmod a+x /usr/local/bin/phpunit57
     echo -n "phpunit57 --version : " && phpunit57 --version
 fi
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    curl -sSL https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
+    ${WGET} https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
     echo -n "phpunit48 --version : " && phpunit48 --version
 fi
 
@@ -302,3 +324,6 @@ find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true
 find /usr/share/doc -empty|xargs rmdir || true
 rm -rf /usr/share/man/* /usr/share/groff/* /usr/share/info/*
 rm -rf /usr/share/lintian/* /usr/share/linda/* /var/cache/man/*
+
+# Remove unnecessary files left after installations
+apt-get clean -y && apt-get clean -y && apt-get autoclean -y && rm -r /var/lib/apt/lists/*

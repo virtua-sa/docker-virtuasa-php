@@ -70,6 +70,13 @@ all)
     ;;
 esac
 
+rm -Rf setup/tmp
+mkdir -p setup/tmp
+if [[ "${df_from_image##*:}" =~ lenny|squeeze ]]; then
+    wget -P setup/tmp https://www.openssl.org/source/openssl-1.1.0.tar.gz
+    wget -P setup/tmp https://curl.haxx.se/download/curl-7.52.1.tar.gz
+fi;
+
 # Display build info
 echo "df_from_image='${df_from_image}'"
 echo "df_php_version=${df_php_version}"

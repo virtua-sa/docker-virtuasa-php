@@ -80,6 +80,7 @@ RUN set -xe \
     && echo "PHP_VERSION=${PHP_VERSION}" \
     && /setup/docker/build.sh \
     && rm -rf /setup/docker/apt/* \
+    && rm -rf /setup/docker/tmp \
     && rm -f /setup/docker/build.sh \
     && rm -f /setup/docker/Dockerfile
 
