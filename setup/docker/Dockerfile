@@ -82,7 +82,7 @@ RUN set -xe \
     && echo "PHP_VERSION=${PHP_VERSION}" \
     && /setup/docker/${FROM_DISTRIBUTION}/build.sh \
     && cp -R /setup/docker/${FROM_DISTRIBUTION}/run/* /setup/run/ \
-    && rm -rf /setup/docker setup/tmp
+    && rm -rf /setup/docker/${FROM_DISTRIBUTION} setup/tmp /setup/docker/Dockerfile
 
 # Set the workdir to mountpoint, the volume and the user
 USER docker

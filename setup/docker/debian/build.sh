@@ -14,6 +14,7 @@ shopt
 # Enable some shell options
 shopt -s extglob
 
+export DEBCONF_FRONTEND='noninteractive'
 WGET="curl -sSL"
 BASE_PATH="/setup/docker/${FROM_DISTRIBUTION}"
 # Check if Debian version is already configured

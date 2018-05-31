@@ -1,4 +1,4 @@
-# Lint: https://gitlab.virtua.ch/ci/lint
+# Disable due is now integrated on travis
 
 stages:
 #  - check
@@ -90,7 +90,7 @@ push:dev:
 push:all:
   <<: *template
   stage: push
-  only: 
+  only:
     - master
   when: manual
   script:
