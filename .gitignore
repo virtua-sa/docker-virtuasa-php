@@ -1,4 +1,4 @@
 *.log
 /builds/*
 /tests/tmp*/*
-/setup/tmp/*.tar.gz
+/setup/tmp/*

@@ -76,12 +76,12 @@ COPY ./setup/ /setup/
 
 # Make sure scripts are executables and run the build script
 RUN set -xe \
-    && chmod -R a+rX /setup \
+    && mkdir -p /setup/run/ && chmod -R a+rX /setup \
     && find /setup -type f -name "*.sh" -exec sed -i 's/\r$//' {} \; \
     && find /setup -type f -name "*.sh" -exec chmod +x {} \; \
     && echo "PHP_VERSION=${PHP_VERSION}" \
     && /setup/docker/${FROM_DISTRIBUTION}/build.sh \
-    && cp -R /setup/docker/${FROM_DISTRIBUTION}/run /setup/ \
+    && cp -R /setup/docker/${FROM_DISTRIBUTION}/run/* /setup/run/ \
     && rm -rf /setup/docker setup/tmp
 
 # Set the workdir to mountpoint, the volume and the user
