@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # Make sure we stop building/pushing images if an error happens
-set -e
+set -xe
 
 # Configure the build accordingly to the requested PHP version
 case "$1" in

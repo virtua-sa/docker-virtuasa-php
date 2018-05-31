@@ -81,7 +81,7 @@ php -v
 
 # Run php version hook
 if [ -f "${BASE_PATH}/build.d/php-${PHP_VERSION}.sh" ]; then
-   ${BASE_PATH}/build.d/php-${PHP_VERSION}.sh  || exit 1
+   ${BASE_PATH}/build.d/php-${PHP_VERSION}.sh
 fi
 
 # Install NodeJS and Yarn

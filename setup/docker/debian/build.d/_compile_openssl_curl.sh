@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -xe
 
 # install OpenSSL 1.0.1
 apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev make info2man curl
@@ -12,7 +13,7 @@ make > log-file 2>&1
 make install > log-file 2>&1
 cd ..
 rm -Rf openssl-*
-openssl version || exit 1
+openssl version
 
 echo "Build Curl..."
 tar xfz /setup/tmp/curl-*
@@ -23,7 +24,7 @@ make install > log-file 2>&1
 cd ..
 rm -Rf curl-*
 ln -s /usr/local/bin/curl /usr/bin/curl
-curl --version || exit 1
+curl --version
 
 apt-get purge -y --force-yes libssl-dev make info2man
 

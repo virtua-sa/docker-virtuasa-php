@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -xe
 
 echo "Download openssl-1.1.0.tar.gz"
 wget -q -P setup/tmp https://www.openssl.org/source/openssl-1.1.0.tar.gz || exit 1
