@@ -295,6 +295,9 @@ rm /etc/nginx/sites-available/*
 rm /etc/nginx/sites-enabled/*
 cp -vrf /setup/nginx/* /etc/nginx
 
+# Default timezone
+sudo find /etc -name "php.ini" -exec sed -i "s|^;*date.timezone =.*|date.timezone = \"${DOCKER_TIMEZONE}\"|" {} +
+
 # Create mountpoint for the web application
 mkdir -p "${DOCKER_BASE_DIR}"
 chmod -R 755 "${DOCKER_BASE_DIR}"

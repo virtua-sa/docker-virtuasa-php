@@ -15,8 +15,8 @@ export DOLLAR='$'
 sudo mkdir -p ${DOCKER_BASE_DIR}
 cd ${DOCKER_BASE_DIR}
 
-# Disable Nginx for PHP < 7.0
-[[ "${PHP_VERSION}" =~ ^(5\.[23456]) ]] && export DOCKER_WEB_SERVER="apache"
+# Disable Nginx for PHP < 5.4
+[[ "${PHP_VERSION}" =~ ^(5\.[23]) ]] && export DOCKER_WEB_SERVER="apache"
 
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
@@ -31,7 +31,7 @@ trap 'echo -e "\n(last error code: '"'"'$?/${PIPESTATUS[*]}'"'"'; on line: '"'"'
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
 sudo dpkg-reconfigure --frontend noninteractive tzdata
-sudo find /etc -name "php.ini" -exec sed -i "s|^;*date.timezone =.*|date.timezone = \"${DOCKER_TIMEZONE}3\"|" {} +
+sudo find /etc -name "php.ini" -exec sed -i "s|^;*date.timezone =.*|date.timezone = \"${DOCKER_TIMEZONE}\"|" {} +
 
 # Print installed PHP version
 php -v
