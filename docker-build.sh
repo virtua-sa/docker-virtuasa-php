@@ -94,7 +94,7 @@ if [ -f "./setup/docker/${df_from_distribution}/master-build.d/${df_from_distrib
    ./setup/docker/${df_from_distribution}/master-build.d/${df_from_distribution}-${df_from_version}.sh || exit 1
 fi
 # Run php version hook
-if [ -f "/etup/docker/${df_from_distribution}/master-build.d/php-${df_php_version}.sh" ]; then
+if [ -f "/setup/docker/${df_from_distribution}/master-build.d/php-${df_php_version}.sh" ]; then
    ./setup/docker/${df_from_distribution}/master-build.d/php-${df_php_version}.sh || exit 1
 fi
 
