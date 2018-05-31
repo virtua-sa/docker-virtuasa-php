@@ -3,7 +3,7 @@ set -e
 
 PHP_VERSION=$1
 
-if ! [[ "${TRAVIS_BRANCH}" =~ master|develop ]]; then
+if [[ "${TRAVIS_BRANCH}" =~ master|develop ]]; then
     echo "Docker Login"
     docker login -u "${DOCKER_USERNAME}" -p "${DOCKER_PASSWORD}"
 fi
