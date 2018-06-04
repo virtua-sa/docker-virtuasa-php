@@ -149,18 +149,18 @@ fi
 # Configure SSMTP
 if [[ -n "${SSMTP_MAILHUB}" ]]; then
     file=/etc/ssmtp/ssmtp.conf
-    echo "" > ${file}
+    echo "" | sudo tee ${file} > /dev/null
 
-    [[ -n "${SSMTP_SENDER_ROOT}" ]] && echo Root=${SSMTP_SENDER_ROOT} >> ${file}
-    [[ -n "${SSMTP_MAILHUB}" ]] && echo Mailhub=${SSMTP_MAILHUB} >> ${file}
-    [[ -n "${SSMTP_AUTH_USER}" ]] && echo AuthUser=${SSMTP_AUTH_USER} >> ${file}
-    [[ -n "${SSMTP_AUTH_PASS}" ]] && echo AuthPass=${SSMTP_AUTH_PASS} >> ${file}
-    [[ -n "${SSMTP_AUTH_METHOD}" ]] && echo AuthMethod=${SSMTP_AUTH_METHOD} >> ${file}
-    [[ -n "${SSMTP_USE_TLS}" ]] && echo UseTLS=${SSMTP_USE_TLS} >> ${file}
-    [[ -n "${SSMTP_USE_STARTTLS}" ]] && echo UseSTARTTLS=${SSMTP_USE_STARTTLS} >> ${file}
-    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo Hostname=${SSMTP_SENDER_HOSTNAME} >> ${file}
-    [[ -z "${SSMTP_REWRITE_DOMAIN+x}" ]] && echo RewriteDomain=${SSMTP_REWRITE_DOMAIN} >> ${file}
-    [[ -z "${SSMTP_FROM_LINE_OVERRIDE+x}" ]] && echo FromLineOverride=${SSMTP_FROM_LINE_OVERRIDE} >> ${file}
+    [[ -n "${SSMTP_SENDER_ROOT}" ]] && echo Root=${SSMTP_SENDER_ROOT} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_MAILHUB}" ]] && echo Mailhub=${SSMTP_MAILHUB} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_AUTH_USER}" ]] && echo AuthUser=${SSMTP_AUTH_USER} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_AUTH_PASS}" ]] && echo AuthPass=${SSMTP_AUTH_PASS} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_AUTH_METHOD}" ]] && echo AuthMethod=${SSMTP_AUTH_METHOD} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_USE_TLS}" ]] && echo UseTLS=${SSMTP_USE_TLS} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_USE_STARTTLS}" ]] && echo UseSTARTTLS=${SSMTP_USE_STARTTLS} | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo Hostname=${SSMTP_SENDER_HOSTNAME} | sudo tee --append ${file} > /dev/null
+    [[ -z "${SSMTP_REWRITE_DOMAIN+x}" ]] && echo RewriteDomain=${SSMTP_REWRITE_DOMAIN} | sudo tee --append ${file} > /dev/null
+    [[ -z "${SSMTP_FROM_LINE_OVERRIDE+x}" ]] && echo FromLineOverride=${SSMTP_FROM_LINE_OVERRIDE} | sudo tee --append ${file} > /dev/null
 fi
 
 # Configure web server

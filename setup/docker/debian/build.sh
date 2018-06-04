@@ -28,10 +28,10 @@ BASE_PATH="/setup/docker/${FROM_DISTRIBUTION}"
     && exit 1;
 
 # Install base packages
-apt-get update \
-    && apt-get upgrade -y --force-yes --fix-missing --no-install-recommends \
-    && apt-get dist-upgrade -y --force-yes --fix-missing --no-install-recommends \
-    && apt-get install -y --force-yes --fix-missing --no-install-recommends \
+DEBIAN_FRONTEND=noninteractive apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --force-yes --fix-missing --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get dist-upgrade -y --force-yes --fix-missing --no-install-recommends \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --fix-missing --no-install-recommends \
         $(<${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Run distribution version hook
@@ -76,7 +76,7 @@ apt-get update
 apt-cache search php${PHP_VERSION_APT} | grep -v dbgsym | cut -d' ' -f1
 
 # Install development tools
-apt-get install -y --force-yes --fix-missing --no-install-recommends \
+DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --fix-missing --no-install-recommends \
     $(<${BASE_PATH}/apt/php-${PHP_VERSION})
 php -v
 
@@ -87,7 +87,7 @@ fi
 
 # Install NodeJS and Yarn
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-    apt-get install -y --force-yes --fix-missing --no-install-recommends \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --fix-missing --no-install-recommends \
         nodejs \
         yarn
     echo -n "Node.js " && node -v && echo -n "NPM v" && npm -v

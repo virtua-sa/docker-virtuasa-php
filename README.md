@@ -100,8 +100,8 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_LOG_PATH`                  | `var/logs/php`                            | Path of the PHP log folder \*
 | `PHP_MEMORY_LIMIT_APACHE`       | `128M`                                    | Maximum amount of memory a PHP script running on Apache may consume
 | `PHP_MEMORY_LIMIT_CLI`          | `512M`                                    | Maximum amount of memory a PHP script running on CLI may consume
-| `PHP_XDEBUG_APACHE_ENABLE`      | `off`                                     | Force activation of PHP XDebug on Apache if set to `on`
-| `PHP_XDEBUG_CLI_ENABLE`         | `off`                                     | Force activation of PHP XDebug on CLI if set to `on`
+| `PHP_XDEBUG_APACHE_AUTOSTART`   | `0`                                       | Force activation of PHP XDebug on Apache if set to `1`
+| `PHP_XDEBUG_CLI_AUTOSTART`      | `0`                                       | Force activation of PHP XDebug on CLI if set to `1`
 | `SSMTP_MAILHUB`                 | ` ` *(empty)*                             | The host to send mail to, in the form host IP_addr[:port]. The default port is 25.
 | `SSMTP_AUTH_USER`               | ` ` *(empty)*                             | The user name to use for SMTP AUTH. The default is blank, in which case SMTP AUTH is not used. sent without
 | `SSMTP_AUTH_PASS`               | ` ` *(empty)*                             | The password to use for SMTP AUTH.
