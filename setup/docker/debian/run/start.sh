@@ -28,6 +28,17 @@ trap 'echo -e "\n(last error code: '"'"'$?/${PIPESTATUS[*]}'"'"'; on line: '"'"'
     PTK="${!}"; [[ -n "${PTK}" ]] && ps -e | grep -q "${PTK}" && kill ${PTK};
     echo "Stopping the Virtua Docker Container ..."; . /setup/run/stop.sh' 0
 
+# Configure /etc/hosts
+if [[ -n "${HOSTNAME_LOCAL_ALIAS}" ]]; then
+    HOSTNAME_LOCAL_ALIAS_SPACE=`echo "${HOSTNAME_LOCAL_ALIAS}" | tr ',' ' ' | tr ';' ' '`
+    if grep -Fxq "${HOSTNAME_LOCAL_ALIAS_SPACE}" /etc/hosts; then
+        echo "Host ${HOSTNAME_LOCAL_ALIAS} already resolved to 127.0.0.1"
+    else
+        sudo mungehosts -l "${HOSTNAME_LOCAL_ALIAS_SPACE}"
+        echo "Host ${HOSTNAME_LOCAL_ALIAS} resolved to 127.0.0.1 added"
+    fi
+fi
+
 # Set timezone
 echo "${DOCKER_TIMEZONE}" | sudo tee /etc/timezone > /dev/null
 sudo dpkg-reconfigure --frontend noninteractive tzdata
@@ -87,6 +98,8 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/fpm"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/etc"
+    sudo cp "/etc/hosts" "${DOCKER_HOST_SETUP_DIR}/etc"
     if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
         sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/xhgui"
     fi

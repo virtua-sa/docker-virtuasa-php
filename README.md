@@ -67,6 +67,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 | Variable name                   | Default value                             | Description                                                                    |
 | ------------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------ |
+| `HOSTNAME_LOCAL_ALIAS`          | ``                                        | List of hosts names alias for machine resolved to 127.0.0.1, separator is coma
 | `APACHE_DOCUMENT_ROOT`          | `web`                                     | Path to the Apache document root folder \*
 | `APACHE_LOG_PATH`               | `var/logs/apache`                         | Path of the website Apache log folder \*
 | `APACHE_RUN_GROUP`              | `docker`                                  | Group of user running Apache

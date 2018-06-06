@@ -157,6 +157,8 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_HOST_GID=$(id -g) \
     --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="apache" \
+    --env HOSTNAME_LOCAL_ALIAS="alias1.test,alias2.test" \
+    --env SSMTP_MAILHUB="mail.docker" \
     virtuasa/php:${df_php_version}-dev
 sleep 10s
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1
@@ -177,7 +179,8 @@ docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed >
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 > ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
-rm -rf tests/tmp${df_php_version}
+# Test
+[[ grep -vFxq "localhost alias1.test alias2.test" tests/tmp${df_php_version}/setup/etc/hosts ]] && echo "HOSTNAME_LOCAL_ALIAS not working" && exit 1;
 
 # Test the image built with Apache without DEBUG
 cat <<"EOF"

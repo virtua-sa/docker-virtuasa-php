@@ -106,6 +106,9 @@ fi
 /usr/sbin/nginx -v
 /usr/sbin/sendmail -V
 
+# mungehosts
+${WGET} https://github.com/hiteshjasani/nim-mungehosts/releases/download/v0.1.1/mungehosts > /usr/local/bin/mungehosts && chmod 755 /usr/local/bin/mungehosts
+
 # Install Behat
 if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
     ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
