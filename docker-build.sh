@@ -180,7 +180,7 @@ docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 > ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build
 # Test
-grep -q "localhost alias1.test alias2.test" tests/tmp${df_php_version}/setup/etc/hosts || (echo  "HOSTNAME_LOCAL_ALIAS not working" ; exit 1;)
+grep -q "localhost alias1.test alias2.test" ${db_build_path}/setup/etc/hosts || (echo  "HOSTNAME_LOCAL_ALIAS not working" ; exit 1;)
 
 # Test the image built with Apache without DEBUG
 cat <<"EOF"
