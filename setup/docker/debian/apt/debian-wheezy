@@ -25,3 +25,4 @@ wget
 ssmtp
 strace
 swaks
+make
