@@ -176,7 +176,7 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_build_path}/phpinfo-cli.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
-if [[ "${df_php_version}" =~ ^(5\.[2]) ]]; then
+if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
     docker exec virtuasa-php-${df_php_version}-dev-build composer check-platform-reqs
 fi
 docker stop virtuasa-php-${df_php_version}-dev-build
