@@ -282,6 +282,7 @@ if [[ "${PHP_VERSION}" =~ ^(5\.[234]) ]]; then
     cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/fpm/conf.d
     if [ -d "/etc/php${PHP_VERSION_DIR}/mods-available/" ]; then
         # override symlinks
+        cp /etc/php${PHP_VERSION_DIR}/conf.d/*.ini /etc/php${PHP_VERSION_DIR}/mods-available
         ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/apache2/mods-available
         ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/cli/mods-available
         ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/fpm/mods-available
