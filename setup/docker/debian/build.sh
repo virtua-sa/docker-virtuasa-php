@@ -280,6 +280,11 @@ if [[ "${PHP_VERSION}" =~ ^(5\.[234]) ]]; then
     cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
     cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/cli/conf.d
     cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/fpm/conf.d
+    if [ -d "/etc/php${PHP_VERSION_DIR}/mods-available/" ]; then
+        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/apache2/mods-available
+        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/cli/mods-available
+        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/fpm/mods-available
+    fi
 fi
 cp -vrf /setup/php/apache/* /etc/php${PHP_VERSION_DIR}/apache2
 cp -vrf /setup/php/cli/* /etc/php${PHP_VERSION_DIR}/cli
