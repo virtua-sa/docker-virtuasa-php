@@ -2,7 +2,7 @@
 set -xe
 
 # install OpenSSL 1.0.1
-apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev make info2man curl
+apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev info2man curl
 apt-get -y --force-yes remove curl
 
 echo "Build OpenSSL..."
@@ -26,6 +26,6 @@ rm -Rf curl-*
 ln -s /usr/local/bin/curl /usr/bin/curl
 curl --version
 
-apt-get purge -y --force-yes libssl-dev make info2man
+apt-get purge -y --force-yes libssl-dev info2man
 
 exit 0
