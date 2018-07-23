@@ -270,24 +270,6 @@ find /setup -name "*.ini-*" -exec rm {} \;
 ls -alhR /etc/php${PHP_VERSION_DIR}
 ls -alhR /etc/apache2
 ls -alhR /etc/nginx
-if [[ "${PHP_VERSION}" =~ ^(5\.[234]) ]]; then
-    [[ -L "/etc/php${PHP_VERSION_DIR}/apache2/conf.d" ]] && rm /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-    [[ -L "/etc/php${PHP_VERSION_DIR}/cli/conf.d" ]] && rm /etc/php${PHP_VERSION_DIR}/cli/conf.d
-    [[ -L "/etc/php${PHP_VERSION_DIR}/fpm/conf.d" ]] && rm /etc/php${PHP_VERSION_DIR}/fpm/conf.d
-    mkdir -p /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-    mkdir -p /etc/php${PHP_VERSION_DIR}/cli/conf.d
-    mkdir -p /etc/php${PHP_VERSION_DIR}/fpm/conf.d
-    cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/apache2/conf.d
-    cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/cli/conf.d
-    cp -vrf /etc/php${PHP_VERSION_DIR}/conf.d/* /etc/php${PHP_VERSION_DIR}/fpm/conf.d
-    if [ -d "/etc/php${PHP_VERSION_DIR}/mods-available/" ]; then
-        # override symlinks
-        cp /etc/php${PHP_VERSION_DIR}/conf.d/*.ini /etc/php${PHP_VERSION_DIR}/mods-available
-        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/apache2/mods-available
-        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/cli/mods-available
-        ln -sf /etc/php${PHP_VERSION_DIR}/mods-available /etc/php${PHP_VERSION_DIR}/fpm/mods-available
-    fi
-fi
 cp -vrf /setup/php/apache/* /etc/php${PHP_VERSION_DIR}/apache2
 cp -vrf /setup/php/cli/* /etc/php${PHP_VERSION_DIR}/cli
 cp -vrf /setup/php/fpm/* /etc/php${PHP_VERSION_DIR}/fpm
