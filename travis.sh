@@ -11,16 +11,18 @@ fi
 echo "Start build for branch ${TRAVIS_BRANCH}"
 
 if [ "${TRAVIS_BRANCH}" = 'master' ] ; then
-    # build no push to dev
-    di_disable_push=1 ./docker-build.sh ${PHP_VERSION}
+    # build and push
+    ./docker-build.sh ${PHP_VERSION}
     echo "Docker Push Production images.."
     ./docker-push.sh ${PHP_VERSION};
 elif [ "${TRAVIS_BRANCH}" = 'develop' ] ; then
     # build and push to dev tag
     ./docker-build.sh ${PHP_VERSION}
+    echo "Docker Push Dev images.."
+    ./docker-push.sh ${PHP_VERSION} "-dev"
 else
     # build no push
-    di_disable_push=1 ./docker-build.sh ${PHP_VERSION}
+    ./docker-build.sh ${PHP_VERSION}
 fi
 
 echo "Finish build for branch ${TRAVIS_BRANCH}"

@@ -70,14 +70,14 @@ case "$1" in
     df_php_version_dir="/7.2"
     ;;
 all)
-    di_disable_push="${di_disable_push}" $0 5.2
-    di_disable_push="${di_disable_push}" $0 5.3
-    di_disable_push="${di_disable_push}" $0 5.4
-    di_disable_push="${di_disable_push}" $0 5.5
-    di_disable_push="${di_disable_push}" $0 5.6
-    di_disable_push="${di_disable_push}" $0 7.0
-    di_disable_push="${di_disable_push}" $0 7.1
-    di_disable_push="${di_disable_push}" $0 7.2
+    $0 5.2
+    $0 5.3
+    $0 5.4
+    $0 5.5
+    $0 5.6
+    $0 7.0
+    $0 7.1
+    $0 7.2
     exit 0;
     ;;
 *)
@@ -260,12 +260,5 @@ docker rm virtuasa-php-${df_php_version}-dev-build
 rm -rf tests/tmp${df_php_version}
 
 echo "Build finished :-)"
-
-if [ -z "${di_disable_push}" ]; then
-    echo "Push the image to Docker Hub..."
-    docker push virtuasa/php:${df_php_version}-dev
-else
-    echo "Don't push the images to Docker Hub (${di_disable_push})"
-fi
 
 exit 0;
