@@ -249,9 +249,9 @@ echo " OK"
 # Add php_xdebug command
 echo "Setting up docker php-xdebug"
 
-rm -f /usr/local/bin/php_xdebug
-mkdir -p /usr/local/bin
-cat <<EOT >> /usr/local/bin/php_xdebug
+sudo rm -f /usr/local/bin/php_xdebug
+sudo mkdir -p /usr/local/bin
+cat <<EOT | sudo tee /usr/local/bin/php_xdebug
 #!/bin/sh
 export XDEBUG_CONFIG="idekey=phpstorm"
 export PHP_IDE_CONFIG="serverName=\${APACHE_SERVER_NAME}"
@@ -260,7 +260,7 @@ php \$@
 export XDEBUG_CONFIG=""
 EOT
 
-chmod +x /usr/local/bin/php_xdebug
+sudo chmod +x /usr/local/bin/php_xdebug
 
 # Start PHP-FPM if using Nginx
 [[ "${DOCKER_WEB_SERVER}" = "nginx" ]] && sudo service php${PHP_VERSION_APT}-fpm start
