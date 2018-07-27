@@ -150,6 +150,3 @@ To customize these setup on your projects, changes must only be done to file [`d
 * `PHP < 5.5`:
   * Using `XHGUI_ACTIVE=true` is incompatible, on Docker start the variable will be overriden to `XHGUI_ACTIVE=false`.
 
-## Changelog
-
-See [CHANGELOG.md](CHANGELOG.md).
