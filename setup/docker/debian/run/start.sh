@@ -250,7 +250,7 @@ echo " OK"
 echo "Setting up docker php-xdebug"
 
 rm -f /usr/local/bin/php_xdebug
-
+mkdir -p /usr/local/bin
 cat <<EOT >> /usr/local/bin/php_xdebug
 #!/bin/sh
 export XDEBUG_CONFIG="idekey=phpstorm"
