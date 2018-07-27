@@ -99,7 +99,7 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
         ruby
     ruby -v && echo -n "gem v" && gem -v
     gem install bundler
-    bundler install
+    bundler install --gemfile=/setup/docker/debian/capistrano/Gemfile
     cap -v
 fi
 
