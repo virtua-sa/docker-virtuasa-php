@@ -92,6 +92,7 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
         yarn
     echo -n "Node.js " && node -v && echo -n "NPM v" && npm -v
 fi
+
 #Install Ruby and Capistrano BUG on capistrano install
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
     apt-get install -y --force-yes --fix-missing --no-install-recommends \
