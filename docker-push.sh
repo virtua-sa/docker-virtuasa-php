@@ -11,5 +11,5 @@ dp_sub="$2"
 
 [[ ! "${dp_phpv}" =~ ^[57]\.[0-9]$ ]] && echo "Wrong PHP version number: ${dp_phpv}" && exit 1;
 
-docker tag virtuasa/php:${dp_phpv}$-dev virtuasa/php:${dp_phpv}${dp_sub}
+docker tag virtuasa/php:${dp_phpv}-dev virtuasa/php:${dp_phpv}${dp_sub}
 docker push virtuasa/php:${dp_phpv}${dp_sub}
