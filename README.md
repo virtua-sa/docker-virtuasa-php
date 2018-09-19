@@ -10,6 +10,7 @@
 > [`virtuasa/php:7.0`](https://microbadger.com/images/virtuasa/php:7.0)
 > [`virtuasa/php:7.1`](https://microbadger.com/images/virtuasa/php:7.1)
 > [`virtuasa/php:7.2`](https://microbadger.com/images/virtuasa/php:7.2)
+> [`virtuasa/php:7.3`](https://microbadger.com/images/virtuasa/php:7.3)
 
 These images are built and published on [VirtuaSA Docker Hub](https://hub.docker.com/r/virtuasa/php/).
 
@@ -22,37 +23,37 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 
 ## Images content
 
-| [Tags (`virtuasa/php:`)](https://hub.docker.com/r/virtuasa/php/tags/)                             | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       |
-| ------------------------------------------------------------------------------------------------- | :------: | :-------: | :------: | :------: | :------: | :-------: | :-------: | :-------: |
-| [PHP (`php`)](http://php.net/manual/en/)                                                          | *5.2.6*  | *5.3.3*   | *5.4.45* | *5.5.38* | *5.6.30* | *7.0.26*  | *7.1.13*  | *7.2.1*   |
-| [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)                                    |          |           |          | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Composer (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [DbUnit (`dbunit`)](https://github.com/sebastianbergmann/dbunit)                                  |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Phing (`phing`)](https://www.phing.info/docs/guide/stable/)                                      |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)    |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)                 |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)                                  |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHPUnit (Current Stable Release) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)   |          |           |          |          |          |           | &#x2714;  | &#x2714;  |
-| [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)                         |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)                         |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Node.js (`node`, `npm`)](https://nodejs.org/dist/latest-v8.x/docs/api/)                          |          |           | *6.9.1*  | *6.9.1*  | *6.9.1*  | *8.9.0*   | *8.9.0*   | *8.9.0*   |
-| [Bower (`bower`)](https://bower.io/)                                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Gulp (`gulp`)](https://github.com/gulpjs/gulp/blob/master/docs/API.md)                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Grunt (`grunt`)](https://gruntjs.com/getting-started)                                            |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PM2 (`pm2`)](http://pm2.keymetrics.io/docs/usage/quick-start/)                                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Webpack (`webpack`)](https://webpack.js.org/concepts/)                                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [XHGUI (`xhgui`)](https://github.com/perftools/xhgui)                                             |          |           |          | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  |
-| [Apache](https://httpd.apache.org/docs/2.4/)                                                      | *2.2.9*  | *2.2.16*  | *2.2.22* | *2.2.22* | *2.4.10* | *2.4.25*  | *2.4.25*  | *2.4.25*  |
-| [NGINX](https://nginx.org/en/docs/)                                                               | *0.6.32* | *0.7.67*  | *1.2.1*  | *1.2.1*  | *1.6.2*  | *1.10.3*  | *1.10.3*  | *1.10.3*  |
-| [SSMTP](https://doc.ubuntu-fr.org/ssmtp)                                                          |  *2.64*  |  *2.64*   |  *2.64*  |  *2.64*  |  *2.64*  |  *2.64*   |  *2.64*   |  *2.64*   |
-| [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* |
+| [Tags (`virtuasa/php:`)](https://hub.docker.com/r/virtuasa/php/tags/)                             | 5.2      | 5.3       | 5.4      | 5.5      | 5.6      | 7.0       | 7.1       | 7.2       | 7.3       |
+| ------------------------------------------------------------------------------------------------- | :------: | :-------: | :------: | :------: | :------: | :-------: | :-------: | :-------: | :-------: |
+| [PHP (`php`)](http://php.net/manual/en/)                                                          | *5.2.6*  | *5.3.3*   | *5.4.45* | *5.5.38* | *5.6.30* | *7.0.31*  | *7.1.20*  | *7.2.9*   | *7.3.0*   |
+| [Behat (`behat`)](http://behat.org/en/latest/quick_start.html)                                    |          |           |          | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Composer (`composer`)](https://getcomposer.org/doc/01-basic-usage.md)                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [DbUnit (`dbunit`)](https://github.com/sebastianbergmann/dbunit)                                  |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Phing (`phing`)](https://www.phing.info/docs/guide/stable/)                                      |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)    |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)                 |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)                                  |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPUnit (Current Stable Release) (`phpunit`)](https://phpunit.de/manual/current/en/index.html)   |          |           |          |          |          |           | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPUnit 6.2+ (`phpunit62`)](https://phpunit.de/manual/6.2/en/index.html)                         |          |           |          |          |          | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPUnit 5.7+ (`phpunit57`)](https://phpunit.de/manual/5.7/en/index.html)                         |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PHPUnit 4.8+ (`phpunit48`)](https://phpunit.de/manual/4.8/en/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Node.js (`node`, `npm`)](https://nodejs.org/dist/latest-v8.x/docs/api/)                          |          |           | *6.9.1*  | *6.9.1*  | *6.9.1*  | *8.9.0*   | *8.9.0*   | *8.9.0*   | *8.9.0*   |
+| [Bower (`bower`)](https://bower.io/)                                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Gulp (`gulp`)](https://github.com/gulpjs/gulp/blob/master/docs/API.md)                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Grunt (`grunt`)](https://gruntjs.com/getting-started)                                            |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PM2 (`pm2`)](http://pm2.keymetrics.io/docs/usage/quick-start/)                                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Webpack (`webpack`)](https://webpack.js.org/concepts/)                                           |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [XHGUI (`xhgui`)](https://github.com/perftools/xhgui)                                             |          |           |          | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Yarn (`yarn`)](https://yarnpkg.com/en/docs)                                                      |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [Apache](https://httpd.apache.org/docs/2.4/)                                                      | *2.2.9*  | *2.2.16*  | *2.2.22* | *2.2.22* | *2.4.10* | *2.4.25*  | *2.4.25*  | *2.4.25*  | *2.4.25*  |
+| [NGINX](https://nginx.org/en/docs/)                                                               | *0.6.32* | *0.7.67*  | *1.2.1*  | *1.2.1*  | *1.6.2*  | *1.10.3*  | *1.10.3*  | *1.10.3*  | *1.10.3*  |
+| [SSMTP](https://doc.ubuntu-fr.org/ssmtp)                                                          |  *2.64*  |  *2.64*   |  *2.64*  |  *2.64*  |  *2.64*  |  *2.64*   |  *2.64*   |  *2.64*   |  *2.64*   |
+| [Debian](https://www.debian.org/doc/)                                                             | *lenny*  | *squeeze* | *wheezy* | *wheezy* | *jessie* | *stretch* | *stretch* | *stretch* | *stretch* |
 
 To customize these setup on your projects, changes must only be done to file [`docker-compose.yml`](https://docs.docker.com/compose/compose-file/compose-file-v1/).
 
