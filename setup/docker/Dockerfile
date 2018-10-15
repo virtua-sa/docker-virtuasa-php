@@ -10,6 +10,7 @@ ARG DOCKER_FROM_COMMIT=""
 ARG PHP_VERSION="7.1"
 ARG PHP_VERSION_APT="7.1"
 ARG PHP_VERSION_DIR="/7.1"
+ARG GITHUB_TOKEN=""
 
 # Set metadata labels, see: http://label-schema.org/rc1/
 LABEL org.label-schema.build-date="${DOCKER_BUILD_DATE}" \
