@@ -153,7 +153,7 @@ fi
 
 # Run Composer if necessary
 if [[ "${PHP_VERSION}" != "5.2" ]]; then
-    [[ -e 'composer.json' && ! -e 'vendor/autoload.php' ]] && composer install --no-interaction || composer update --no-interaction || echo "Ignore composer install/update Errors"
+    [[ -e 'composer.json' && ! -e 'vendor/autoload.php' ]] && ( composer install --no-interaction || composer update --no-interaction || echo "Ignore composer install/update Errors" )
 fi
 
 # Install npm packages if necessary
