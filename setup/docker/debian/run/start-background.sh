@@ -15,8 +15,10 @@ fi
 
 c=0
 while ! grep -m1 "${START_MSG}" < /tmp/server-log.txt; do
-    ((c++)) && ((c>60)) && break
+    ((c++)) && ((c>120)) && break
     sleep 1
 done
 
 echo "Server ${DOCKER_WEB_SERVER} is up after ${c} seconds"
+
+sleep 3
