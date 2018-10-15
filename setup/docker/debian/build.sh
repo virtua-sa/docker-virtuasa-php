@@ -160,7 +160,7 @@ if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
     ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
     echo -n "phpstan -V : " && phpstan -V
 elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
-    LAST_VERSION=$(curl --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+    LAST_VERSION=$(curl -H "Authorization: token ${GITHUB_TOKEN}" --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
     ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
     echo -n "phpstan -V : " && phpstan -V
 else
