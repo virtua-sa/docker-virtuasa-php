@@ -108,6 +108,10 @@ fi
 /usr/sbin/nginx -v
 /usr/sbin/sendmail -V
 
+# Copy bin files
+chmod a+x ${BASE_PATH}/bin/*
+cp ${BASE_PATH}/bin/* /usr/local/bin
+
 # mungehosts
 ${WGET} https://github.com/hiteshjasani/nim-mungehosts/releases/download/v0.1.1/mungehosts > /usr/local/bin/mungehosts && chmod 755 /usr/local/bin/mungehosts
 
@@ -153,12 +157,14 @@ fi
 
 # Install PHP Static Analysis Tool
 if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
-    ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan && chmod a+x /usr/local/bin/phpstan
+    ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
     echo -n "phpstan -V : " && phpstan -V
 elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
     LAST_VERSION=$(curl --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-    ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan && chmod a+x /usr/local/bin/phpstan
+    ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
     echo -n "phpstan -V : " && phpstan -V
+else
+    rm -f /usr/local/bin/phpstan
 fi
 
 # Install PHP_CodeSniffer
@@ -239,6 +245,9 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     ${WGET} https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
     echo -n "phpunit48 --version : " && phpunit48 --version
 fi
+
+
+
 
 # Install XHGUI
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
