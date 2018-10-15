@@ -147,7 +147,7 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
 fi
 
 # Install PHP Coding Standards Fixer
-if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
+if [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
     ${WGET} https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.2.20/php-cs-fixer.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
     echo -n "php-cs-fixer -V : " && php-cs-fixer -V
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then

@@ -33,7 +33,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [PHP_CodeSniffer (`phpcs`, `phpcbf`)](https://github.com/squizlabs/PHP_CodeSniffer/wiki/Usage)    |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP Copy/Paste Detector (`phpcpd`)](https://github.com/sebastianbergmann/phpcpd)                 |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP_Depend (`pdepend`)](https://pdepend.org/documentation/getting-started.html)                  |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PHP Coding Standards Fixer (`php-cs-fixer`)](https://github.com/friendsofphp/php-cs-fixer)       |          | *2.2.20*  | *2.2.20* | *2.2.20* | *2.13.0+*| *2.13.0+* | *2.13.0+* | *2.13.0+* | *2.13.0+* |
+| [PHP Coding Standards Fixer (`php-cs-fixer`)](https://github.com/friendsofphp/php-cs-fixer)       |          |           | *2.2.20* | *2.2.20* | *2.13.0+*| *2.13.0+* | *2.13.0+* | *2.13.0+* | *2.13.0+* |
 | [PHP Static Analysis Tool (`phpstan`)](https://github.com/phpstan/phpstan)                        |          |           |          |          |          |  *0.9.2*  | *0.10.3+* | *0.10.3+* | *0.10.3+* |
 | [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
