@@ -23,6 +23,7 @@ LABEL org.label-schema.build-date="${DOCKER_BUILD_DATE}" \
 
 # Set default environment variables
 ENV LANG=C.UTF-8 \
+    GITHUB_TOKEN="${GITHUB_TOKEN}" \
     HOSTNAME_LOCAL_ALIAS="" \
     APACHE_DOCUMENT_ROOT="web" \
     APACHE_LOG_PATH="var/logs/apache" \
