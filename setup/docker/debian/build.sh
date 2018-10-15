@@ -142,6 +142,25 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
     echo -n "phing -version : " && phing -version
 fi
 
+# Install PHP Coding Standards Fixer
+if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
+    ${WGET} https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.12.3/php-cs-fixer.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
+    echo -n "php-cs-fixer -V : " && php-cs-fixer -V
+elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
+    ${WGET} https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
+    echo -n "php-cs-fixer -V : " && php-cs-fixer -V
+fi
+
+# Install PHP Static Analysis Tool
+if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
+    ${WGET} https://github.com/phpstan/phpstan/releases/download/0.9.2/phpstan.phar > /usr/local/bin/phpstan && chmod a+x /usr/local/bin/phpstan
+    echo -n "phpstan -V : " && phpstan -V
+elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
+    LAST_VERSION=$(curl --silent "https://api.github.com/repos/phpstan/phpstan/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+    ${WGET} https://github.com/phpstan/phpstan/releases/download/${LAST_VERSION}/phpstan.phar > /usr/local/bin/phpstan && chmod a+x /usr/local/bin/phpstan
+    echo -n "phpstan -V : " && phpstan -V
+fi
+
 # Install PHP_CodeSniffer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
     ${WGET} https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod a+x /usr/local/bin/phpcs

@@ -11,6 +11,8 @@ echo "docker-init.sh called !"
 # [[ -n "$(type -t dbunit)" ]]        && dbunit --version
 [[ -n "$(type -t pdepend)" ]]       && pdepend --version
 [[ -n "$(type -t phing)" ]]         && phing -version
+[[ -n "$(type -t php-cs-fixer)" ]]  && php-cs-fixer -V
+[[ -n "$(type -t phpstan)" ]]       && phpstan -V
 [[ -n "$(type -t phpcbf)" ]]        && phpcbf --version
 [[ -n "$(type -t phpcpd)" ]]        && phpcpd --version
 [[ -n "$(type -t phpcs)" ]]         && phpcs --version
