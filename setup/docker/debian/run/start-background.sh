@@ -2,8 +2,6 @@
 
 /setup/run/start.sh > /tmp/server-log.txt &
 
-sleep 3
-
 START_MSG=""
 
 # Start web server
@@ -21,4 +19,4 @@ done
 
 echo "Server ${DOCKER_WEB_SERVER} is up after ${c} seconds"
 
-sleep 3
+sleep 2
