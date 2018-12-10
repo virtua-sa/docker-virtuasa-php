@@ -150,10 +150,11 @@ fi
 if [[ "${PHP_VERSION}" =~ ^(5\.[45]) ]]; then
     ${WGET} https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v2.2.20/php-cs-fixer.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
     echo -n "php-cs-fixer -V : " && php-cs-fixer -V
-elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
+elif [[ "${PHP_VERSION}" =~ ^((7\.[12])|(5\.6)) ]]; then
     ${WGET} https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
     echo -n "php-cs-fixer -V : " && php-cs-fixer -V
 fi
+## TODO for php 7.3
 
 # Install PHP Static Analysis Tool
 if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
