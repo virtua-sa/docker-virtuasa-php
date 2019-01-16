@@ -95,8 +95,18 @@ fi
 
 #Install Ruby and Capistrano BUG on capistrano install
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-    apt-get install -y --force-yes --fix-missing --no-install-recommends \
-        ruby
+    apt-get install -y --force-yes --fix-missing --no-install-recommends ruby
+    if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie ]]; then
+        # in case of jessie upgrade ruby to 2.3.3
+        wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz
+        tar -xzvf ruby-install-0.7.0.tar.gz
+        cd ruby-install-0.7.0
+        sudo make install
+        ruby-install ruby 2.3.3
+        cd ..
+        rm -rf ruby-install-0.7.0
+        hash -r
+    fi
     ruby -v && echo -n "gem v" && gem -v
     gem install bundler
     bundler install --gemfile=/setup/docker/debian/capistrano/Gemfile
