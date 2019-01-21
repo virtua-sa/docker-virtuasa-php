@@ -102,7 +102,7 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
         tar -xzvf ruby-install-0.7.0.tar.gz
         cd ruby-install-0.7.0
         sudo make install
-        ruby-install ruby 2.3.3
+        sudo ruby-install --system ruby 2.3.3
         cd ..
         rm -rf ruby-install-0.7.0
         hash -r
@@ -255,8 +255,6 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
     ${WGET} https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
     echo -n "phpunit48 --version : " && phpunit48 --version
 fi
-
-
 
 
 # Install XHGUI
