@@ -148,7 +148,7 @@ copyTestSrc() {
     cp -r tests/src tests/tmp${1}
     chmod 775 tests/tmp${1}
     if [ -d "tests/src.d/${1}/" ]; then
-       cp -r "tests/src.d/${1}/*" tests/tmp${1}
+       cp -r tests/src.d/${1}/* tests/tmp${1}/
     fi
 }
 # Test the image built with Apache
