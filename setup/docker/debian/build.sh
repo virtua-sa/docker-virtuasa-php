@@ -239,11 +239,13 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
 fi
 
 # Install PHPUnit
-if [[ "${PHP_VERSION}" =~ ^7\.[123456] ]]; then
+if [[ "${PHP_VERSION}" =~ ^7\.[23456] ]]; then
     ${WGET} https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
     echo -n "phpunit --version : " && phpunit --version
 fi
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
+    ${WGET} https://phar.phpunit.de/phpunit-7.5.phar > /usr/local/bin/phpunit75 && chmod a+x /usr/local/bin/phpunit75
+    echo -n "phpunit75 --version : " && phpunit75 --version
     ${WGET} https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod a+x /usr/local/bin/phpunit62
     echo -n "phpunit62 --version : " && phpunit62 --version
 fi

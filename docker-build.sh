@@ -143,6 +143,14 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
     --file setup/docker/Dockerfile . | tee ${db_build_path}/build.log
 grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path}/build.log || exit 1;
 
+copyTestSrc() {
+    rm -rf tests/tmp${1}
+    cp -r tests/src tests/tmp${1}
+    chmod 775 tests/tmp${1}
+    if [ -d "tests/src.d/${1}/" ]; then
+       cp -r "tests/src.d/${1}/*" tests/tmp${1}
+    fi
+}
 # Test the image built with Apache
 cat <<"EOF"
   _____         _                _                     _
@@ -152,9 +160,7 @@ cat <<"EOF"
    |_|\___||___/\__|         /_/   \_\ .__/ \__,_|\___|_| |_|\___|
                                      |_|
 EOF
-rm -rf tests/tmp${df_php_version}
-cp -r tests/src tests/tmp${df_php_version}
-chmod 775 tests/tmp${df_php_version}
+copyTestSrc ${df_php_version}
 docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
 docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
@@ -187,6 +193,11 @@ docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
+    # Run distribution version hook
+if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
+   ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
+fi
+
     docker exec virtuasa-php-${df_php_version}-dev-build composer check-platform-reqs
 fi
 docker stop virtuasa-php-${df_php_version}-dev-build
@@ -204,9 +215,7 @@ cat <<"EOF"
    |_|\___||___/\__|         /_/   \_\ .__/ \__,_|\___|_| |_|\___|    \_/\_/_/  \___/  |____/|____/ \____|
                                      |_|
 EOF
-rm -rf tests/tmp${df_php_version}
-cp -r tests/src tests/tmp${df_php_version}
-chmod 775 tests/tmp${df_php_version}
+copyTestSrc ${df_php_version}
 docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
 docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
@@ -228,7 +237,6 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker rm virtuasa-php-${df_php_version}-dev-build
-rm -rf tests/tmp${df_php_version}
 
 # Test the image built with Nginx
 cat <<"EOF"
@@ -238,8 +246,7 @@ cat <<"EOF"
    | |  __/\__ \ |_  |_____| | |\  | |_| || || |\  |/  \
    |_|\___||___/\__|         |_| \_|\____|___|_| \_/_/\_\
 EOF
-cp -r tests/src tests/tmp${df_php_version}
-chmod 775 tests/tmp${df_php_version}
+copyTestSrc ${df_php_version}
 docker ps | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker stop virtuasa-php-${df_php_version}-dev-build
 docker ps -a | grep "virtuasa-php-${df_php_version}-dev-build" > /dev/null && docker rm virtuasa-php-${df_php_version}-dev-build
 docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
