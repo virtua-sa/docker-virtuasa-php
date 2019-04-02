@@ -152,12 +152,14 @@ fi
 [[ -n "${DOCKER_CHMOD_R777}" ]] && sudo chmod -R 777 ${DOCKER_CHMOD_R777}
 
 # Run Composer if necessary
-if [[ "${PHP_VERSION}" != "5.2" ]]; then
+if [[ "${COMPOSER_AUTO_INSTALL}" = "true" ]] && [[ "${PHP_VERSION}" != "5.2" ]]; then
     [[ -e 'composer.json' && ! -e 'vendor/autoload.php' ]] && ( composer install --no-interaction || composer update --no-interaction || echo "Ignore composer install/update Errors" )
 fi
 
 # Install npm packages if necessary
-[[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install || echo "Ignore npm install Errors"
+if [[ "${NPM_AUTO_INSTALL}" = "true" ]]; then
+    [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install || echo "Ignore npm install Errors"
+fi
 
 # Configure SSMTP
 if [[ -n "${SSMTP_MAILHUB}" ]]; then

@@ -97,5 +97,7 @@ EXPOSE 80 443 9000
 # Entrypoint to switch UID GID and run as docker
 ENTRYPOINT [ "/setup/run/docker-entrypoint.sh" ]
 
+USER docker
+
 # Run the default script on startup
 CMD [ "/setup/run/start.sh" ]

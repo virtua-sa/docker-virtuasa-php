@@ -118,12 +118,14 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `SSMTP_SENDER_ROOT`             | ` ` *(empty)*                             | The user that gets all mail for userids less than 1000. If blank, address rewriting is disabled.
 | `SSMTP_SENDER_HOSTNAME`         | ` ` *(empty)*                             | The full qualified name of the host. If not specified, the host is queried for its hostname.
 | `SSMTP_REWRITE_DOMAIN`          | ` ` *(empty)*                             | The domain from which mail seems to come. for user authentication.
-| `SSMTP_FROM_LINE_OVERRIDE`      | ` ` *(empty)*                             | Specifies whether the From header of an email, if any, may override the default domain. The default is “no”.
+| `SSMTP_FROM_LINE_OVERRIDE`      | ` ` *(empty)*                             | Specifies whether the From header of an email, if any, may override the default domain. The default is `no`.
 | `XHGUI_ACTIVE`                  | `false`                                   | Activate of Tideways profiling if set to `true`
 | `XHGUI_DB_ENSURE`               | `false`                                   | Ensure MongoDB database creation and configuration if set to `true`
 | `XHGUI_DB_HOST`                 | ` ` *(empty)*                             | MongoDB database host to store the profiles
 | `XHGUI_DB_NAME`                 | ` ` *(empty)*                             | MongoDB database name to store the profiles
 | `XHGUI_SERVER_NAME`             | `xhgui.localhost`                         | XHGUI Apache server name
+| `COMPOSER_AUTO_INSTALL`         | `false`                                   | Automatic composer install, on start container if `true` 
+| `NPM_AUTO_INSTALL`              | `false`                                   | Automatic npm install, on start container if `true` 
 
 \* *Path is relative to the Docker container mount path, i.e., to the root of the project.*
 
