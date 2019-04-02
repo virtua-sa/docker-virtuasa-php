@@ -204,8 +204,12 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
 fi
 
 # Install phpdox
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+if [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
     ${WGET} http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+    echo -n "phpdox --version : " && phpdox --version
+fi
+if [[ "${PHP_VERSION}" =~ ^((7\.0)|(5\.[56])) ]]; then
+    ${WGET} https://github.com/theseer/phpdox/releases/download/0.11.2/phpdox-0.11.2.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
     echo -n "phpdox --version : " && phpdox --version
 fi
 if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then

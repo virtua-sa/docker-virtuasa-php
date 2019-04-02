@@ -6,6 +6,23 @@ echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 echo "Built from commit: ${DOCKER_FROM_COMMIT}"
 echo
 
+CURRENT_DOCKER_UID=$(id -u)
+CURRENT_DOCKER_GID=$(id -g)
+
+# UID and GID changing
+if [[ -n "${DOCKER_HOST_UID}" ]] && [[ "${CURRENT_DOCKER_UID}" != "${DOCKER_HOST_UID}" ]]; then
+    echo "Change docker UID from ${CURRENT_DOCKER_UID} to ${DOCKER_HOST_UID}"
+    usermod -u ${DOCKER_HOST_UID} docker
+    find / -user ${CURRENT_DOCKER_UID} -exec chown -h ${DOCKER_HOST_UID} {} \;
+fi
+
+if [[ -n "${DOCKER_HOST_GID}" ]] && [[ "${CURRENT_DOCKER_GID}" != "${DOCKER_HOST_GID}" ]]; then
+    echo "Change docker GID from ${CURRENT_DOCKER_GID} to ${DOCKER_HOST_GID}"
+    groupmod -g ${DOCKER_HOST_GID} docker
+    find / -user ${CURRENT_DOCKER_GID} -exec chgrp -h ${DOCKER_HOST_GID} {} \;
+    usermod -g ${DOCKER_HOST_GID} docker
+fi
+
 export DOLLAR='$'
 
 # Print ran commands
@@ -138,9 +155,6 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
         sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/xhgui/"* "${XHGUI_BASE_DIR}/config/"
     fi
 fi
-
-# Chown the mount directory
-[[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
 
 # Create the requested directories
 [[ -n "${DOCKER_MKDIR}" ]] && sudo mkdir -p ${DOCKER_MKDIR}
@@ -293,9 +307,6 @@ if [[ "${DOCKER_COPY_IP_TO_HOST}" = "true" ]]; then
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
 fi
-
-# Chown the mount dir after Apache has started
-(sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then

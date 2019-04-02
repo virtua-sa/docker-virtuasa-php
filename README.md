@@ -36,7 +36,7 @@ These images are built and published on [VirtuaSA Docker Hub](https://hub.docker
 | [PHP Coding Standards Fixer (`php-cs-fixer`)](https://github.com/friendsofphp/php-cs-fixer)       |          |           | *2.2.20* | *2.2.20* | *2.14.0+*| *2.14.0+* | *2.14.0+* | *2.14.0+* | *2.14.0+* |
 | [PHP Static Analysis Tool (`phpstan`)](https://github.com/phpstan/phpstan)                        |          |           |          |          |          |  *0.9.2*  | *0.10.3+* | *0.10.3+* | *0.10.3+* |
 | [PhpDocumentor (`phpdoc`)](https://docs.phpdoc.org/)                                              |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
-| [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
+| [PhpDox (`phpdox`)](http://phpdox.de/)                                                            |          |  0.8.1.1  |  0.9.0   |  0.11.2  |  0.11.2  |  0.11.2   | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHPLOC (`phploc`)](https://github.com/sebastianbergmann/phploc)                                  |          |           |          |          | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PhpMetrics (`phpmetrics`)](http://www.phpmetrics.org/documentation/index.html)                   |          |           | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
 | [PHP Mess Detector (`phpmd`)](https://phpmd.org/documentation/index.html)                         |          | &#x2714;  | &#x2714; | &#x2714; | &#x2714; | &#x2714;  | &#x2714;  | &#x2714;  | &#x2714;  |
@@ -92,9 +92,9 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting web server \*
 | `DOCKER_CUSTOM_STOP`            | `docker-stop.sh`                          | Execute script before shutting down \*
 | `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
-| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
+| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | docker user GID (see `id -g`) if set
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
-| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
+| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | docker user UID (see `id -u`) if set
 | `DOCKER_MKDIR`                  | ` ` *(empty)*                             | Create requested directories using `mkdir -p` if set \*
 | `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
 | `DOCKER_WEB_SERVER`             | `apache`                                  | Web server to use, can be either `apache` or `nginx`
@@ -126,8 +126,6 @@ To customize these setup on your projects, changes must only be done to file [`d
 \* *Path is relative to the Docker container mount path, i.e., to the root of the project.*
 
 \*\* *Path is absolute in the Docker container, don't forget to add the path of the mount path if needed.*
-
-\*\*\* *`DOCKER_HOST_GID` and `DOCKER_HOST_UID` must be both empty or both have a value.*
 
 ### Readonly environment variables
 
