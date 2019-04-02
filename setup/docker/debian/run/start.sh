@@ -128,14 +128,13 @@ fi
 
 # Copy image's configuration files from host filesystem
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/apache/"* "/etc/apache2"
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/nginx/"* "/etc/nginx"
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2"
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli"
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm"
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/apache/"* "/etc/apache2" || true
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/nginx/"* "/etc/nginx" || true
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2" || true
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli" || true
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm" || true
     if [[ "${XHGUI_ACTIVE}" = "true" ]]; then
-        sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/xhgui/"* "${XHGUI_BASE_DIR}/config/"
+        sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/xhgui/"* "${XHGUI_BASE_DIR}/config/" || true
     fi
 fi
 
