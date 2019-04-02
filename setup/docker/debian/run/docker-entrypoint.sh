@@ -18,4 +18,4 @@ if [[ -n "${DOCKER_DEV_GID}" ]] && [[ "${CURRENT_DOCKER_GID}" != "${DOCKER_DEV_G
     usermod -g ${DOCKER_DEV_GID} docker
 fi
 
-exec sudo -u docker "$@"
+exec sudo -E -u docker "$@"
