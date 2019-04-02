@@ -92,10 +92,12 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting web server \*
 | `DOCKER_CUSTOM_STOP`            | `docker-stop.sh`                          | Execute script before shutting down \*
 | `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
-| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | docker user GID (see `id -g`) if set
+| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
-| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | docker user UID (see `id -u`) if set
+| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
 | `DOCKER_MKDIR`                  | ` ` *(empty)*                             | Create requested directories using `mkdir -p` if set \*
+| `DOCKER_DEV_UID`                | ` ` *(empty)*                             | docker user UID (see `id -u` in you host) must be set to UID of the developer
+| `DOCKER_DEV_GID`                | ` ` *(empty)*                             | docker user GID (see `id -g` in you host) must be set to GID of the developer
 | `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
 | `DOCKER_WEB_SERVER`             | `apache`                                  | Web server to use, can be either `apache` or `nginx`
 | `NGINX_DOCUMENT_ROOT`           | `web`                                     | Path to the Nginx document root folder \*
@@ -126,6 +128,8 @@ To customize these setup on your projects, changes must only be done to file [`d
 \* *Path is relative to the Docker container mount path, i.e., to the root of the project.*
 
 \*\* *Path is absolute in the Docker container, don't forget to add the path of the mount path if needed.*
+
+\*\*\* *`DOCKER_HOST_GID` and `DOCKER_HOST_UID` must be both empty or both have a value.*
 
 ### Readonly environment variables
 

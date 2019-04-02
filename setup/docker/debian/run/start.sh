@@ -139,6 +139,9 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     fi
 fi
 
+# Chown the mount directory
+[[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
+
 # Create the requested directories
 [[ -n "${DOCKER_MKDIR}" ]] && sudo mkdir -p ${DOCKER_MKDIR}
 
@@ -290,6 +293,9 @@ if [[ "${DOCKER_COPY_IP_TO_HOST}" = "true" ]]; then
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
 fi
+
+# Chown the mount dir after Apache has started
+(sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then

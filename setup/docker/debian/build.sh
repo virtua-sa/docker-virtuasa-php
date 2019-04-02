@@ -27,6 +27,11 @@ BASE_PATH="/setup/docker/${FROM_DISTRIBUTION}"
     && echo "PHP version not supported yet, file ${BASE_PATH}/apt/php-${PHP_VERSION} doesn't exist !" \
     && exit 1;
 
+# Run distribution version hook
+if [[ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}-repository.sh" ]]; then
+   ${BASE_PATH}/build.d/debian-${FROM_VERSION}-repository.sh || exit 1
+fi
+
 # Install base packages
 DEBIAN_FRONTEND=noninteractive apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --force-yes --fix-missing --no-install-recommends \
@@ -35,7 +40,7 @@ DEBIAN_FRONTEND=noninteractive apt-get update \
         $(<${BASE_PATH}/apt/debian-${DOCKER_FROM_IMAGE##*:})
 
 # Run distribution version hook
-if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
+if [[ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]]; then
    ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
 fi
 
