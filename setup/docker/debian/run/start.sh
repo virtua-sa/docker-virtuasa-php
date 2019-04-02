@@ -6,23 +6,6 @@ echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
 echo "Built from commit: ${DOCKER_FROM_COMMIT}"
 echo
 
-CURRENT_DOCKER_UID=$(id -u)
-CURRENT_DOCKER_GID=$(id -g)
-
-# UID and GID changing
-if [[ -n "${DOCKER_HOST_UID}" ]] && [[ "${CURRENT_DOCKER_UID}" != "${DOCKER_HOST_UID}" ]]; then
-    echo "Change docker UID from ${CURRENT_DOCKER_UID} to ${DOCKER_HOST_UID}"
-    usermod -u ${DOCKER_HOST_UID} docker
-    find / -user ${CURRENT_DOCKER_UID} -exec chown -h ${DOCKER_HOST_UID} {} \;
-fi
-
-if [[ -n "${DOCKER_HOST_GID}" ]] && [[ "${CURRENT_DOCKER_GID}" != "${DOCKER_HOST_GID}" ]]; then
-    echo "Change docker GID from ${CURRENT_DOCKER_GID} to ${DOCKER_HOST_GID}"
-    groupmod -g ${DOCKER_HOST_GID} docker
-    find / -user ${CURRENT_DOCKER_GID} -exec chgrp -h ${DOCKER_HOST_GID} {} \;
-    usermod -g ${DOCKER_HOST_GID} docker
-fi
-
 export DOLLAR='$'
 
 # Print ran commands
@@ -310,9 +293,11 @@ fi
 
 # Start web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
-    [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
-        && sudo /usr/sbin/apache2ctl -DFOREGROUND \
-        || sudo /usr/sbin/apache2ctl -D FOREGROUND
+    if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
+        exec sudo /usr/sbin/apache2ctl -DFOREGROUND
+    else
+        exec sudo /usr/sbin/apache2ctl -D FOREGROUND
+    fi
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
-    sudo nginx
+    exec sudo nginx
 fi

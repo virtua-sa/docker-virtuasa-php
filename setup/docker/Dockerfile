@@ -88,12 +88,14 @@ RUN set -xe \
     && rm -rf /setup/docker/${FROM_DISTRIBUTION} setup/tmp /setup/docker/Dockerfile
 
 # Set the workdir to mountpoint, the volume and the user
-USER docker
 WORKDIR ${DOCKER_BASE_DIR}
 VOLUME ${DOCKER_BASE_DIR}
 
 # Expose ports
 EXPOSE 80 443 9000
+
+# Entrypoint to switch UID GID and run as docker
+ENTRYPOINT [ "/setup/run/docker-entrypoint.sh" ]
 
 # Run the default script on startup
 CMD [ "/setup/run/start.sh" ]
