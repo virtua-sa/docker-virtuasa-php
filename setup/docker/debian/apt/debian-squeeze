@@ -25,4 +25,5 @@ ssmtp
 strace
 swaks
 make
+re2c
 less
