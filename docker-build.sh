@@ -22,7 +22,7 @@ case "$1" in
     df_php_version_dir="5"
     ;;
 5.4)
-    df_from_image="debian:wheezy"
+    df_from_image="debian/eol:wheezy"
     df_from_distribution="debian"
     df_from_version="wheezy"
     df_php_version="5.4"
@@ -30,7 +30,7 @@ case "$1" in
     df_php_version_dir="5"
     ;;
 5.5)
-    df_from_image="debian:wheezy"
+    df_from_image="debian/eol:wheezy"
     df_from_distribution="debian"
     df_from_version="wheezy"
     df_php_version="5.5"
