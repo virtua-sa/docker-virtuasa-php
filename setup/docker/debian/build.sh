@@ -171,16 +171,16 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
 fi
 
 # Install PHP Static Analysis Tool
-if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
-    ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
-    echo -n "phpstan -V : " && phpstan -V
-elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
-    LAST_VERSION=$(curl -H "Authorization: token ${GITHUB_TOKEN}" --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-    ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
-    echo -n "phpstan -V : " && phpstan -V
-else
-    rm -f /usr/local/bin/phpstan
-fi
+#if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
+#    ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
+#    echo -n "phpstan -V : " && phpstan -V
+#elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
+#    LAST_VERSION=$(curl -H "Authorization: token ${GITHUB_TOKEN}" --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
+#    ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
+#    echo -n "phpstan -V : " && phpstan -V
+#else
+#    rm -f /usr/local/bin/phpstan
+#fi
 
 # Install PHP_CodeSniffer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
@@ -203,28 +203,28 @@ fi
 #fi
 
 # Install phpDocumentor
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    ${WGET} http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
-    echo -n "phpdoc --version : " && phpdoc --version
-fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
+#    ${WGET} http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
+#    echo -n "phpdoc --version : " && phpdoc --version
+#fi
 
 # Install phpdox
-if [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
-    ${WGET} http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-    echo -n "phpdox --version : " && phpdox --version
-fi
-if [[ "${PHP_VERSION}" =~ ^((7\.0)|(5\.[56])) ]]; then
-    ${WGET} https://github.com/theseer/phpdox/releases/download/0.11.2/phpdox-0.11.2.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-    echo -n "phpdox --version : " && phpdox --version
-fi
-if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then
-    ${WGET} https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-    echo -n "phpdox --version : " && phpdox --version
-fi
-if [[ "${PHP_VERSION}" =~ ^5\.3 ]]; then
-    ${WGET} https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-    echo -n "phpdox --version : " && phpdox --version
-fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
+#    ${WGET} http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+#    echo -n "phpdox --version : " && phpdox --version
+#fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.0)|(5\.[56])) ]]; then
+#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.11.2/phpdox-0.11.2.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+#    echo -n "phpdox --version : " && phpdox --version
+#fi
+#if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then
+#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+#    echo -n "phpdox --version : " && phpdox --version
+#fi
+#if [[ "${PHP_VERSION}" =~ ^5\.3 ]]; then
+#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
+#    echo -n "phpdox --version : " && phpdox --version
+#fi
 
 # Install PHPLOC
 if [[ "${PHP_VERSION}" =~ ^((7\.[23])) ]]; then
@@ -243,13 +243,13 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
 fi
 
 # Install PhpMetrics
-if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
-    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
-    echo -n "phpmetrics --version : " && phpmetrics --version
-elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
-    echo -n "phpmetrics --version : " && phpmetrics --version
-fi
+#if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
+#    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
+#    echo -n "phpmetrics --version : " && phpmetrics --version
+#elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+#    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
+#    echo -n "phpmetrics --version : " && phpmetrics --version
+#fi
 
 # Install PHPUnit
 if [[ "${PHP_VERSION}" =~ ^7\.[23456] ]]; then
