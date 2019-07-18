@@ -238,7 +238,7 @@ fi
 
 # Install PHP Mess Detector (PHPMD)
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    ${WGET} http://static.phpmd.org/php/latest/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
+    ${WGET} https://github.com/phpmd/phpmd/releases/download/2.6.1/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
     echo -n "phpmd --version : " && phpmd --version
 fi
 
