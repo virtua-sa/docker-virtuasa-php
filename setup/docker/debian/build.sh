@@ -197,10 +197,10 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
 fi
 
 # Install PHP_Depend
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    ${WGET} http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
-    echo -n "pdepend --version : " && pdepend --version
-fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+#    ${WGET} http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
+#    echo -n "pdepend --version : " && pdepend --version
+#fi
 
 # Install phpDocumentor
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
