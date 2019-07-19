@@ -1,0 +1,49 @@
+# Virtua Framework doctrine completion.
+
+have cbatch &&
+_calleo_batch()
+{
+    local cur prev special i tool_path listAction slashes
+
+    slashes=${PWD//[^\/]/}
+    tool_path="$PWD"
+    for (( n=${#slashes}; n>0; --n ))
+    do
+      test -e "$tool_path/bin/batch.php" && break
+      tool_path=$(realpath "$tool_path/..")
+    done
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
+    listAction=$(${tool_path}/bin/batch.php -l)
+
+    case $prev in
+        -e|--environment)
+             COMPREPLY=( $( compgen -W 'development preproduction production test_ci' -- "$cur" ) )
+             return 0
+             ;;
+        -a|--action)
+             COMPREPLY=( $( compgen -W "${listAction[@]}" -- "$cur" ) )
+             return 0
+             ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-l -a -h -e \
+            -list --action --help --environment ' -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _calleo_batch cbatch &&
+complete -F _calleo_batch cbatch_xdebug &&
+complete -F _calleo_batch batch.php
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh

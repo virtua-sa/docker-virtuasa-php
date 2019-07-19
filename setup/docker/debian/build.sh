@@ -126,6 +126,7 @@ fi
 # Copy bin files
 chmod a+x ${BASE_PATH}/bin/*
 cp ${BASE_PATH}/bin/* /usr/local/bin
+cp ${BASE_PATH}/bash_completion.d/* /etc/bash_completion.d
 
 # mungehosts
 ${WGET} https://github.com/hiteshjasani/nim-mungehosts/releases/download/v0.1.1/mungehosts > /usr/local/bin/mungehosts && chmod 755 /usr/local/bin/mungehosts

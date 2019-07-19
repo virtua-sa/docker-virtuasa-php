@@ -1,0 +1,69 @@
+# Virtua Framework doctrine completion.
+
+have doctrine &&
+_doctrine()
+{
+    local cur prev special i doctrine_path listres slashes
+
+    slashes=${PWD//[^\/]/}
+    doctrine_path="$PWD"
+    for (( n=${#slashes}; n>0; --n ))
+    do
+      test -e "$doctrine_path/bin/doctrine.php" && break
+      doctrine_path=$(realpath "$doctrine_path/..")
+    done
+
+    COMPREPLY=()
+    _get_comp_words_by_ref cur prev
+
+    for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
+        if [[ ${COMP_WORDS[i]} == @(generate-models|generate-migrations-diff|generate-migrations-diff-and-migrate|build-module|rebuild-module|migrate|generate-translations|generate-sql-migration) ]]; then
+            special=${COMP_WORDS[i]}
+        fi
+    done
+
+    if [ -n "$special" ]; then
+        case $special in
+            generate-models|build-module|rebuild-module|create-tables)
+                listres=$(ls -d ${doctrine_path}/application/App/Module/*/ | xargs -l basename)
+                COMPREPLY=( $( compgen -W "${listres[@]}" -- "$cur" ) )
+                return 0
+                ;;
+            generate-migrations-diff|migrate|generate-migrations-diff-and-migrate|generate-translations|generate-sql-migration)
+                listres=$(cd ${doctrine_path}/data/migrations/ && find * -type d -not -name feature)
+                COMPREPLY=( $( compgen -W "${listres[@]}" -- "$cur" ) )
+                return 0
+                ;;
+        esac
+    fi
+
+    case $prev in
+        -e|--environment)
+             COMPREPLY=( $( compgen -W 'development preproduction production test_ci' -- "$cur" ) )
+             return 0
+             ;;
+    esac
+
+    if [[ "$cur" == -* ]]; then
+        COMPREPLY=( $( compgen -W '-h -e \
+            --help --environment' -- "$cur" ) )
+    else
+        COMPREPLY=( $( compgen -W 'drop-db create-db generate-models generate-all-models \
+		create-all-tables create-tables drop-tables drop-all-tables \
+        dump-model get-current-migration dump-data migrate-all generate-translations \
+		build-module build-all rebuild-module rebuild-all generate-migrations-diff \
+		generate-migrations-diff-and-migrate migrate dump-data load-data dump-model get-current-migration set-migration-version' -- "$cur" ) )
+    fi
+
+    return 0
+} &&
+complete -F _doctrine doctrine &&
+complete -F _doctrine doctrine.php
+
+# Local variables:
+# mode: shell-script
+# sh-basic-offset: 4
+# sh-indent-comment: t
+# indent-tabs-mode: nil
+# End:
+# ex: ts=4 sw=4 et filetype=sh
