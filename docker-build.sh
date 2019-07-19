@@ -176,7 +176,7 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env HOSTNAME_LOCAL_ALIAS="alias1.test,alias2.test" \
     --env SSMTP_MAILHUB="mail.docker" \
     virtuasa/php:${df_php_version}-dev
-sleep 10s
+sleep 20s
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1
 cp -r tests/tmp${df_php_version}/setup ${db_build_path}/setup
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
@@ -226,7 +226,7 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="apache" \
     virtuasa/php:${df_php_version}-dev
-sleep 10s
+sleep 20s
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
 [[ "${di_check}" != "/data" ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build whoami)"
@@ -258,7 +258,7 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="nginx" \
     virtuasa/php:${df_php_version}-dev
-sleep 10s
+sleep 20s
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-nginx.log 2>&1
 docker exec virtuasa-php-${df_php_version}-dev-build ls || docker logs -t virtuasa-php-${df_php_version}-dev-build
 di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build pwd)"
