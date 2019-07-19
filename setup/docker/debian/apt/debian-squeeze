@@ -27,3 +27,4 @@ swaks
 make
 re2c
 less
+bash-completion
