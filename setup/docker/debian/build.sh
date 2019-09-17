@@ -143,7 +143,10 @@ elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
 fi
 
 # Install Composer
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
+    ${WGET} https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
+    echo -n "composer --version : " && composer --version
+elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
     ${WGET} https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
 fi

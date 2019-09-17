@@ -70,9 +70,9 @@ case "$1" in
     df_php_version_dir="/7.2"
     ;;
 7.3)
-    df_from_image="debian:stretch"
+    df_from_image="debian:buster"
     df_from_distribution="debian"
-    df_from_version="stretch"
+    df_from_version="buster"
     df_php_version="7.3"
     df_php_version_apt="7.3"
     df_php_version_dir="/7.3"
@@ -192,12 +192,13 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_build_path}/phpinfo-cli.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
-if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
-    # Run distribution version hook
+# Run distribution version hook
 if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
    ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
 fi
 
+if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
+    docker exec virtuasa-php-${df_php_version}-dev-build composer install
     docker exec virtuasa-php-${df_php_version}-dev-build composer check-platform-reqs
 fi
 docker stop virtuasa-php-${df_php_version}-dev-build
