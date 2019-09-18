@@ -146,6 +146,8 @@ fi
 if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
     ${WGET} https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
+    git config --global --unset http.sslVersion
+    git config --global --add http.sslVersion tlsv1.2
 elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
     ${WGET} https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version

@@ -146,10 +146,10 @@ grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path
 copyTestSrc() {
     rm -rf tests/tmp${1}
     cp -r tests/src tests/tmp${1}
-    chmod 775 tests/tmp${1}
     if [ -d "tests/src.d/${1}/" ]; then
        cp -r tests/src.d/${1}/* tests/tmp${1}/
     fi
+    chmod -R a+rwX tests/tmp${1}
 }
 # Test the image built with Apache
 cat <<"EOF"
@@ -198,8 +198,8 @@ if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
 fi
 
 if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
-    docker exec virtuasa-php-${df_php_version}-dev-build composer install
-    docker exec virtuasa-php-${df_php_version}-dev-build composer check-platform-reqs
+    docker exec virtuasa-php-${df_php_version}-dev-build php_no_xdebug /usr/local/bin/composer install
+    docker exec virtuasa-php-${df_php_version}-dev-build php_no_xdebug /usr/local/bin/composer check-platform-reqs
 fi
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 > ${db_build_path}/run-apache.log
