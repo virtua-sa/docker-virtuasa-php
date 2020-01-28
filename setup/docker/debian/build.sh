@@ -121,7 +121,7 @@ fi
 # Print Apache and Nginx versions
 /usr/sbin/apache2 -v
 /usr/sbin/nginx -v
-/usr/sbin/sendmail -V
+/usr/sbin/sendmail -V || msmtp --version
 
 # Copy bin files
 chmod a+x ${BASE_PATH}/bin/*
