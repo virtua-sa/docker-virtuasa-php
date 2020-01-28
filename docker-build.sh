@@ -77,6 +77,14 @@ case "$1" in
     df_php_version_apt="7.3"
     df_php_version_dir="/7.3"
     ;;
+7.4)
+    df_from_image="debian:buster"
+    df_from_distribution="debian"
+    df_from_version="buster"
+    df_php_version="7.4"
+    df_php_version_apt="7.4"
+    df_php_version_dir="/7.4"
+    ;;
 all)
     $0 5.2
     $0 5.3
@@ -87,6 +95,7 @@ all)
     $0 7.1
     $0 7.2
     $0 7.3
+    $0 7.4
     exit 0;
     ;;
 *)

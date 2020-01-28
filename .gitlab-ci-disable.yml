@@ -73,6 +73,11 @@ build:73:
   script:
     - di_disable_push=1 ./docker-build.sh 7.3
 
+build:74:
+  <<: *template_build
+  script:
+    - di_disable_push=1 ./docker-build.sh 7.4
+
 push:nothing:
   <<: *template
   stage: push

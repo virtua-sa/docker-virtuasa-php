@@ -160,8 +160,30 @@ if [[ "${NPM_AUTO_INSTALL}" = "true" ]]; then
     [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install || echo "Ignore npm install Errors"
 fi
 
-# Configure SSMTP
-if [[ -n "${SSMTP_MAILHUB}" ]]; then
+# configure msmtp or ssmtp
+if hash msmtp 2>/dev/null; then
+    file=/etc/msmtp.conf
+    echo "account default" | sudo tee ${file} > /dev/null
+    echo "add_missing_from_header on" | sudo tee --append ${file} > /dev/null
+
+    if [[ -n "${SSMTP_MAILHUB}" ]]; then
+      host="$(echo ${SSMTP_MAILHUB} | sed -e 's,:.*,,g')"
+      port="$(echo ${SSMTP_MAILHUB} | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+      [[ -z "$port" ]] && port=25
+      echo "host $host" | sudo tee --append ${file} > /dev/null
+      echo "port $port" | sudo tee --append ${file} > /dev/null
+    fi
+
+    [[ -n "${SSMTP_AUTH_USER}" ]] && echo "user ${SSMTP_AUTH_USER}" | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_AUTH_PASS}" ]] && echo "password ${SSMTP_AUTH_PASS}" | sudo tee --append ${file} > /dev/null
+
+    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "domain ${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "maildomain ${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
+    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "from docker@${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
+
+    echo "sendmail_path = \"msmtp -C ${file}\"" >> /etc/php${PHP_VERSION_DIR}/conf.d/msmtp.ini
+
+elif [[ -n "${SSMTP_MAILHUB}" ]]; then
     file=/etc/ssmtp/ssmtp.conf
     echo "" | sudo tee ${file} > /dev/null
 

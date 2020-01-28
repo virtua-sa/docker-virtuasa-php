@@ -11,7 +11,7 @@ git-svn
 gnupg
 htop
 mc
-mysql-client
+default-mysql-client
 nano
 nginx
 rsync
@@ -21,7 +21,7 @@ sudo
 unzip
 vim
 wget
-ssmtp
+msmtp
 strace
 swaks
 make

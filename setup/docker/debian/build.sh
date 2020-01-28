@@ -46,7 +46,7 @@ fi
 
 # Use Sury repository, to get PHP 7+ on Debian 9
 if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    echo "deb https://packages.sury.org/php/ stretch main" > /etc/apt/sources.list.d/php.list
+    echo "deb https://packages.sury.org/php/ ${FROM_VERSION} main" > /etc/apt/sources.list.d/php.list
     ${WGET} https://packages.sury.org/php/apt.gpg | apt-key add -
 fi
 
