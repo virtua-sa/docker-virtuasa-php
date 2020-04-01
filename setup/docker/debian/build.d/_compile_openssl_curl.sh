@@ -6,7 +6,7 @@ apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev info
 apt-get -y --force-yes remove curl
 
 echo "Build OpenSSL..."
-tar xfz /setup/tmp/OpenSSL_*
+tar xfz /setup/tmp/openssl-*
 cd openssl-*
 ./config --prefix=/usr zlib-dynamic --openssldir=/etc/ssl shared > log-file 2>&1 || (cat log-file; exit 1)
 make > log-file 2>&1 || (cat log-file; exit 1)

@@ -153,7 +153,7 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
 grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path}/build.log || exit 1;
 
 copyTestSrc() {
-    rm -rf tests/tmp${1} || sudo rm -rf tests/tmp${1}
+    rm -rf tests/tmp${1} > /dev/null 2>&1 || sudo rm -rf tests/tmp${1}
     cp -r tests/src tests/tmp${1}
     if [ -d "tests/src.d/${1}/" ]; then
        cp -r tests/src.d/${1}/* tests/tmp${1}/
@@ -286,7 +286,7 @@ docker exec virtuasa-php-${df_php_version}-dev-build sudo chown -R docker:docker
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-nginx.log
 docker rm virtuasa-php-${df_php_version}-dev-build
-rm -rf tests/tmp${df_php_version}
+rm -rf tests/tmp${df_php_version} > /dev/null 2>&1 || sudo rm -rf tests/tmp${df_php_version}
 
 echo "Build finished :-)"
 
