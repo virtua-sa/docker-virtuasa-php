@@ -49,9 +49,7 @@ ENV LANG=C.UTF-8 \
     DOCKER_DEBUG="" \
     DOCKER_FROM_COMMIT="${DOCKER_FROM_COMMIT}" \
     DOCKER_FROM_IMAGE="${FROM_IMAGE}" \
-    DOCKER_HOST_GID="" \
     DOCKER_HOST_SETUP_DIR="setup" \
-    DOCKER_HOST_UID="" \
     DOCKER_MKDIR="" \
     DOCKER_TIMEZONE="Europe/Zurich" \
     DOCKER_WEB_SERVER="apache" \
@@ -67,6 +65,7 @@ ENV LANG=C.UTF-8 \
     PHP_VERSION_DIR="${PHP_VERSION_DIR}" \
     PHP_XDEBUG_HTTP_AUTOSTART="0" \
     PHP_XDEBUG_CLI_AUTOSTART="0" \
+    SSMTP_MAILHUB="smtp.docker" \
     XHGUI_ACTIVE="false" \
     XHGUI_BASE_DIR="/xhgui" \
     XHGUI_DB_ENSURE="false" \
@@ -94,10 +93,10 @@ VOLUME ${DOCKER_BASE_DIR}
 # Expose ports
 EXPOSE 80 443 9000
 
-# Entrypoint to switch UID GID and run as docker
-ENTRYPOINT [ "/setup/run/docker-entrypoint.sh" ]
+USER docker:docker
 
-USER docker
+# Entrypoint to switch UID GID using FIXUID & FIXGUID
+ENTRYPOINT ["fixuid", "-q"]
 
 # Run the default script on startup
 CMD [ "/setup/run/start.sh" ]

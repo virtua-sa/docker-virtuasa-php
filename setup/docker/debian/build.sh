@@ -363,16 +363,26 @@ mkdir -p "${DOCKER_BASE_DIR}"
 chmod -R 755 "${DOCKER_BASE_DIR}"
 
 # Create a non privileged user
-useradd --create-home --groups sudo --shell /bin/bash docker
+# DEV Enable support of FIXUID
+USER=docker
+GROUP=docker
+groupadd -g 1000 ${GROUP}
+useradd -u 1000 -g ${GROUP} -g sudo -d /home/${USER} -s /bin/sh ${USER} && \
+curl -SsL https://github.com/boxboat/fixuid/releases/download/v0.4/fixuid-0.4-linux-amd64.tar.gz | tar -C /usr/local/bin -xzf -
+chown root:root /usr/local/bin/fixuid
+chmod 4755 /usr/local/bin/fixuid
+mkdir -p /etc/fixuid
+printf "user: ${USER}\ngroup: ${GROUP}\npaths:\n  - /home\n" > /etc/fixuid/config.yml
+mkdir -p /home/${USER}
+chown ${USER}:${GROUP} /home/${USER}
+
 if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
     echo "docker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 else
     echo "docker ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/docker
     chmod 440 /etc/sudoers.d/docker
 fi
-adduser docker www-data
-adduser www-data docker
-chown docker "${DOCKER_BASE_DIR}"
+adduser ${USER} www-data
 
 # Clean all unecessary files (doc)
 find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true

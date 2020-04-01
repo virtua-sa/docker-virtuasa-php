@@ -127,7 +127,7 @@ echo "df_php_version_dir=${df_php_version_dir}"
 # Log all build details
 db_build_date="$(date --iso-8601=seconds)"
 db_build_path="builds/${df_php_version}-$(date +%Y%m%d)"
-rm -rf ${db_build_path}
+rm -rf ${db_build_path} || sudo rm -rf ${db_build_path}
 mkdir -p ${db_build_path}
 
 # Build the image and tag it
@@ -153,13 +153,20 @@ docker build --tag virtuasa/php:${df_php_version}-dev \
 grep -q "Successfully tagged virtuasa/php:${df_php_version}-dev" ${db_build_path}/build.log || exit 1;
 
 copyTestSrc() {
-    rm -rf tests/tmp${1}
+    rm -rf tests/tmp${1} || sudo rm -rf tests/tmp${1}
     cp -r tests/src tests/tmp${1}
     if [ -d "tests/src.d/${1}/" ]; then
        cp -r tests/src.d/${1}/* tests/tmp${1}/
     fi
     chmod -R a+rwX tests/tmp${1}
 }
+
+err_docker_log() {
+    echo "FINISH WITH ERROR !!!"
+    # docker logs virtuasa-php-${df_php_version}-dev-build
+}
+trap 'err_docker_log' ERR
+
 # Test the image built with Apache
 cat <<"EOF"
   _____         _                _                     _
@@ -179,11 +186,9 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_COPY_CONFIG_FROM_HOST="true" \
     --env DOCKER_COPY_CONFIG_TO_HOST="true" \
     --env DOCKER_DEBUG=1 \
-    --env DOCKER_HOST_GID=$(id -g) \
-    --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="apache" \
     --env HOSTNAME_LOCAL_ALIAS="alias1.test,alias2.test" \
-    --env SSMTP_MAILHUB="mail.docker" \
+    --env SSMTP_MAILHUB="smtp.docker" \
     virtuasa/php:${df_php_version}-dev
 sleep 20s
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1
@@ -200,7 +205,7 @@ di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-de
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 docker exec virtuasa-php-${df_php_version}-dev-build php web/phpinfo.php > ${db_build_path}/phpinfo-cli.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-apache.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
-docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker logs -t virtuasa-php-${df_php_version}-dev-build
+docker exec virtuasa-php-${df_php_version}-dev-build sudo apt list --installed > ${db_build_path}/apt.log || docker exec virtuasa-php-${df_php_version}-dev-build sudo dpkg --get-selections | grep -v deinstall > ${db_build_path}/dpkg.log
 # Run distribution version hook
 if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
    ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
@@ -232,8 +237,6 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --name virtuasa-php-${df_php_version}-dev-build \
     --env DOCKER_CHMOD_666="read.txt" \
     --env DOCKER_CHMOD_777="." \
-    --env DOCKER_HOST_GID=$(id -g) \
-    --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="apache" \
     virtuasa/php:${df_php_version}-dev
 sleep 20s
@@ -264,8 +267,6 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_CHMOD_666="read.txt" \
     --env DOCKER_CHMOD_777="." \
     --env DOCKER_DEBUG=1 \
-    --env DOCKER_HOST_GID=$(id -g) \
-    --env DOCKER_HOST_UID=$(id -u) \
     --env DOCKER_WEB_SERVER="nginx" \
     virtuasa/php:${df_php_version}-dev
 sleep 20s
@@ -281,6 +282,7 @@ di_check="$(docker exec virtuasa-php-${df_php_version}-dev-build php web/test-io
 di_check="$(curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/test-io.php")"
 [[ ! "${di_check}" =~ ^S+$ ]] && echo "${LINE_NO} Unexpected value: ${di_check}" && exit 1;
 curl -sSL "http://$(docker inspect virtuasa-php-${df_php_version}-dev-build | jq '.[].NetworkSettings.Networks.bridge.IPAddress' | sed 's/"//g')/phpinfo.php" > ${db_build_path}/phpinfo-nginx.log
+docker exec virtuasa-php-${df_php_version}-dev-build sudo chown -R docker:docker /data
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-nginx.log
 docker rm virtuasa-php-${df_php_version}-dev-build

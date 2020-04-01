@@ -92,12 +92,10 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `DOCKER_CUSTOM_START`           | `docker-start.sh`                         | Execute script just before starting web server \*
 | `DOCKER_CUSTOM_STOP`            | `docker-stop.sh`                          | Execute script before shutting down \*
 | `DOCKER_DEBUG`                  | ` ` *(empty)*                             | Enable debug output if any value is set
-| `DOCKER_HOST_GID`               | ` ` *(empty)*                             | `chown` the mount path to given GID (see `id -g`) if set \***
 | `DOCKER_HOST_SETUP_DIR`         | `setup`                                   | Path of the setup configuration files on the host \*
-| `DOCKER_HOST_UID`               | ` ` *(empty)*                             | `chown` the mount path to given UID (see `id -u`) if set \***
 | `DOCKER_MKDIR`                  | ` ` *(empty)*                             | Create requested directories using `mkdir -p` if set \*
-| `DOCKER_DEV_UID`                | ` ` *(empty)*                             | docker user UID (see `id -u` in you host) must be set to UID of the developer
-| `DOCKER_DEV_GID`                | ` ` *(empty)*                             | docker user GID (see `id -g` in you host) must be set to GID of the developer
+| `FIXUID`                        | `1000`                                    | docker user UID (see `id -u` in you host) must be set to UID of the developer \***
+| `FIXGID`                        | `1000`                                    | docker user GID (see `id -g` in you host) must be set to GID of the developer \***
 | `DOCKER_TIMEZONE`               | `Europe/Zurich`                           | Time zone of the Docker container
 | `DOCKER_WEB_SERVER`             | `apache`                                  | Web server to use, can be either `apache` or `nginx`
 | `NGINX_DOCUMENT_ROOT`           | `web`                                     | Path to the Nginx document root folder \*
@@ -109,7 +107,7 @@ To customize these setup on your projects, changes must only be done to file [`d
 | `PHP_MEMORY_LIMIT_CLI`          | `512M`                                    | Maximum amount of memory a PHP script running on CLI may consume
 | `PHP_XDEBUG_APACHE_AUTOSTART`   | `0`                                       | Force activation of PHP XDebug on Apache if set to `1`
 | `PHP_XDEBUG_CLI_AUTOSTART`      | `0`                                       | Force activation of PHP XDebug on CLI if set to `1`
-| `SSMTP_MAILHUB`                 | ` ` *(empty)*                             | The host to send mail to, in the form host IP_addr[:port]. The default port is 25.
+| `SSMTP_MAILHUB`                 | `smtp.docker`                             | The host to send mail to, in the form host IP_addr[:port]. The default port is 25.
 | `SSMTP_AUTH_USER`               | ` ` *(empty)*                             | The user name to use for SMTP AUTH. The default is blank, in which case SMTP AUTH is not used. sent without
 | `SSMTP_AUTH_PASS`               | ` ` *(empty)*                             | The password to use for SMTP AUTH.
 | `SSMTP_AUTH_METHOD`             | ` ` *(empty)*                             | The authorization method to use. If unset, plain text is used. May also be set to “cram-md5”.
@@ -131,7 +129,18 @@ To customize these setup on your projects, changes must only be done to file [`d
 
 \*\* *Path is absolute in the Docker container, don't forget to add the path of the mount path if needed.*
 
-\*\*\* *`DOCKER_HOST_GID` and `DOCKER_HOST_UID` must be both empty or both have a value.*
+\*\*\* *`FIXUID` and `FIXGID` must be set globaly host side.*
+
+### FIXUID and FIXGID
+
+If you host linux user don't have the id 1000 (check with `id`), please set the globals variables to your session :
+ ```bash
+    printf "FIXUID=`id -u`\nFIXGID=`id -g`" >> ~/.profile
+```    
+When using docker-compose file, set `user` parameter for the container like that :
+```yaml
+    user: ${FIXUID:-1000}:${FIXGID:-1000}
+```
 
 ### Readonly environment variables
 

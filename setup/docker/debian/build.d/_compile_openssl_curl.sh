@@ -6,23 +6,25 @@ apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev info
 apt-get -y --force-yes remove curl
 
 echo "Build OpenSSL..."
-tar xfz /setup/tmp/openssl-*
+tar xfz /setup/tmp/OpenSSL_*
 cd openssl-*
-./config --prefix=/usr zlib-dynamic --openssldir=/etc/ssl shared > log-file 2>&1
-make > log-file 2>&1
-make install > log-file 2>&1
+./config --prefix=/usr zlib-dynamic --openssldir=/etc/ssl shared > log-file 2>&1 || (cat log-file; exit 1)
+make > log-file 2>&1 || (cat log-file; exit 1)
+make install > log-file 2>&1 || (cat log-file; exit 1)
+appdir=$(pwd)
 cd ..
-rm -Rf openssl-*
+rm -Rf "${appdir}"
 openssl version
 
 echo "Build Curl..."
 tar xfz /setup/tmp/curl-*
 cd curl-*
-./configure --disable-shared > log-file 2>&1
-make > log-file 2>&1
-make install > log-file 2>&1
+./configure --disable-shared > log-file 2>&1 || (cat log-file; exit 1)
+make > log-file 2>&1 || (cat log-file; exit 1)
+make install > log-file 2>&1 || (cat log-file; exit 1)
+appdir=$(pwd)
 cd ..
-rm -Rf curl-*
+rm -Rf "${appdir}"
 ln -s /usr/local/bin/curl /usr/bin/curl
 curl --version
 

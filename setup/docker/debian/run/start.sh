@@ -68,10 +68,6 @@ fi
 # Enable some shell options
 shopt -s extglob
 
-# Force the UID/GID of the docker container running user
-[[ -n "${DOCKER_USER_UID}" ]] && usermod -u ${DOCKER_USER_UID} docker
-[[ -n "${DOCKER_USER_GID}" ]] && groupmod -u ${DOCKER_USER_GID} docker && usermod -g ${DOCKER_USER_GID} docker
-
 # Copy Apache configuration files
 sudo rm -rf /etc/apache2/sites-available/*
 sudo cp -r /setup/apache/* /etc/apache2
@@ -124,6 +120,7 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
             sudo cp -nr "${XHGUI_BASE_DIR}/config/"* "${DOCKER_HOST_SETUP_DIR}/php/xhgui"
         fi
     fi
+    sudo chown -R docker:docker "${DOCKER_HOST_SETUP_DIR}"
 fi
 
 # Copy image's configuration files from host filesystem
@@ -137,9 +134,6 @@ if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
         sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/xhgui/"* "${XHGUI_BASE_DIR}/config/" || true
     fi
 fi
-
-# Chown the mount directory
-[[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}"
 
 # Create the requested directories
 [[ -n "${DOCKER_MKDIR}" ]] && sudo mkdir -p ${DOCKER_MKDIR}
@@ -181,7 +175,10 @@ if hash msmtp 2>/dev/null; then
     [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "maildomain ${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
     [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "from docker@${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
 
-    echo "sendmail_path = \"msmtp -C ${file}\"" >> /etc/php${PHP_VERSION_DIR}/conf.d/msmtp.ini
+    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cli/conf.d/msmtp.ini
+    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/apache2/conf.d/msmtp.ini
+    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/fpm/conf.d/msmtp.ini
+    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cgi/conf.d/msmtp.ini
 
 elif [[ -n "${SSMTP_MAILHUB}" ]]; then
     file=/etc/ssmtp/ssmtp.conf
@@ -316,9 +313,6 @@ if [[ "${DOCKER_COPY_IP_TO_HOST}" = "true" ]]; then
     sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
     echo "${IP}" | sudo tee "${DOCKER_HOST_SETUP_DIR}/docker/ip" > /dev/null
 fi
-
-# Chown the mount dir after Apache has started
-(sleep 5s; [[ -n "${DOCKER_HOST_UID}" ]] && [[ -n "${DOCKER_HOST_GID}" ]] && sudo chown -R ${DOCKER_HOST_UID}:${DOCKER_HOST_GID} "${DOCKER_BASE_DIR}") &
 
 # Start web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
