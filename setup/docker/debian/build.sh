@@ -100,7 +100,7 @@ fi
 
 #Install Ruby and Capistrano BUG on capistrano install
 if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-    apt-get install -y --force-yes --fix-missing --no-install-recommends ruby
+    DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes --fix-missing --no-install-recommends ruby
     if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie ]]; then
         # in case of jessie upgrade ruby to 2.3.3
         wget -O ruby-install-0.7.0.tar.gz https://github.com/postmodern/ruby-install/archive/v0.7.0.tar.gz
@@ -255,7 +255,7 @@ fi
 #fi
 
 # Install PHPUnit
-if [[ "${PHP_VERSION}" =~ ^7\.[23456] ]]; then
+if [[ "${PHP_VERSION}" =~ ^7\.[3456] ]]; then
     ${WGET} https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
     echo -n "phpunit --version : " && phpunit --version
 fi

@@ -2,8 +2,9 @@
 set -xe
 
 # install OpenSSL 1.0.1
-apt-get upgrade -y --force-yes && apt-get install -y --force-yes libssl-dev info2man curl
-apt-get -y --force-yes remove curl
+DEBIAN_FRONTEND=noninteractive apt-get upgrade -y --force-yes
+DEBIAN_FRONTEND=noninteractive apt-get install -y --force-yes libssl-dev info2man curl
+DEBIAN_FRONTEND=noninteractive apt-get -y --force-yes remove curl
 
 echo "Build OpenSSL..."
 tar xfz /setup/tmp/openssl-*
@@ -28,6 +29,6 @@ rm -Rf "${appdir}"
 ln -s /usr/local/bin/curl /usr/bin/curl
 curl --version
 
-apt-get purge -y --force-yes libssl-dev info2man
+DEBIAN_FRONTEND=noninteractive apt-get purge -y --force-yes libssl-dev info2man
 
 exit 0
