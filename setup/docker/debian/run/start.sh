@@ -321,24 +321,6 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     else
         exec sudo /usr/sbin/apache2ctl -D FOREGROUND
     fi
-    cat <<EOT | sudo tee /usr/local/bin/xenable
-#!/bin/sh
-sudo phpenmod xdebug; sudo /usr/sbin/apache2ctl graceful
-EOT
-    cat <<EOT | sudo tee /usr/local/bin/xdisable
-#!/bin/sh
-sudo phpdismod xdebug; sudo /usr/sbin/apache2ctl graceful
-EOT
-    sudo chmod a+x /usr/local/bin/xenable /usr/local/bin/xdisable
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
-    cat <<EOT | sudo tee /usr/local/bin/xenable
-#!/bin/sh
-sudo phpenmod xdebug; sudo service php7.2-fpm restart
-EOT
-    cat <<EOT | sudo tee /usr/local/bin/xdisable
-#!/bin/sh
-sudo phpdismod xdebug; sudo service php7.2-fpm restart
-EOT
-    sudo chmod a+x /usr/local/bin/xenable /usr/local/bin/xdisable
     exec sudo nginx
 fi

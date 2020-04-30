@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+
+sudo phpenmod xdebug
+
+if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
+  sudo /usr/sbin/apache2ctl graceful
+elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
+  sudo service php${PHP_VERSION_APT}-fpm restart
+fi
+
+echo "Xdebug was enabled"
