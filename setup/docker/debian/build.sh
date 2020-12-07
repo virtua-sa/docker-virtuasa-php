@@ -72,8 +72,8 @@ fi
 
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
     # Use Tideways pre-compiled packages
-    echo "deb http://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages debian main" > /etc/apt/sources.list.d/tideways.list
-    ${WGET} https://s3-eu-west-1.amazonaws.com/qafoo-profiler/packages/EEB5E8F4.gpg | apt-key add -
+    echo 'deb https://packages.tideways.com/apt-packages debian main' | sudo tee /etc/apt/sources.list.d/tideways.list
+    ${WGET} https://packages.tideways.com/key.gpg | sudo apt-key add -
 fi
 
 # Update APT and list all available PHP packages
