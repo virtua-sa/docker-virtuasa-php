@@ -70,11 +70,11 @@ if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
     ${WGET} https://deb.nodesource.com/setup_8.x | bash -
 fi
 
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    # Use Tideways pre-compiled packages
-    echo 'deb https://packages.tideways.com/apt-packages debian main' | sudo tee /etc/apt/sources.list.d/tideways.list
-    ${WGET} https://packages.tideways.com/key.gpg | sudo apt-key add -
-fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
+#    # Use Tideways pre-compiled packages
+#    echo 'deb https://packages.tideways.com/apt-packages debian main' | sudo tee /etc/apt/sources.list.d/tideways.list
+#    ${WGET} https://packages.tideways.com/key.gpg | sudo apt-key add -
+#fi
 
 # Update APT and list all available PHP packages
 apt-get update
@@ -132,15 +132,15 @@ cp ${BASE_PATH}/bash_completion.d/* /etc/bash_completion.d
 ${WGET} https://github.com/hiteshjasani/nim-mungehosts/releases/download/v0.1.1/mungehosts > /usr/local/bin/mungehosts && chmod 755 /usr/local/bin/mungehosts
 
 # Install Behat
-if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
-    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
-    echo -n "behat --version : " && behat --version
-    rm -rf /tmp/behat_gherkin_cache
-elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
-    echo -n "behat --version : " && behat --version
-    rm -rf /tmp/behat_gherkin_cache
-fi
+#if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
+#    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
+#    echo -n "behat --version : " && behat --version
+#    rm -rf /tmp/behat_gherkin_cache
+#elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
+#    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
+#    echo -n "behat --version : " && behat --version
+#    rm -rf /tmp/behat_gherkin_cache
+#fi
 
 # Install Composer
 if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
