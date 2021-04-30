@@ -194,10 +194,10 @@ if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
 fi
 
 # Install PHP Copy/Paste Detector (PHPCPD)
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    ${WGET} https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
-    echo -n "phpcpd --version : " && phpcpd --version
-fi
+#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+#    ${WGET} https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
+#    echo -n "phpcpd --version : " && phpcpd --version
+#fi
 
 # Install PHP_Depend
 #if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
