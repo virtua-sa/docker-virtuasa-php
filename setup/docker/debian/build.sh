@@ -230,8 +230,12 @@ fi
 #fi
 
 # Install PHPLOC
-if [[ "${PHP_VERSION}" =~ ^((7\.[23])) ]]; then
-    ${WGET} https://phar.phpunit.de/phploc.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
+if [[ "${PHP_VERSION}" =~ ^((7\.[3])) ]]; then
+    ${WGET} https://phar.phpunit.de/phploc-6.0.2.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
+    echo -n "phploc --version : " && phploc --version
+fi
+if [[ "${PHP_VERSION}" =~ ^((7\.[2])) ]]; then
+    ${WGET} https://phar.phpunit.de/phploc-5.0.0.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
     echo -n "phploc --version : " && phploc --version
 fi
 if [[ "${PHP_VERSION}" =~ ^((7\.[01])|(5\.[6])) ]]; then
