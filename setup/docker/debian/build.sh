@@ -169,7 +169,7 @@ fi
 
 # Install PHP Coding Standards Fixer
 if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    ${WGET} https://cs.sensiolabs.org/download/php-cs-fixer-v2.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
+    ${WGET} https://cs.symfony.com/download/php-cs-fixer-v2.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
     echo -n "php-cs-fixer -V : " && php-cs-fixer -V
 fi
 
