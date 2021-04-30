@@ -230,21 +230,13 @@ fi
 #fi
 
 # Install PHPLOC
-if [[ "${PHP_VERSION}" =~ ^((7\.[3])) ]]; then
-    ${WGET} https://phar.phpunit.de/phploc-6.0.2.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
-    echo -n "phploc --version : " && phploc --version
-fi
-if [[ "${PHP_VERSION}" =~ ^((7\.[2])) ]]; then
-    ${WGET} https://phar.phpunit.de/phploc-5.0.0.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
-    echo -n "phploc --version : " && phploc --version
-fi
 if [[ "${PHP_VERSION}" =~ ^((7\.[01])|(5\.[6])) ]]; then
     ${WGET} https://phar.phpunit.de/phploc-4.0.1.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
     echo -n "phploc --version : " && phploc --version
 fi
 
 # Install PHP Mess Detector (PHPMD)
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
+if [[ "${PHP_VERSION}" =~ ^(5\.[3456]) ]]; then
     ${WGET} https://github.com/phpmd/phpmd/releases/download/2.6.1/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
     echo -n "phpmd --version : " && phpmd --version
 fi
