@@ -73,6 +73,13 @@ build:8.0:
   script:
     - ./gitlab-ci.sh 8.0
 
+clean:soft:
+  <<: *template
+  stage: clean
+  when: manual
+  script:
+    - ./docker-clean.sh all
+
 clean:hard:
   <<: *template
   stage: clean
