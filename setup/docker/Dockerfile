@@ -65,13 +65,7 @@ ENV LANG=C.UTF-8 \
     PHP_VERSION_DIR="${PHP_VERSION_DIR}" \
     PHP_XDEBUG_HTTP_AUTOSTART="0" \
     PHP_XDEBUG_CLI_AUTOSTART="0" \
-    SSMTP_MAILHUB="smtp.docker" \
-    XHGUI_ACTIVE="false" \
-    XHGUI_BASE_DIR="/xhgui" \
-    XHGUI_DB_ENSURE="false" \
-    XHGUI_DB_HOST="" \
-    XHGUI_DB_NAME="" \
-    XHGUI_SERVER_NAME="xhgui.${APACHE_SERVER_NAME}"
+    SSMTP_MAILHUB="smtp.docker"
 
 # Copy the needed shell scripts
 COPY ./setup/ /setup/

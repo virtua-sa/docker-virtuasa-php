@@ -45,7 +45,7 @@ if [[ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]]; then
 fi
 
 # Use Sury repository, to get PHP 7+ on Debian 9
-if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
+if [[ "${PHP_VERSION}" =~ ^(7|8)\. ]]; then
     echo "deb https://packages.sury.org/php/ ${FROM_VERSION} main" > /etc/apt/sources.list.d/php.list
     ${WGET} https://packages.sury.org/php/apt.gpg | apt-key add -
 fi
@@ -55,26 +55,6 @@ if [[ "${PHP_VERSION}" = "5.5" ]]; then
     echo "deb http://packages.dotdeb.org wheezy-php55 all" > /etc/apt/sources.list.d/dotdeb.list
     ${WGET} https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 fi
-
-# Use Yarnpkg repository, to get Yarn on Debian
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-    echo "deb https://dl.yarnpkg.com/debian/ stable main" > /etc/apt/sources.list.d/yarn.list
-    ${WGET} https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
-fi
-
-# Use Nodesource, to get Node.js on Debian
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy ]]; then
-    ${WGET} https://deb.nodesource.com/setup_6.x | bash -
-fi
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ jessie|stretch ]]; then
-    ${WGET} https://deb.nodesource.com/setup_8.x | bash -
-fi
-
-#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-#    # Use Tideways pre-compiled packages
-#    echo 'deb https://packages.tideways.com/apt-packages debian main' | sudo tee /etc/apt/sources.list.d/tideways.list
-#    ${WGET} https://packages.tideways.com/key.gpg | sudo apt-key add -
-#fi
 
 # Update APT and list all available PHP packages
 apt-get update
@@ -131,166 +111,15 @@ cp ${BASE_PATH}/bash_completion.d/* /etc/bash_completion.d
 # mungehosts
 ${WGET} https://github.com/hiteshjasani/nim-mungehosts/releases/download/v0.1.1/mungehosts > /usr/local/bin/mungehosts && chmod 755 /usr/local/bin/mungehosts
 
-# Install Behat
-#if [[ "${PHP_VERSION}" =~ ^(5\.[5]) ]]; then
-#    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
-#    echo -n "behat --version : " && behat --version
-#    rm -rf /tmp/behat_gherkin_cache
-#elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-#    ${WGET} https://github.com/Behat/Behat/releases/download/v3.3.0/behat.phar > /usr/local/bin/behat && chmod a+x /usr/local/bin/behat
-#    echo -n "behat --version : " && behat --version
-#    rm -rf /tmp/behat_gherkin_cache
-#fi
-
 # Install Composer
 if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
     ${WGET} https://getcomposer.org/installer | php -- --disable-tls && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
     # git config --global --unset http.sslVersion || echo "http.sslVersion not set"
     # git config --global --add http.sslVersion tlsv1.2
-elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[6])) ]]; then
+else
     ${WGET} https://getcomposer.org/installer | php && mv composer.phar /usr/local/bin/composer
     echo -n "composer --version : " && composer --version
-fi
-
-# Install DbUnit
-if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    ${WGET} https://phar.phpunit.de/dbunit.phar > /usr/local/bin/dbunit && chmod a+x /usr/local/bin/dbunit
-fi
-
-# Install Phing
-if [[ "${PHP_VERSION}" =~ ^(5\.[345]) ]]; then
-    ${WGET} https://www.phing.info/get/phing-2.16.0.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
-    echo -n "phing -version : " && phing -version
-elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    ${WGET} https://www.phing.info/get/phing-latest.phar > /usr/local/bin/phing && chmod a+x /usr/local/bin/phing
-    echo -n "phing -version : " && phing -version
-fi
-
-# Install PHP Coding Standards Fixer
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    ${WGET} https://cs.symfony.com/download/php-cs-fixer-v2.phar > /usr/local/bin/php-cs-fixer && chmod a+x /usr/local/bin/php-cs-fixer
-    echo -n "php-cs-fixer -V : " && php-cs-fixer -V
-fi
-
-# Install PHP Static Analysis Tool
-#if [[ "${PHP_VERSION}" =~ ^(7\.0) ]]; then
-#    ${WGET} https://github.com/phpstan/phpstan-shim/blob/0.9.2/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
-#    echo -n "phpstan -V : " && phpstan -V
-#elif [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
-#    LAST_VERSION=$(curl -H "Authorization: token ${GITHUB_TOKEN}" --silent "https://api.github.com/repos/phpstan/phpstan-shim/releases/latest" | grep -Po '"tag_name": "\K.*?(?=")')
-#    ${WGET} https://github.com/phpstan/phpstan-shim/blob/${LAST_VERSION}/phpstan.phar?raw=true > /usr/local/bin/phpstan.phar && chmod a+x /usr/local/bin/phpstan.phar
-#    echo -n "phpstan -V : " && phpstan -V
-#else
-#    rm -f /usr/local/bin/phpstan
-#fi
-
-# Install PHP_CodeSniffer
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-    ${WGET} https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar > /usr/local/bin/phpcs && chmod a+x /usr/local/bin/phpcs
-    echo -n "phpcs --version : " && phpcs --version
-    ${WGET} https://squizlabs.github.io/PHP_CodeSniffer/phpcbf.phar > /usr/local/bin/phpcbf && chmod a+x /usr/local/bin/phpcbf
-    echo -n "phpcbf --version : " && phpcbf --version
-fi
-
-# Install PHP Copy/Paste Detector (PHPCPD)
-#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-#    ${WGET} https://github.com/sebastianbergmann/phpcpd/releases/download/2.0.0/phpcpd.phar > /usr/local/bin/phpcpd && chmod a+x /usr/local/bin/phpcpd
-#    echo -n "phpcpd --version : " && phpcpd --version
-#fi
-
-# Install PHP_Depend
-#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-#    ${WGET} http://static.pdepend.org/php/latest/pdepend.phar > /usr/local/bin/pdepend && chmod a+x /usr/local/bin/pdepend
-#    echo -n "pdepend --version : " && pdepend --version
-#fi
-
-# Install phpDocumentor
-#if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[456])) ]]; then
-#    ${WGET} http://phpdoc.org/phpDocumentor.phar > /usr/local/bin/phpdoc && chmod a+x /usr/local/bin/phpdoc
-#    echo -n "phpdoc --version : " && phpdoc --version
-#fi
-
-# Install phpdox
-#if [[ "${PHP_VERSION}" =~ ^((7\.[123])) ]]; then
-#    ${WGET} http://phpdox.de/releases/phpdox.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-#    echo -n "phpdox --version : " && phpdox --version
-#fi
-#if [[ "${PHP_VERSION}" =~ ^((7\.0)|(5\.[56])) ]]; then
-#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.11.2/phpdox-0.11.2.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-#    echo -n "phpdox --version : " && phpdox --version
-#fi
-#if [[ "${PHP_VERSION}" =~ ^5\.4 ]]; then
-#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.9.0/phpdox-0.9.0.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-#    echo -n "phpdox --version : " && phpdox --version
-#fi
-#if [[ "${PHP_VERSION}" =~ ^5\.3 ]]; then
-#    ${WGET} https://github.com/theseer/phpdox/releases/download/0.8.1.1/phpdox-0.8.1.1.phar > /usr/local/bin/phpdox && chmod a+x /usr/local/bin/phpdox
-#    echo -n "phpdox --version : " && phpdox --version
-#fi
-
-# Install PHPLOC
-if [[ "${PHP_VERSION}" =~ ^((7\.[01])|(5\.[6])) ]]; then
-    ${WGET} https://phar.phpunit.de/phploc-4.0.1.phar > /usr/local/bin/phploc && chmod a+x /usr/local/bin/phploc
-    echo -n "phploc --version : " && phploc --version
-fi
-
-# Install PHP Mess Detector (PHPMD)
-if [[ "${PHP_VERSION}" =~ ^(5\.[3456]) ]]; then
-    ${WGET} https://github.com/phpmd/phpmd/releases/download/2.6.1/phpmd.phar > /usr/local/bin/phpmd && chmod a+x /usr/local/bin/phpmd
-    echo -n "phpmd --version : " && phpmd --version
-fi
-
-# Install PhpMetrics
-#if [[ "${PHP_VERSION}" =~ ^(5\.[4]) ]]; then
-#    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.0.0/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
-#    echo -n "phpmetrics --version : " && phpmetrics --version
-#elif [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-#    ${WGET} https://github.com/phpmetrics/PhpMetrics/releases/download/v2.3.2/phpmetrics.phar > /usr/local/bin/phpmetrics && chmod a+x /usr/local/bin/phpmetrics
-#    echo -n "phpmetrics --version : " && phpmetrics --version
-#fi
-
-# Install PHPUnit
-if [[ "${PHP_VERSION}" =~ ^7\.[3456] ]]; then
-    ${WGET} https://phar.phpunit.de/phpunit.phar > /usr/local/bin/phpunit && chmod a+x /usr/local/bin/phpunit
-    echo -n "phpunit --version : " && phpunit --version
-fi
-if [[ "${PHP_VERSION}" =~ ^7\.[123456] ]]; then
-    ${WGET} https://phar.phpunit.de/phpunit-7.5.phar > /usr/local/bin/phpunit75 && chmod a+x /usr/local/bin/phpunit75
-    echo -n "phpunit75 --version : " && phpunit75 --version
-fi
-if [[ "${PHP_VERSION}" =~ ^7\. ]]; then
-    ${WGET} https://phar.phpunit.de/phpunit-6.2.phar > /usr/local/bin/phpunit62 && chmod a+x /usr/local/bin/phpunit62
-    echo -n "phpunit62 --version : " && phpunit62 --version
-fi
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.6)) ]]; then
-    ${WGET} https://phar.phpunit.de/phpunit-5.7.phar > /usr/local/bin/phpunit57 && chmod a+x /usr/local/bin/phpunit57
-    echo -n "phpunit57 --version : " && phpunit57 --version
-fi
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[3456])) ]]; then
-    ${WGET} https://phar.phpunit.de/phpunit-4.8.phar > /usr/local/bin/phpunit48 && chmod a+x /usr/local/bin/phpunit48
-    echo -n "phpunit48 --version : " && phpunit48 --version
-fi
-
-
-# Install XHGUI
-if [[ "${PHP_VERSION}" =~ ^((7\.)|(5\.[56])) ]]; then
-    rm -Rf "${XHGUI_BASE_DIR}"
-    git clone https://github.com/perftools/xhgui.git "${XHGUI_BASE_DIR}" --branch 0.9.0
-    chmod -R 755 "${XHGUI_BASE_DIR}"
-    chmod -R 777 "${XHGUI_BASE_DIR}/cache"
-    if [[ "${PHP_VERSION}" =~ ^(7\.) ]]; then
-        composer require -d "${XHGUI_BASE_DIR}" mongodb/mongodb:1.2
-    else
-        composer install -d "${XHGUI_BASE_DIR}" --ignore-platform-reqs
-    fi
-fi
-
-# Install common Node.js tools
-if [[ "${DOCKER_FROM_IMAGE##*:}" =~ wheezy|jessie|stretch ]]; then
-# BUG on gulp install
-#    npm install -g bower grunt gulp pm2 webpack
-    npm install -g bower grunt pm2 webpack
 fi
 
 # Configure Apache

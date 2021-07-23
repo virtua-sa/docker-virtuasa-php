@@ -3,7 +3,7 @@
 # <https://gitlab.virtua.ch/ddev/tools-docker/tree/master>
 
 web:
-  image: virtuasa/php:7.1
+  image: virtuasa/php:8.0
   environment:
     # @todo: change the following value accordingly to your project settings
     - APACHE_DOCUMENT_ROOT=web
@@ -13,12 +13,6 @@ web:
     - DOCKER_HOST_SETUP_DIR=setup
     - DOCKER_TIMEZONE=Europe/Zurich
     - PHP_LOG_PATH=var/logs
-    # @todo Uncomment these lines to profile the application
-    #- XHGUI_ACTIVE=true
-    #- XHGUI_DB_ENSURE=true
-    #- XHGUI_DB_HOST=mongo:27017
-    #- XHGUI_DB_NAME=myapp
-    #- XHGUI_SERVER_NAME=xhgui.project.customer.docker
   labels:
     # @todo: change the following value accordingly to your project name
     - "com.dnsdock.alias=project.customer.docker"
