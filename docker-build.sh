@@ -5,66 +5,26 @@ set -xe
 
 # Configure the build accordingly to the requested PHP version
 case "$1" in
-5.2)
-    df_from_image="debian/eol:lenny"
-    df_from_distribution="debian"
-    df_from_version="lenny"
-    df_php_version="5.2"
-    df_php_version_apt="5"
-    df_php_version_dir="5"
-    ;;
-5.3)
-    df_from_image="debian/eol:squeeze"
-    df_from_distribution="debian"
-    df_from_version="squeeze"
-    df_php_version="5.3"
-    df_php_version_apt="5"
-    df_php_version_dir="5"
-    ;;
-5.4)
-    df_from_image="debian/eol:wheezy"
-    df_from_distribution="debian"
-    df_from_version="wheezy"
-    df_php_version="5.4"
-    df_php_version_apt="5"
-    df_php_version_dir="5"
-    ;;
-5.5)
-    df_from_image="debian/eol:wheezy"
-    df_from_distribution="debian"
-    df_from_version="wheezy"
-    df_php_version="5.5"
-    df_php_version_apt="5"
-    df_php_version_dir="5"
-    ;;
-5.6)
-    df_from_image="debian:jessie"
-    df_from_distribution="debian"
-    df_from_version="jessie"
-    df_php_version="5.6"
-    df_php_version_apt="5"
-    df_php_version_dir="5"
-    ;;
 7.0)
-    df_from_image="debian:stretch"
+    df_from_image="debian:buster"
     df_from_distribution="debian"
-    df_from_version="stretch"
+    df_from_version="buster"
     df_php_version="7.0"
     df_php_version_apt="7.0"
     df_php_version_dir="/7.0"
     ;;
 7.1)
-    df_from_image="debian:stretch"
+    df_from_image="debian:buster"
     df_from_distribution="debian"
-    df_from_version="stretch"
+    df_from_version="buster"
     df_php_version="7.1"
     df_php_version_apt="7.1"
     df_php_version_dir="/7.1"
     ;;
 7.2)
-    df_from_image="debian:stretch"
+    df_from_image="debian:buster"
     df_from_distribution="debian"
-    df_from_version="stretch"
+    df_from_version="buster"
     df_php_version="7.2"
     df_php_version_apt="7.2"
     df_php_version_dir="/7.2"
@@ -102,11 +62,6 @@ case "$1" in
     df_php_version_dir="/8.1"
     ;;
 all)
-    $0 5.2
-    $0 5.3
-    $0 5.4
-    $0 5.5
-    $0 5.6
     $0 7.0
     $0 7.1
     $0 7.2
@@ -206,7 +161,7 @@ docker run -d -v `pwd`/tests/tmp${df_php_version}:/data \
     --env DOCKER_DEBUG=1 \
     --env DOCKER_WEB_SERVER="apache" \
     --env HOSTNAME_LOCAL_ALIAS="alias1.test,alias2.test" \
-    --env SSMTP_MAILHUB="smtp.docker" \
+    --env SMTP_MAILHUB="smtp.docker" \
     virtuasa/php:${df_php_version}-dev
 sleep 20s
 docker logs -t virtuasa-php-${df_php_version}-dev-build > ${db_build_path}/run-apache.log 2>&1
@@ -229,10 +184,9 @@ if [ -f "${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh" ]; then
    ${BASE_PATH}/build.d/debian-${FROM_VERSION}.sh || exit 1
 fi
 
-if [[ ! "${df_php_version}" =~ ^(5\.[2]) ]]; then
-    docker exec virtuasa-php-${df_php_version}-dev-build php_no_xdebug /usr/local/bin/composer install
-    docker exec virtuasa-php-${df_php_version}-dev-build php_no_xdebug /usr/local/bin/composer check-platform-reqs
-fi
+docker exec virtuasa-php-${df_php_version}-dev-build php /usr/local/bin/composer install
+docker exec virtuasa-php-${df_php_version}-dev-build php /usr/local/bin/composer check-platform-reqs
+
 docker stop virtuasa-php-${df_php_version}-dev-build
 docker logs -t virtuasa-php-${df_php_version}-dev-build  2>&1 > ${db_build_path}/run-apache.log
 docker rm virtuasa-php-${df_php_version}-dev-build

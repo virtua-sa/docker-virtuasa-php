@@ -1,3 +1,4 @@
+#!/bin/bash
 # Virtua Framework doctrine completion.
 
 have doctrine &&
@@ -17,19 +18,33 @@ _doctrine()
     _get_comp_words_by_ref cur prev
 
     for (( i=0; i < ${#COMP_WORDS[@]}-1; i++ )); do
-        if [[ ${COMP_WORDS[i]} == @(generate-models|generate-migrations-diff|generate-migrations-diff-and-migrate|build-module|rebuild-module|migrate|generate-translations|generate-sql-migration) ]]; then
+        if [[ ${COMP_WORDS[i]} == @(generate-models|generate-migrations-diff|generate-migrations-diff-and-migrate|build-module|rebuild-module|migrate|generate-translations|generate-sql-migration|get-current-migration|set-migration-version) ]]; then
             special=${COMP_WORDS[i]}
         fi
     done
 
     if [ -n "$special" ]; then
         case $special in
-            generate-models|build-module|rebuild-module|create-tables)
+            get-current-migration)
+                listres=$(cd ${doctrine_path}/data/migrations/ && find * -type d -not -name feature)
+                COMPREPLY=( $( compgen -W "all active ${listres[@]}" -- "$cur" ) )
+                return 0
+                ;;
+            set-migration-version)
+                if [[ "$prev" == "$special" ]]; then
+                  COMPREPLY=( $( compgen -W "last 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20" -- "$cur" ) )
+                else
+                  listres=$(cd ${doctrine_path}/data/migrations/ && find * -type d -not -name feature)
+                  COMPREPLY=( $( compgen -W "${listres[@]}" -- "$cur" ) )
+                fi
+                return 0
+                ;;
+            build-module|rebuild-module|create-tables)
                 listres=$(ls -d ${doctrine_path}/application/App/Module/*/ | xargs -l basename)
                 COMPREPLY=( $( compgen -W "${listres[@]}" -- "$cur" ) )
                 return 0
                 ;;
-            generate-migrations-diff|migrate|generate-migrations-diff-and-migrate|generate-translations|generate-sql-migration)
+            generate-migrations-diff|migrate|generate-migrations-diff-and-migrate|generate-migrations-diff-and-generate|generate-translations|generate-sql-migration)
                 listres=$(cd ${doctrine_path}/data/migrations/ && find * -type d -not -name feature)
                 COMPREPLY=( $( compgen -W "${listres[@]}" -- "$cur" ) )
                 return 0
@@ -50,9 +65,10 @@ _doctrine()
     else
         COMPREPLY=( $( compgen -W 'drop-db create-db generate-models generate-all-models \
 		create-all-tables create-tables drop-tables drop-all-tables \
-        dump-model get-current-migration dump-data migrate-all generate-translations \
+        dump-model dump-data migrate-all generate-translations generate-sql-migration \
 		build-module build-all rebuild-module rebuild-all generate-migrations-diff \
-		generate-migrations-diff-and-migrate migrate dump-data load-data dump-model get-current-migration set-migration-version' -- "$cur" ) )
+		generate-migrations-diff-and-migrate migrate dump-data load-data load-dev-fixtures \
+		dump-model get-current-migration set-migration-version' -- "$cur" ) )
     fi
 
     return 0

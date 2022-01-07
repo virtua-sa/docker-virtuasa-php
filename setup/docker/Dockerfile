@@ -1,15 +1,15 @@
-ARG FROM_IMAGE="debian:stretch"
+ARG FROM_IMAGE="debian:buster"
 FROM ${FROM_IMAGE}
 
 # Retrieve build arguments
-ARG FROM_IMAGE="debian:stretch"
+ARG FROM_IMAGE="debian:buster"
 ARG FROM_DISTRIBUTION="debian"
-ARG FROM_VERSION="stretch"
+ARG FROM_VERSION="buster"
 ARG DOCKER_BUILD_DATE=""
 ARG DOCKER_FROM_COMMIT=""
-ARG PHP_VERSION="7.1"
-ARG PHP_VERSION_APT="7.1"
-ARG PHP_VERSION_DIR="/7.1"
+ARG PHP_VERSION="8.1"
+ARG PHP_VERSION_APT="8.1"
+ARG PHP_VERSION_DIR="/8.1"
 ARG GITHUB_TOKEN=""
 
 # Set metadata labels, see: http://label-schema.org/rc1/
@@ -63,9 +63,7 @@ ENV LANG=C.UTF-8 \
     PHP_VERSION="${PHP_VERSION}" \
     PHP_VERSION_APT="${PHP_VERSION_APT}" \
     PHP_VERSION_DIR="${PHP_VERSION_DIR}" \
-    PHP_XDEBUG_HTTP_AUTOSTART="0" \
-    PHP_XDEBUG_CLI_AUTOSTART="0" \
-    SSMTP_MAILHUB="smtp.docker"
+    SMTP_MAILHUB="smtp.docker"
 
 # Copy the needed shell scripts
 COPY ./setup/ /setup/

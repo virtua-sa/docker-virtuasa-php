@@ -1,3 +1,4 @@
+#!/bin/bash
 # Store this file in /etc/bash_completion.d/composer
 
 _composer_scripts() {

@@ -2,7 +2,7 @@
 set -e
 
 echo "Starting the Virtua Docker Container ..."
-echo "More info at: <https://hub.docker.com/r/virtuasa/php/>"
+echo "More info at: <https://hub.docker.com/r/virtuasa/php>"
 echo "Built from commit: ${DOCKER_FROM_COMMIT}"
 echo
 
@@ -14,9 +14,6 @@ export DOLLAR='$'
 # Set working directory
 sudo mkdir -p ${DOCKER_BASE_DIR}
 cd ${DOCKER_BASE_DIR}
-
-# Disable Nginx for PHP < 7.0
-[[ "${PHP_VERSION}" =~ ^(5\.[23456]) ]] && export DOCKER_WEB_SERVER="apache"
 
 # Exec custom init script
 [[ -n "${DOCKER_CUSTOM_INIT}" ]] && [[ -e "${DOCKER_CUSTOM_INIT}" ]] && sudo chmod +x "${DOCKER_CUSTOM_INIT}" \
@@ -46,6 +43,19 @@ sudo find /etc -name "php.ini" -exec sed -i "s|^;*date.timezone =.*|date.timezon
 
 # Print installed PHP version
 php -v
+
+# set blackfire configuration
+if [[ -n "${BLACKFIRE_SERVER_ID}" ]] && [[ -n "${BLACKFIRE_SERVER_TOKEN}" ]] && [[ -n "${BLACKFIRE_CLIENT_ID}" ]] && [[ -n "${BLACKFIRE_CLIENT_TOKEN}" ]]; then
+cat <<EOSQL | sudo tee "/home/docker/.blackfire.ini"
+[blackfire]
+server-id=${BLACKFIRE_SERVER_ID}
+server-token=${BLACKFIRE_SERVER_TOKEN}
+client-id=${BLACKFIRE_CLIENT_ID}
+client-token=${BLACKFIRE_CLIENT_TOKEN}
+endpoint=https://blackfire.io/
+collector=https://blackfire.io/
+EOSQL
+fi;
 
 # Get HOST ip address
 DOCKER_HOST_IP="${DOCKER_HOST_IP:-$(/sbin/ip route | awk '/default/ { print $3 }')}"
@@ -80,26 +90,14 @@ if [[ "${DOCKER_COPY_CONFIG_TO_HOST}" = "true" ]]; then
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/apache"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/docker"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/nginx"
-    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/apache"
-    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/cli"
-    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php/fpm"
+    sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/php"
     sudo mkdir -p "${DOCKER_HOST_SETUP_DIR}/etc"
     sudo cp "/etc/hosts" "${DOCKER_HOST_SETUP_DIR}/etc"
-    if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
-        sudo cp -r "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
-        sudo cp -r "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
-        sudo cp -r "/etc/nginx/"* "${DOCKER_HOST_SETUP_DIR}/nginx"
-        sudo cp -r "/etc/php${PHP_VERSION_DIR}/apache2/"* "${DOCKER_HOST_SETUP_DIR}/php/apache"
-        sudo cp -r "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
-        sudo cp -r "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
-    else
-        sudo cp -nr "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
-        sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
-        sudo cp -nr "/etc/nginx/"* "${DOCKER_HOST_SETUP_DIR}/nginx"
-        sudo cp -nr "/etc/php${PHP_VERSION_DIR}/apache2/"* "${DOCKER_HOST_SETUP_DIR}/php/apache"
-        sudo cp -nr "/etc/php${PHP_VERSION_DIR}/cli/"* "${DOCKER_HOST_SETUP_DIR}/php/cli"
-        sudo cp -nr "/etc/php${PHP_VERSION_DIR}/fpm/"* "${DOCKER_HOST_SETUP_DIR}/php/fpm"
-    fi
+
+    sudo cp -nr "/etc/apache2/"* "${DOCKER_HOST_SETUP_DIR}/apache"
+    sudo cp -nr "/setup/docker/.gitignore" "${DOCKER_HOST_SETUP_DIR}/docker"
+    sudo cp -nr "/etc/nginx/"* "${DOCKER_HOST_SETUP_DIR}/nginx"
+    sudo cp -nr "/etc/php${PHP_VERSION_DIR}/"* "${DOCKER_HOST_SETUP_DIR}/php"
     sudo chown -R docker:docker "${DOCKER_HOST_SETUP_DIR}"
 fi
 
@@ -107,9 +105,7 @@ fi
 if [[ "${DOCKER_COPY_CONFIG_FROM_HOST}" = "true" ]]; then
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/apache/"* "/etc/apache2" || true
     sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/nginx/"* "/etc/nginx" || true
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/apache/"* "/etc/php${PHP_VERSION_DIR}/apache2" || true
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/cli/"* "/etc/php${PHP_VERSION_DIR}/cli" || true
-    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/fpm/"* "/etc/php${PHP_VERSION_DIR}/fpm" || true
+    sudo cp -rf "${DOCKER_HOST_SETUP_DIR}/php/"* "/etc/php${PHP_VERSION_DIR}/" || true
 fi
 
 # Create the requested directories
@@ -121,57 +117,31 @@ fi
 [[ -n "${DOCKER_CHMOD_R666}" ]] && sudo chmod -R 666 ${DOCKER_CHMOD_R666}
 [[ -n "${DOCKER_CHMOD_R777}" ]] && sudo chmod -R 777 ${DOCKER_CHMOD_R777}
 
-# Run Composer if necessary
-if [[ "${COMPOSER_AUTO_INSTALL}" = "true" ]] && [[ "${PHP_VERSION}" != "5.2" ]]; then
-    [[ -e 'composer.json' && ! -e 'vendor/autoload.php' ]] && ( composer install --no-interaction || composer update --no-interaction || echo "Ignore composer install/update Errors" )
+# configure msmtp
+file=/etc/msmtp.conf
+echo "account default" | sudo tee ${file} > /dev/null
+echo "add_missing_from_header on" | sudo tee --append ${file} > /dev/null
+
+if [[ -n "${SMTP_MAILHUB}" ]]; then
+  host="$(echo ${SMTP_MAILHUB} | sed -e 's,:.*,,g')"
+  port="$(echo ${SMTP_MAILHUB} | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
+  [[ -z "$port" ]] && port=25
+  echo "host $host" | sudo tee --append ${file} > /dev/null
+  echo "port $port" | sudo tee --append ${file} > /dev/null
 fi
 
-# Install npm packages if necessary
-if [[ "${NPM_AUTO_INSTALL}" = "true" ]]; then
-    [[ -e 'packages.json' && ! -f 'node_modules' ]] && npm install || echo "Ignore npm install Errors"
-fi
+[[ -n "${SMTP_AUTH_USER}" ]] && echo "user ${SMTP_AUTH_USER}" | sudo tee --append ${file} > /dev/null
+[[ -n "${SMTP_AUTH_PASS}" ]] && echo "password ${SMTP_AUTH_PASS}" | sudo tee --append ${file} > /dev/null
 
-# configure msmtp or ssmtp
-if hash msmtp 2>/dev/null; then
-    file=/etc/msmtp.conf
-    echo "account default" | sudo tee ${file} > /dev/null
-    echo "add_missing_from_header on" | sudo tee --append ${file} > /dev/null
+[[ -n "${SMTP_SENDER_HOSTNAME}" ]] && echo "domain ${SMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
+[[ -n "${SMTP_SENDER_HOSTNAME}" ]] && echo "maildomain ${SMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
+[[ -n "${SMTP_SENDER_HOSTNAME}" ]] && echo "from docker@${SMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
 
-    if [[ -n "${SSMTP_MAILHUB}" ]]; then
-      host="$(echo ${SSMTP_MAILHUB} | sed -e 's,:.*,,g')"
-      port="$(echo ${SSMTP_MAILHUB} | sed -e 's,^.*:,:,g' -e 's,.*:\([0-9]*\).*,\1,g' -e 's,[^0-9],,g')"
-      [[ -z "$port" ]] && port=25
-      echo "host $host" | sudo tee --append ${file} > /dev/null
-      echo "port $port" | sudo tee --append ${file} > /dev/null
-    fi
+echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cli/conf.d/msmtp.ini
+echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/apache2/conf.d/msmtp.ini
+echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/fpm/conf.d/msmtp.ini
+echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cgi/conf.d/msmtp.ini
 
-    [[ -n "${SSMTP_AUTH_USER}" ]] && echo "user ${SSMTP_AUTH_USER}" | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_AUTH_PASS}" ]] && echo "password ${SSMTP_AUTH_PASS}" | sudo tee --append ${file} > /dev/null
-
-    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "domain ${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "maildomain ${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo "from docker@${SSMTP_SENDER_HOSTNAME}" | sudo tee --append ${file} > /dev/null
-
-    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cli/conf.d/msmtp.ini
-    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/apache2/conf.d/msmtp.ini
-    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/fpm/conf.d/msmtp.ini
-    echo "sendmail_path = \"msmtp -C ${file}\"" | sudo tee /etc/php${PHP_VERSION_DIR}/cgi/conf.d/msmtp.ini
-
-elif [[ -n "${SSMTP_MAILHUB}" ]]; then
-    file=/etc/ssmtp/ssmtp.conf
-    echo "" | sudo tee ${file} > /dev/null
-
-    [[ -n "${SSMTP_SENDER_ROOT}" ]] && echo Root=${SSMTP_SENDER_ROOT} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_MAILHUB}" ]] && echo Mailhub=${SSMTP_MAILHUB} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_AUTH_USER}" ]] && echo AuthUser=${SSMTP_AUTH_USER} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_AUTH_PASS}" ]] && echo AuthPass=${SSMTP_AUTH_PASS} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_AUTH_METHOD}" ]] && echo AuthMethod=${SSMTP_AUTH_METHOD} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_USE_TLS}" ]] && echo UseTLS=${SSMTP_USE_TLS} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_USE_STARTTLS}" ]] && echo UseSTARTTLS=${SSMTP_USE_STARTTLS} | sudo tee --append ${file} > /dev/null
-    [[ -n "${SSMTP_SENDER_HOSTNAME}" ]] && echo Hostname=${SSMTP_SENDER_HOSTNAME} | sudo tee --append ${file} > /dev/null
-    [[ -z "${SSMTP_REWRITE_DOMAIN+x}" ]] && echo RewriteDomain=${SSMTP_REWRITE_DOMAIN} | sudo tee --append ${file} > /dev/null
-    [[ -z "${SSMTP_FROM_LINE_OVERRIDE+x}" ]] && echo FromLineOverride=${SSMTP_FROM_LINE_OVERRIDE} | sudo tee --append ${file} > /dev/null
-fi
 
 # Configure web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
@@ -179,7 +149,6 @@ if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
     sudo rm -f /var/run/apache2/apache2.pid
     sudo rm -f /var/run/apache2/ssl_mutex
     sudo mkdir -p /var/run/apache2
-    [[ "${PHP_VERSION}" = "5.4" ]] && sudo chown ${APACHE_RUN_USER} /var/lock/apache2
     # Apache log directory
     export APACHE_LOG_DIR="${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
     sudo mkdir -p "${DOCKER_BASE_DIR}/${APACHE_LOG_PATH}"
@@ -231,29 +200,6 @@ find /etc/php${PHP_VERSION_DIR} -regex ".*\.\(conf\|ini\)\.tpl" | while IFS= rea
 done
 echo " OK"
 
-
-# Add php_xdebug command
-echo "Setting up docker php-xdebug"
-
-sudo rm -f /usr/local/bin/php_xdebug
-sudo mkdir -p /usr/local/bin
-cat <<EOT | sudo tee /usr/local/bin/php_xdebug
-#!/bin/sh
-export XDEBUG_CONFIG="idekey=phpstorm"
-export PHP_IDE_CONFIG="serverName=\${APACHE_SERVER_NAME}"
-export XDEBUG_CONFIG="remote_enable=1 remote_mode=req remote_port=9000 remote_host=172.17.42.1 remote_connect_back=1"
-php \$@
-export XDEBUG_CONFIG=""
-EOT
-
-sudo chmod +x /usr/local/bin/php_xdebug
-
-# Start PHP-FPM if using Nginx
-[[ "${DOCKER_WEB_SERVER}" = "nginx" ]] && sudo service php${PHP_VERSION_APT}-fpm start
-
-# Clean Behat cache directory
-sudo rm -rf /tmp/behat_gherkin_cache
-
 # Exec custom startup script
 [[ -n "${DOCKER_CUSTOM_START}" ]] && [[ -e "${DOCKER_CUSTOM_START}" ]] && sudo chmod +x "${DOCKER_CUSTOM_START}" \
     && echo "Executing custom start script: ${DOCKER_CUSTOM_START} ..." \
@@ -261,9 +207,7 @@ sudo rm -rf /tmp/behat_gherkin_cache
 
 # Display server IP
 echo "Started ${DOCKER_WEB_SERVER} web server on ..."
-[[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]] \
-    && IP="$(ifconfig | awk '/inet addr/{print substr($2,6)}' | head -n 3 | tail -n 1)" \
-    || IP="$(hostname -I | cut -d' ' -f1)"
+IP="$(hostname -I | cut -d' ' -f1)"
 echo "> http://${IP}"
 echo "> https://${IP}"
 if [[ "${DOCKER_COPY_IP_TO_HOST}" = "true" ]]; then
@@ -274,11 +218,9 @@ fi
 
 # Start web server
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
-    if [[ "${DOCKER_FROM_IMAGE##*:}" = "lenny" ]]; then
-        exec sudo /usr/sbin/apache2ctl -DFOREGROUND
-    else
-        exec sudo /usr/sbin/apache2ctl -D FOREGROUND
-    fi
+  sudo sed -i "s|^autostart = .*|autostart = true|" /etc/supervisor/conf.d/apache.conf
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
-    exec sudo nginx
+  sudo sed -i "s|^autostart = .*|autostart = true|" /etc/supervisor/conf.d/nginx.conf
 fi
+
+exec sudo sudo supervisord -n -c /etc/supervisor/supervisord.conf

@@ -12,15 +12,8 @@ shell_quote() {
     )
 }
 
-slashes=${PWD//[^\/]/}
-tool_path="$PWD"
-for (( n=${#slashes}; n>0; --n ))
-do
-  test -e "$tool_path/bin/batch.php" && break
-  tool_path="$tool_path/.."
-done
-
-tool_path=$(realpath --relative-to=$PWD "$tool_path/bin/batch.php")
-
-RUN="php '${tool_path}' $(shell_quote "$@")"
+export XDEBUG_SESSION=xdebug_is_great
+export PHP_IDE_CONFIG="serverName=${CALLEO_CRM_HOSTNAME}"
+RUN="php $(shell_quote "$@")"
 eval "$RUN"
+export XDEBUG_SESSION=""

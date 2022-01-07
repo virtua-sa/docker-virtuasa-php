@@ -1,4 +1,5 @@
 apache2
+lsb-release
 apt-transport-https
 apt-utils
 build-essential
@@ -16,7 +17,6 @@ nano
 nginx
 rsync
 ssl-cert
-subversion
 sudo
 unzip
 vim
@@ -28,3 +28,4 @@ make
 re2c
 less
 bash-completion
+supervisor

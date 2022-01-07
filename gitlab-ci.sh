@@ -2,7 +2,7 @@
 set -e
 
 PHP_VERSION="$1"
-PUSH_SUFIX="-light"
+PUSH_SUFIX="-v2"
 
 echo "Start build for branch $PHP_VERSION"
 ./docker-build.sh "${PHP_VERSION}"

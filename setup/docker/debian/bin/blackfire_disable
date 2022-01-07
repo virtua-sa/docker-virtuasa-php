@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 
-search=$(find /etc/php/ -iname *xdebug.ini.disable | wc -l)
+search=$(find /etc/php/ -iname *blackfire.ini.disable | wc -l)
 if [ $search -eq 0 ]
 then
-  echo -n "XDebug enable in progress... "
+  echo -n "Blackfire.io disable in progress... "
 else
-  echo -n "xdebug already enabled, restart services ... "
+  echo -n "Blackfire.io already disabled, restart service... "
 fi
 
 # Enable xdebug
@@ -18,7 +18,7 @@ for f in $(find /etc/php/ -iname *blackfire.ini); do
 done
 
 # restart services
-sudo supervisorctl stop blackfire &> /dev/null || true
+sudo supervisorctl stop blackfire &> /dev/null || echo "Supervisor not started for blackfire"
 if [[ "${DOCKER_WEB_SERVER}" = "apache" ]]; then
   sudo supervisorctl restart apache &> /dev/null || echo "Supervisor not started for apache"
 elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
@@ -26,4 +26,4 @@ elif [[ "${DOCKER_WEB_SERVER}" = "nginx" ]]; then
 fi
 
 echo "done"
-echo "XDebug enabled (Blackfire disabled)"
+echo "Blackfire disabled and XDebug enabled"

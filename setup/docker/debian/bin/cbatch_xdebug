@@ -1,5 +1,17 @@
 #!/usr/bin/env bash
 
+shell_quote() {
+    # run in a subshell to protect the caller's environment
+    (
+        sep=''
+        for arg in "$@"; do
+            sqesc=$(printf '%s\n' "${arg}" | sed -e "s/'/'\\\\''/g")
+            printf '%s' "${sep}'${sqesc}'"
+            sep=' '
+        done
+    )
+}
+
 slashes=${PWD//[^\/]/}
 tool_path="$PWD"
 for (( n=${#slashes}; n>0; --n ))
@@ -10,4 +22,5 @@ done
 
 tool_path=$(realpath --relative-to=$PWD "$tool_path/bin/batch.php")
 
-php_xdebug ${tool_path} $@
+RUN="php_xdebug '${tool_path}' $(shell_quote "$@")"
+eval "$RUN"
