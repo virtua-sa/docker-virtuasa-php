@@ -48,7 +48,7 @@ build:8.0:
   script:
     - ./gitlab-ci.sh 8.0
 
-build:8.0:
+build:8.1:
   <<: *template_build
   script:
     - ./gitlab-ci.sh 8.1
