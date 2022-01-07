@@ -193,7 +193,7 @@ fi
 adduser ${USER} www-data
 
 # update all packages
-apt-get update && apt-get dist-upgrade
+apt-get update && apt-get ${APT_FLAGS} dist-upgrade && apt-get ${APT_FLAGS} autoremove
 
 # Clean all unecessary files (doc)
 find /usr/share/doc -depth -type f ! -name copyright|xargs rm || true
